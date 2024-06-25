@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
 import * as Contacts from 'expo-contacts';
 
-const phonebook = () => {
+const PhoneBook = () => {
   const [contacts, setContacts] = useState([]);
   const [permission, setPermission] = useState(null);
 
@@ -88,5 +88,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default phonebook
+export default PhoneBook
 

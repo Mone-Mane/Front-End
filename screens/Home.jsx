@@ -17,7 +17,7 @@ const Home = ({ navigation }) => {
       <Button title="Go to test" onPress={() => navigation.navigate("Testr")} />
       <Button
         title="Go to phonebook"
-        onPress={() => navigation.navigate("phonebook")}
+        onPress={() => navigation.navigate("PhoneBook")}
       />
     </View>
   );
