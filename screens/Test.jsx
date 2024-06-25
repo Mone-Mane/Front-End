@@ -9,7 +9,6 @@ const Test = () => {
   const [progress, setProgress] = useState(70);
   return (
     <View>
-      <AccountHistory/>
       <View style={styles.appContainer}>
         <ProgressBar progress={progress} />
       </View>

@@ -14,7 +14,7 @@ const Home = ({ navigation }) => {
         title="Go to Diary"
         onPress={() => navigation.navigate("그림일기")}
       />
-      <Button title="Go to test" onPress={() => navigation.navigate("Testr")} />
+      <Button title="Go to AccountHistory" onPress={() => navigation.navigate("거래내역조회")} />
       <Button
         title="Go to phonebook"
         onPress={() => navigation.navigate("PhoneBook")}
