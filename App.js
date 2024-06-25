@@ -6,17 +6,23 @@ import Home from "./screens/Home";
 import Profile from "./screens/Profile";
 import Test from "./screens/Test";
 import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
-import MyPage from "./screens/etc/MyPage";
+import MyPage from "./screens/etc/Mypage.jsx";
 import IndexPage from "./screens/etc/IndexPage";
 import MainPage from "./screens/etc/MainPage";
 import PhoneBook from "./screens/PhoneBook";
+import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
+import AccountHistory from "./components/AccountHistory.jsx";
+import SYTest from "./screens/SYTest.jsx";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     // <View>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Test" component={Test} />
@@ -26,6 +32,8 @@ export default function App() {
         <Stack.Screen name="IndexPage" component={IndexPage} />
         <Stack.Screen name="MainPage" component={MainPage} />
 
+        <Stack.Screen name="계좌내역" component={AccountHistory} />
+        <Stack.Screen name="SYTest" component={SYTest} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
