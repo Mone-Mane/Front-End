@@ -19,6 +19,10 @@ const Home = ({ navigation }) => {
         title="Go to phonebook"
         onPress={() => navigation.navigate("PhoneBook")}
       />
+      <Button
+        title="Go to SYTest"
+        onPress={() => navigation.navigate("SYTest")}
+      />
     </View>
   );
 };
