@@ -1,15 +1,10 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  useWindowDimensions,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../components/CustomHeader";
 import ChallengeCard from "../components/ChallengeCard";
 import color from "../assets/colors/colors";
+import HotRankingCard from "../components/HotRankingCard";
 
 const DATA = [
   {
@@ -41,11 +36,27 @@ const DATA = [
     success: true,
   },
   {
-    id: "4",
+    id: "5",
     title: "커피 줄이기냠냠냠냠",
     dateRange: "06.07 - 06.13",
     status: "성공",
     success: true,
+  },
+];
+
+const DATA1 = [
+  { id: "1", medal: "🥇", title: "커피 줄이기", participants: "2,337명" },
+  {
+    id: "2",
+    medal: "🥈",
+    title: "택시 줄이기",
+    participants: "2,337명",
+  },
+  {
+    id: "3",
+    medal: "🥉",
+    title: "PC방 줄이기",
+    participants: "2,337명",
   },
 ];
 
@@ -57,33 +68,48 @@ const SYTest = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="SYTest" navigation={navigation} />
-      <View
-        style={styles.full}
-        onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
-      >
-        <Text>Test</Text>
-        <FlatList
-          data={DATA}
-          columnWrapperStyle={styles.columnWrapper}
-          renderItem={({ item }) => (
-            <View
-              style={[
-                styles.gridItem,
-                { width: (containerWidth - margins) / numColumns },
-              ]}
-            >
-              <ChallengeCard
-                title={item.title}
-                dateRange={item.dateRange}
-                status={item.status}
-                success={item.success}
-              />
-            </View>
-          )}
-          keyExtractor={(item) => item.id}
-          numColumns={numColumns}
-        />
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View
+          style={styles.full}
+          onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
+        >
+          <Text>Test</Text>
+          <View style={styles.hotList}>
+            <FlatList
+              data={DATA1}
+              renderItem={({ item }) => (
+                <HotRankingCard
+                  medal={item.medal}
+                  title={item.title}
+                  participants={item.participants}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
+          <FlatList
+            data={DATA}
+            columnWrapperStyle={styles.columnWrapper}
+            renderItem={({ item }) => (
+              <View
+                style={[
+                  styles.gridItem,
+                  { width: (containerWidth - margins) / numColumns },
+                ]}
+              >
+                <ChallengeCard
+                  title={item.title}
+                  dateRange={item.dateRange}
+                  status={item.status}
+                  success={item.success}
+                />
+              </View>
+            )}
+            keyExtractor={(item) => item.id}
+            numColumns={numColumns}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -95,9 +121,11 @@ const styles = StyleSheet.create({
     backgroundColor: color.background,
     flex: 1,
   },
+  scrollContainer: {
+    flexGrow: 1,
+  },
   full: {
     padding: 20,
-    flex: 1,
   },
   columnWrapper: {
     justifyContent: "space-between",
@@ -105,5 +133,11 @@ const styles = StyleSheet.create({
   },
   gridItem: {
     marginBottom: 10,
+  },
+  hotList: {
+    borderRadius: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: "#ffffff",
   },
 });
