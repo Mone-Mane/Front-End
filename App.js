@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import Profile from "./screens/Profile";
 import Test from "./screens/Test";
-import MyPage from "./screens/etc/Mypage.jsx";
+import MyPage from "./screens/etc/MyPage.jsx"
 import IndexPage from "./screens/etc/IndexPage";
 import MainPage from "./screens/etc/MainPage";
 import SYTest from "./screens/SYTest.jsx";
