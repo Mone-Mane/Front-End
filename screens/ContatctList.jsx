@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
-import * as Contacts from 'expo-contacts';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import * as Contacts from "expo-contacts";
 
-const PhoneBook = () => {
+const ContatctList = () => {
   const [contacts, setContacts] = useState([]);
   const [permission, setPermission] = useState(null);
 
   useEffect(() => {
     (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
-      setPermission(status === 'granted');
+      setPermission(status === "granted");
     })();
   }, []);
 
@@ -44,10 +51,14 @@ const PhoneBook = () => {
           <View style={styles.contactItem}>
             <Text style={styles.contactName}>{item.name}</Text>
             {item.phoneNumbers && (
-              <Text style={styles.contactInfo}>Phone: {item.phoneNumbers[0].number}</Text>
+              <Text style={styles.contactInfo}>
+                Phone: {item.phoneNumbers[0].number}
+              </Text>
             )}
             {item.emails && (
-              <Text style={styles.contactInfo}>Email: {item.emails[0].email}</Text>
+              <Text style={styles.contactInfo}>
+                Email: {item.emails[0].email}
+              </Text>
             )}
           </View>
         )}
@@ -60,33 +71,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   fetchButton: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: "#6C63FF",
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   fetchButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   contactItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
   },
   contactName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   contactInfo: {
     fontSize: 16,
   },
 });
 
-export default PhoneBook;
-
+export default ContatctList;

@@ -4,6 +4,7 @@ import AccountHistory from "../components/AccountHistory";
 import ProgressBar from "../components/ProgressBar";
 import CreditCard from "../components/CreditCard";
 import { useState } from 'react';
+import DiaryCheck from "./picturediary/DiaryCheck";
 
 
 const Test = () => {
@@ -11,10 +12,8 @@ const Test = () => {
   return (
     <View>
       <AccountHistory/>
-      <View style={styles.appContainer}>
-        <ProgressBar progress={progress} />
-      </View>
       <CreditCard></CreditCard>
+      <DiaryCheck/>
     </View>
     
   );
