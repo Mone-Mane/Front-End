@@ -2,14 +2,14 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
 const AccountHistory = (props) => {
-  // const { transaction } = props;
-  // 테스트용 데이터
-  const transaction = {
-    date: "5.16",
-    name: "베트남 칼국수",
-    amount: "+17,400원",
-    balance: "143,000원"
-  };
+  const { transaction } = props;
+  // // 테스트용 데이터
+  // const transaction = {
+  //   date: "5.16",
+  //   name: "베트남 칼국수",
+  //   amount: "+17,400원",
+  //   balance: "143,000원"
+  // };
 
   // 금액에 따라 스타일을 동적으로 결정
   const amountStyle = transaction.amount.startsWith('+') ? styles.positiveAmount : styles.negativeAmount;
@@ -25,8 +25,8 @@ const AccountHistory = (props) => {
         </View>
       </View>
       <View style={styles.contactAmount}>
-        <Text style={amountStyle}>{transaction.amount}</Text>
-        <Text style={styles.useBalance}>{transaction.balance}</Text>
+        <Text style={amountStyle}>{transaction.amount}원</Text>
+        <Text style={styles.useBalance}>{transaction.balance}원</Text>
       </View>
     </View>
   )
@@ -38,30 +38,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
   },
   contactItem: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderColor:'#eee',
+    borderColor:'#eee', 
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     padding: 10,
   },
   contactHistory: {
     flexDirection: 'row',
-    alignItems: 'center',
     padding: 10,
   },
   contactDate: {
     fontSize: 14,
-    marginLeft: "10%",
-    fontWeight: 'light',
-    color:'gray'
+    color:'gray',
+    marginRight:10
   },
   contactName: {
+    marginTop:-2,
     fontSize: 16,
   },
   contactAmount: {
@@ -80,7 +79,6 @@ const styles = StyleSheet.create({
   negativeAmount: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'red', // 부정적인 금액의 색상
   },
   useBalance:{
     fontSize:12,
