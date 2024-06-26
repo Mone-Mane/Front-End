@@ -1,8 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import color from "../assets/colors/colors";
+import BackIcon from "../assets/icons/back.svg";
 
-const CustomHeader = ({ title, leftIcon = true, onLeftPress, navigation }) => {
+const CustomHeader = ({
+  title,
+  leftIcon = true,
+  onLeftPress,
+  navigation,
+  bgColor,
+}) => {
   const handlePress = () => {
     if (!onLeftPress) {
       navigation.goBack();
@@ -12,10 +19,10 @@ const CustomHeader = ({ title, leftIcon = true, onLeftPress, navigation }) => {
   };
 
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, bgColor ? { backgroundColor: bgColor } : {}]}>
       {leftIcon && (
         <TouchableOpacity onPress={handlePress} style={styles.icon}>
-          <Text>{"⟨"}</Text>
+          <BackIcon width={24} height={24} />
         </TouchableOpacity>
       )}
       <Text style={styles.title}>{title}</Text>
@@ -40,6 +47,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+    marginRight: 10,
     justifyContent: "center",
     alignItems: "center",
   },
