@@ -2,6 +2,7 @@ import { View, Image, Text, StyleSheet, ScrollView,Dimensions  } from 'react-nat
 import React from 'react'
 import OilPic from "../../assets/oil_painting.png"
 import DetailIcon from "../../assets/icons/detail.svg"
+import color from '../../assets/colors/colors'
 
 const { width } = Dimensions.get('window'); // 화면의 전체 너비를 가져옵니다.
 
@@ -9,24 +10,28 @@ const { width } = Dimensions.get('window'); // 화면의 전체 너비를 가져
 const DiaryCheck = () => {
     const images = [
         {
+            id:"id",
             uri:require('../../assets/oil_painting.png'),
             tags: ['tag1', 'tag2', 'tag3'],
             description: '쌀국수 추억',
             date : '06.18'
         },
         {
+          id:"id",
           uri:require('../../assets/oil_painting.png'),
           tags: ['tag1', 'tag2', 'tag3'],
           description: '쌀국수 추억',
           date : '06.18'
         },
         {
+          id:"id",
           uri:require('../../assets/oil_painting.png'),
           tags: ['tag1', 'tag2', 'tag3'],
           description: '쌀국수 추억',
           date : '06.18'
         },
         {
+          id:"id",
           uri:require('../../assets/oil_painting.png'),
           tags: ['tag1', 'tag2', 'tag3'],
           description: '쌀국수 추억',
@@ -62,7 +67,7 @@ const DiaryCheck = () => {
 export default DiaryCheck
 const styles = StyleSheet.create({
     scrollView: {
-      backgroundColor: '#F9F9F9'
+      backgroundColor: color.background
     },
     container: {
       width: '100%', // 화면 너비에 맞춤

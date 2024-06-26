@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   logoContainer: {
-    marginBottom: 200,
+    marginBottom: 100,
   },
   logo: {
     width: 200,
