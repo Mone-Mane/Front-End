@@ -16,8 +16,8 @@ const Home = ({ navigation }) => {
       />
       <Button title="Go to AccountHistory" onPress={() => navigation.navigate("거래내역조회")} />
       <Button
-        title="Go to phonebook"
-        onPress={() => navigation.navigate("PhoneBook")}
+        title="Go to ContatctList"
+        onPress={() => navigation.navigate("ContatctList")}
       />
       <Button
         title="Go to My Page"

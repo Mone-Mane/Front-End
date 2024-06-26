@@ -9,7 +9,7 @@ import MyPage from "./screens/etc/Mypage.jsx";
 import IndexPage from "./screens/etc/IndexPage";
 import MainPage from "./screens/etc/MainPage";
 import SYTest from "./screens/SYTest.jsx";
-import PhoneBook from "./screens/PhoneBook.jsx";
+import ContatctList from "./screens/ContatctList.jsx";
 import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
 import AccountHistory from "./components/AccountHistory.jsx";
 import AccountScreen from "./screens/AccountScreen.jsx";
@@ -26,7 +26,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Test" component={Test} />
-        <Stack.Screen name="PhoneBook" component={PhoneBook} />
+        <Stack.Screen name="ContatctList" component={ContatctList} />
         <Stack.Screen name="그림일기" component={DiaryHome} />
         <Stack.Screen name="MyPage" component={MyPage} />
         <Stack.Screen name="IndexPage" component={IndexPage} />
