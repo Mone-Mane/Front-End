@@ -12,12 +12,27 @@ const Home = ({ navigation }) => {
       <Button title="Go to test" onPress={() => navigation.navigate("Test")} />
       <Button
         title="Go to Diary"
-        onPress={() => navigation.navigate("그림일기")}
+        onPress={() => navigation.navigate("DiaryHome")}
       />
-      <Button title="Go to test" onPress={() => navigation.navigate("Testr")} />
+      <Button
+        title="Go to AccountHistory"
+        onPress={() => navigation.navigate("거래내역조회")}
+      />
       <Button
         title="Go to ContatctList"
         onPress={() => navigation.navigate("ContatctList")}
+      />
+      <Button
+        title="Go to My Page"
+        onPress={() => navigation.navigate("MyPage")}
+      />
+      <Button
+        title="Go to Index Page"
+        onPress={() => navigation.navigate("IndexPage")}
+      />
+      <Button
+        title="Go to Main Page"
+        onPress={() => navigation.navigate("MainPage")}
       />
       <Button
         title="Go to SYTest"
@@ -26,6 +41,10 @@ const Home = ({ navigation }) => {
       <Button
         title="Go to SYTest2"
         onPress={() => navigation.navigate("SYTest2")}
+      />
+      <Button
+        title="원희테스트입니다. 함부로 보면혼나요"
+        onPress={() => navigation.navigate("WHTest")}
       />
     </View>
   );
