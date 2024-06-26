@@ -5,11 +5,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import Profile from "./screens/Profile";
 import Test from "./screens/Test";
-import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
-import MyPage from "./screens/etc/Mypage.jsx";
+import MyPage from "./screens/etc/MyPage.jsx"
 import IndexPage from "./screens/etc/IndexPage";
 import MainPage from "./screens/etc/MainPage";
-import PhoneBook from "./screens/PhoneBook";
+import PhoneBook from "./screens/PhoneBook.jsx";
 import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
 import AccountHistory from "./components/AccountHistory.jsx";
 import SYTest from "./screens/SYTest.jsx";
@@ -49,5 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 100
   },
 });
