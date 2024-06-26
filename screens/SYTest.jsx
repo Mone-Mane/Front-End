@@ -1,10 +1,18 @@
-import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../components/CustomHeader";
 import ChallengeCard from "../components/ChallengeCard";
 import color from "../assets/colors/colors";
 import HotRankingCard from "../components/HotRankingCard";
+import ChallengeAcceptModal from "../components/ChallengeAcceptModal";
 
 const DATA = [
   {
@@ -65,10 +73,20 @@ const SYTest = ({ navigation }) => {
   const margins = 33 * 2; // Padding on each side
   const numColumns = 2; // Number of columns
 
+  //모달
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="SYTest" navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Pressable onPress={() => setIsModalVisible(true)}>
+          <Text style={styles.textStyle}>Modal Open!</Text>
+        </Pressable>
+        <ChallengeAcceptModal
+          isOpen={isModalVisible}
+          setIsOpen={setIsModalVisible}
+        />
         <View
           style={styles.full}
           onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}

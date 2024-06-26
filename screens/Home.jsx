@@ -23,6 +23,10 @@ const Home = ({ navigation }) => {
         title="Go to SYTest"
         onPress={() => navigation.navigate("SYTest")}
       />
+      <Button
+        title="Go to SYTest2"
+        onPress={() => navigation.navigate("SYTest2")}
+      />
     </View>
   );
 };

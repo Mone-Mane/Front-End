@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import Success from "../assets/icons/success.svg";
+import SuccessIcon from "../assets/icons/success.svg";
+import FailIcon from "../assets/icons/fail.svg";
 
 const ChallengeCard = ({ title, dateRange, status, success }) => {
   return (
@@ -11,7 +12,11 @@ const ChallengeCard = ({ title, dateRange, status, success }) => {
         <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
           {title}
         </Text>
-        <Success width={36} height={43} style={styles.icon} />
+        {success ? (
+          <SuccessIcon width={36} height={43} style={styles.icon} />
+        ) : (
+          <FailIcon width={36} height={43} style={styles.icon} />
+        )}
       </View>
       <Text style={styles.dateRange}>{dateRange}</Text>
       <View

@@ -9,6 +9,7 @@ import ContatctList from "./screens/ContatctList.jsx";
 import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
 import AccountHistory from "./components/AccountHistory.jsx";
 import SYTest from "./screens/SYTest.jsx";
+import SYTest2 from "./screens/SYTest2.jsx";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
         <Stack.Screen name="그림일기" component={DiaryHome} />
         <Stack.Screen name="계좌내역" component={AccountHistory} />
         <Stack.Screen name="SYTest" component={SYTest} />
+        <Stack.Screen name="SYTest2" component={SYTest2} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
