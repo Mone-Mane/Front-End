@@ -10,24 +10,28 @@ const { width } = Dimensions.get('window'); // 화면의 전체 너비를 가져
 const DiaryCheck = () => {
     const images = [
         {
+            id:"id",
             uri:require('../../assets/oil_painting.png'),
             tags: ['tag1', 'tag2', 'tag3'],
             description: '쌀국수 추억',
             date : '06.18'
         },
         {
+          id:"id",
           uri:require('../../assets/oil_painting.png'),
           tags: ['tag1', 'tag2', 'tag3'],
           description: '쌀국수 추억',
           date : '06.18'
         },
         {
+          id:"id",
           uri:require('../../assets/oil_painting.png'),
           tags: ['tag1', 'tag2', 'tag3'],
           description: '쌀국수 추억',
           date : '06.18'
         },
         {
+          id:"id",
           uri:require('../../assets/oil_painting.png'),
           tags: ['tag1', 'tag2', 'tag3'],
           description: '쌀국수 추억',

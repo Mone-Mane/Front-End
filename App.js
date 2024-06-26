@@ -11,6 +11,9 @@ import MainPage from "./screens/etc/MainPage";
 import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
 import AccountHistory from "./components/AccountHistory.jsx";
 import AccountScreen from "./screens/AccountScreen.jsx";
+import SYTest from "./screens/SYTest.jsx"
+import ContatctList from "./screens/ContatctList.jsx"
+import WHTest from "./screens/WHTest.jsx";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -25,13 +28,14 @@ export default function App() {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Test" component={Test} />
         <Stack.Screen name="ContatctList" component={ContatctList} />
-        <Stack.Screen name="그림일기" component={DiaryHome} />
+        <Stack.Screen name="DiaryHome" component={DiaryHome} />
         <Stack.Screen name="MyPage" component={MyPage} />
         <Stack.Screen name="IndexPage" component={IndexPage} />
         <Stack.Screen name="MainPage" component={MainPage} />
         <Stack.Screen name="SYTest" component={SYTest} />
         <Stack.Screen name="계좌내역" component={AccountHistory}/>
         <Stack.Screen name="거래내역조회" component={AccountScreen}/>
+        <Stack.Screen name="WHTest" component={WHTest} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

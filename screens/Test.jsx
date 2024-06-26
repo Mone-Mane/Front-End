@@ -11,11 +11,9 @@ const Test = () => {
   const [progress, setProgress] = useState(70);
   return (
     <View>
-      <AccountHistory/>
       <CreditCard></CreditCard>
       <DiaryCheck/>
-    </View>
-    
+    </View> 
   );
 };
 
