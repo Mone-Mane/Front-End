@@ -20,7 +20,7 @@ import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import SelectCategoryScreen from "./screens/picturediary/SelectCategoryScreen.jsx";
 import EditKeyword from "./screens/picturediary/EditKeyword.jsx";
-import LoadingPage from "./screens/picturediary/LoadingPage.jsx";
+import DiaryCompleteScreen from "./screens/picturediary/DiaryCompleteScreen.jsx";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -70,7 +70,10 @@ export default function App() {
         <Stack.Screen name="거래내역조회" component={AccountScreen} />
         <Stack.Screen name="WHTest" component={WHTest} />
         <Stack.Screen name="EditKeyword" component={EditKeyword} />
-        <Stack.Screen name="LoadingPage" component={LoadingPage} />
+        <Stack.Screen
+          name="DiaryCompleteScreen"
+          component={DiaryCompleteScreen}
+        />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
