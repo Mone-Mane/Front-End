@@ -6,7 +6,6 @@ import CreditCard from "../components/CreditCard";
 import { useState } from 'react';
 import DiaryCheck from "./picturediary/DiaryCheck";
 
-
 const Test = () => {
   const [progress, setProgress] = useState(70);
   return (

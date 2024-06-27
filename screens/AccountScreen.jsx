@@ -1,9 +1,11 @@
-import React from 'react';
-import { View, StyleSheet, FlatList, Text,TouchableHighlight} from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet, FlatList, Text,TouchableHighlight, ScrollView} from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
 // import { Card } from 'react-native-elements';
 import AccountHistory from '../components/AccountHistory';
-import { SearchBar } from 'react-native-elements';
-import cavePainting from '../assets/cave_painting.png'; // Make sure the path is correct
+import CustomHeader from "../components/CustomHeader";
+import DownIcon from "../assets/icons/down.svg"
+import ProgreesBar from "../components/ProgressBar"
 
 
 state = {
@@ -21,32 +23,31 @@ const transactions = [
   // 추가 거래 내역
 ];
 
-const AccountScreen = () => {
+
+const AccountScreen = ({navigation}) => {
     const { search } = this.state;
+    const [ProgressValue, setProgressValue] = useState(90);
     return (
+      <SafeAreaView style={styles.safe}>
+      <CustomHeader title="계좌내역조회" navigation={navigation} />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
+          <ProgreesBar progress={ProgressValue}/>
             <View style={styles.cardBox}>              
             </View>
             <View style={styles.searchMonth}>
                 <Text style={styles.textMonth}>1개월</Text>
+                <DownIcon width={24} height={24}/>
             </View>
             <View style={styles.accounthistorycontainer}>
-            <FlatList
-            data={transactions}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item ,separators}) => (
-                <TouchableHighlight
-                    key={item.key}
-                    // OnPress 에 상세보기 하는 거넣으면 좋을듯..
-                    onPress={() => this._onPress(item)}
-                    onShowUnderlay={separators.highlight}
-                    onHideUnderlay={separators.unhighlight}>
-                    <AccountHistory transaction={item} />
-                </TouchableHighlight>
-            )}
-          />
+            {transactions.map((item,index)=>(
+              <AccountHistory key={index} transaction={item} />
+            ))}
+            
             </View>
         </View>
+        </ScrollView>
+        </SafeAreaView>
       );
 };
 
@@ -71,12 +72,14 @@ const styles = StyleSheet.create({
     marginVertical: 5
   },
   searchMonth: {
+    flexDirection:"row",
     padding:20,
-    marginRight:16,
-    alignItems:'flex-end',
+    marginRight:2,
+    alignSelf:'flex-end',
   },
   textMonth:{
-    fontSize:16
+    fontSize:16,
+    marginRight:10
   }
 });
 

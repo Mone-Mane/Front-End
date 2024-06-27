@@ -3,6 +3,17 @@ import React from 'react'
 
 const AccountHistory = (props) => {
   const { transaction } = props;
+  if (!transaction){
+    return (
+      <View style={styles.contactItem}>
+        <View style={styles.contactHistory}>
+          <View>
+            <Text style={styles.contactDate}>{transaction.date} 사용 내역 없음</Text>
+          </View>
+        </View>
+      </View>
+    )
+  }
   // // 테스트용 데이터
   // const transaction = {
   //   date: "5.16",
