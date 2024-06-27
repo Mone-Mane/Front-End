@@ -13,10 +13,12 @@ import AccountHistory from "./components/AccountHistory.jsx";
 import SYTest2 from "./screens/SYTest2.jsx";
 import AccountScreen from "./screens/AccountScreen.jsx";
 import SYTest from "./screens/SYTest.jsx";
+import DoneChallengeScreen from "./screens/Challenge/DoneChallengeScreen.jsx";
 import ContatctList from "./screens/ContatctList.jsx";
 import WHTest from "./screens/WHTest.jsx";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
+import SelectCategoryScreen from "./screens/picturediary/SelectCategoryScreen.jsx";
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -26,7 +28,7 @@ export default function App() {
       await Font.loadAsync({
         Light: require("./assets/font/NanumSquareNeo-aLt.ttf"),
         Regular: require("./assets/font/NanumSquareNeo-bRg.ttf"),
-        Medium: require("./assets/font/NanumSquareNeo-eHv.ttf"),
+        Heavy: require("./assets/font/NanumSquareNeo-eHv.ttf"),
         Bold: require("./assets/font/NanumSquareNeo-cBd.ttf"),
         ExtraBold: require("./assets/font/NanumSquareNeo-dEb.ttf"),
       });
@@ -54,6 +56,14 @@ export default function App() {
         <Stack.Screen name="SYTest" component={SYTest} />
         <Stack.Screen name="SYTest2" component={SYTest2} />
         <Stack.Screen name="계좌내역" component={AccountHistory} />
+        <Stack.Screen
+          name="DoneChallengeScreen"
+          component={DoneChallengeScreen}
+        />
+        <Stack.Screen
+          name="SelectCategoryScreen"
+          component={SelectCategoryScreen}
+        />
         <Stack.Screen name="거래내역조회" component={AccountScreen} />
         <Stack.Screen name="WHTest" component={WHTest} />
       </Stack.Navigator>
