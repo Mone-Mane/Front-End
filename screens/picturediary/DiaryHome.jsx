@@ -7,6 +7,7 @@ import CustomHeader from "../../components/CustomHeader";
 import color from '../../assets/colors/colors'
 import HotRankingCard from '../../components/HotRankingCard'
 import OilPic from "../../assets/oil_painting.png"
+import DrawIcon from "../../assets/icons/draw.svg"
 
 
 
@@ -63,6 +64,7 @@ const DiaryHome = ({navigation}) => {
     <CustomHeader title="SYTest" navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <TouchableOpacity style={styles.createButton}>
+          <DrawIcon marginLeft={-50}/>
           <Text style={styles.createButtonText}>그림일기 생성하기</Text>
         </TouchableOpacity>
         <View style={styles.container}>
@@ -82,16 +84,19 @@ const DiaryHome = ({navigation}) => {
               ))}
           </PagerView>
           </View>
-          <View style={styles.hotList}>
-            {DATA1.map((item,index)=>(
-              <HotRankingCard
-              key={index}
-              medal={item.medal}
-              title={item.title}
-              participants={item.participants}
-            />
-            ))}
-            </View>
+          <View>
+            <Text style={styles.hotText}>주간 HOT! 그림체</Text>
+              <View style={styles.hotList}>
+                {DATA1.map((item,index)=>(
+                  <HotRankingCard
+                  key={index}
+                  medal={item.medal}
+                  title={item.title}
+                  participants={item.participants}
+                />
+                ))}
+              </View>
+          </View>
         <View style={styles.chart}>
           <View style={styles.subText}>
             <Text style={styles.subHeader}>그림일기 이용 약관</Text>
@@ -110,6 +115,8 @@ const styles = StyleSheet.create({
       scrollContainer: {
         backgroundColor:color.background,
         flexGrow: 1,
+        paddingLeft:20,
+        paddingRight:20
       },
   container: {
     flex: 1,
@@ -125,23 +132,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   createButton: {
+    flexDirection:"row",
     height:60,
     backgroundColor: color.primary,
-    padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent:'center',
-    margin:30
+    marginVertical:30
   },
   createButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+    marginLeft: 10
   },
   subHeader: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  hotText:{
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginLeft:20,
+    marginTop:15,
+    alignSelf: 'flex-start',
   },
   subText:{
     fontSize: 40,

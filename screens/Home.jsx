@@ -54,6 +54,14 @@ const Home = ({ navigation }) => {
         title="그림 카테고리 선택"
         onPress={() => navigation.navigate("SelectCategoryScreen")}
       />
+      <Button
+        title="Go to EditKeyword"
+        onPress={() => navigation.navigate("EditKeyword")}
+      />
+      <Button
+        title="Go to LoadingPage"
+        onPress={() => navigation.navigate("LoadingPage")}
+      />
     </View>
   );
 };

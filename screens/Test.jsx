@@ -5,13 +5,16 @@ import ProgressBar from "../components/ProgressBar";
 import CreditCard from "../components/CreditCard";
 import { useState } from 'react';
 import DiaryCheck from "./picturediary/DiaryCheck";
-
+import PayRatio from "../components/PayRatio";
+import Keyword from "../components/Keyword";
 
 const Test = () => {
   const [progress, setProgress] = useState(70);
   return (
     <View>
       <CreditCard></CreditCard>
+      <PayRatio></PayRatio>
+      <Keyword></Keyword>
       <DiaryCheck/>
     </View> 
   );

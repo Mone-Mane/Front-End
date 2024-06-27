@@ -19,6 +19,9 @@ import WHTest from "./screens/WHTest.jsx";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import SelectCategoryScreen from "./screens/picturediary/SelectCategoryScreen.jsx";
+import EditKeyword from "./screens/picturediary/EditKeyword.jsx";
+import LoadingPage from "./screens/picturediary/LoadingPage.jsx";
+
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -66,6 +69,8 @@ export default function App() {
         />
         <Stack.Screen name="거래내역조회" component={AccountScreen} />
         <Stack.Screen name="WHTest" component={WHTest} />
+        <Stack.Screen name="EditKeyword" component={EditKeyword} />
+        <Stack.Screen name="LoadingPage" component={LoadingPage} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
