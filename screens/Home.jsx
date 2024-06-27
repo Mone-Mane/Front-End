@@ -47,6 +47,14 @@ const Home = ({ navigation }) => {
         onPress={() => navigation.navigate("WHTest")}
       />
       <Button
+        title="완료된 챌린지 페이지"
+        onPress={() => navigation.navigate("DoneChallengeScreen")}
+      />
+      <Button
+        title="그림 카테고리 선택"
+        onPress={() => navigation.navigate("SelectCategoryScreen")}
+      />
+      <Button
         title="Go to EditKeyword"
         onPress={() => navigation.navigate("EditKeyword")}
       />
