@@ -15,9 +15,27 @@ import AccountScreen from "./screens/AccountScreen.jsx";
 import SYTest from "./screens/SYTest.jsx";
 import ContatctList from "./screens/ContatctList.jsx";
 import WHTest from "./screens/WHTest.jsx";
+import * as Font from "expo-font";
+import { useEffect, useState } from "react";
 const Stack = createNativeStackNavigator();
-
 export default function App() {
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        Light: require("./assets/font/NanumSquareNeo-aLt.ttf"),
+        Regular: require("./assets/font/NanumSquareNeo-bRg.ttf"),
+        Medium: require("./assets/font/NanumSquareNeo-eHv.ttf"),
+        Bold: require("./assets/font/NanumSquareNeo-cBd.ttf"),
+        ExtraBold: require("./assets/font/NanumSquareNeo-dEb.ttf"),
+      });
+      setFontLoaded(true);
+    };
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) return null;
   return (
     // <View>
     <NavigationContainer>
