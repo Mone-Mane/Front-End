@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
    */
   textStyle: {
     color: "white",
-    fontWeight: "bold",
+    fontWeight: "Bold",
     textAlign: "center",
     marginBottom: 50,
   },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
 
   modalTextStyle: {
     color: "#17191c",
-    fontWeight: "bold",
+    fontWeight: "Bold",
     textAlign: "center",
     alignSelf: "center",
   },
@@ -147,5 +147,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 24,
     color: "#ffffff",
+    fontFamily: "Bold",
   },
 });

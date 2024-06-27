@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "Bold",
     paddingLeft: 16,
     maxWidth: 100,
   },
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "Bold",
   },
   medal: {
     width: 20,
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   dateRange: {
     fontSize: 12,
     color: "#888",
+    fontFamily: "Regular",
     marginBottom: 12,
     alignSelf: "flex-start",
     paddingLeft: 16,
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "Bold",
     paddingVertical: 5,
     paddingHorizontal: 10,
     width: "100%",
