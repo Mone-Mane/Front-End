@@ -12,11 +12,14 @@ import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
 import AccountHistory from "./components/AccountHistory.jsx";
 import SYTest2 from "./screens/SYTest2.jsx";
 import AccountScreen from "./screens/AccountScreen.jsx";
-import SYTest from "./screens/SYTest.jsx";
-import ContatctList from "./screens/ContatctList.jsx";
 import WHTest from "./screens/WHTest.jsx";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
+import ContatctList from "./screens/ContatctList.jsx";
+import SYTest from './screens/SYTest.jsx'
+import EditKeyword from './screens/picturediary/EditKeyword.jsx'
+import LoadingPage from "./screens/picturediary/LoadingPage.jsx";
+
 const Stack = createNativeStackNavigator();
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -53,9 +56,11 @@ export default function App() {
         <Stack.Screen name="MainPage" component={MainPage} />
         <Stack.Screen name="SYTest" component={SYTest} />
         <Stack.Screen name="SYTest2" component={SYTest2} />
-        <Stack.Screen name="계좌내역" component={AccountHistory} />
-        <Stack.Screen name="거래내역조회" component={AccountScreen} />
         <Stack.Screen name="WHTest" component={WHTest} />
+        <Stack.Screen name="계좌내역" component={AccountHistory}/>
+        <Stack.Screen name="거래내역조회" component={AccountScreen}/>
+        <Stack.Screen name="EditKeyword" component={EditKeyword}/>
+        <Stack.Screen name="LoadingPage" component={LoadingPage}/>
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
