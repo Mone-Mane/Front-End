@@ -39,8 +39,12 @@ const Home = ({ navigation }) => {
         onPress={() => navigation.navigate("SYTest")}
       />
       <Button
+        title="Go to SYTest2"
+        onPress={() => navigation.navigate("SYTest2")}
+      />
+      <Button
         title="원희테스트입니다. 함부로 보면혼나요"
-        onPress={()=>navigation.navigate("WHTest")}
+        onPress={() => navigation.navigate("WHTest")}
       />
     </View>
   );

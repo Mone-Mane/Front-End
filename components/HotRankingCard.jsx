@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   participantsContainer: {
     alignItems: "flex-end",
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   participantNum: {
     color: "#aaaaaa",
     fontSize: 10,
+    fontFamily: "Regular",
   },
   personIcon: {
     alignSelf: "center",

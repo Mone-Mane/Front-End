@@ -5,18 +5,37 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import Profile from "./screens/Profile";
 import Test from "./screens/Test";
-import MyPage from "./screens/etc/MyPage.jsx"
+import MyPage from "./screens/etc/MyPage.jsx";
 import IndexPage from "./screens/etc/IndexPage";
 import MainPage from "./screens/etc/MainPage";
 import DiaryHome from "./screens/picturediary/DiaryHome.jsx";
 import AccountHistory from "./components/AccountHistory.jsx";
+import SYTest2 from "./screens/SYTest2.jsx";
 import AccountScreen from "./screens/AccountScreen.jsx";
-import SYTest from "./screens/SYTest.jsx"
-import ContatctList from "./screens/ContatctList.jsx"
+import SYTest from "./screens/SYTest.jsx";
+import ContatctList from "./screens/ContatctList.jsx";
 import WHTest from "./screens/WHTest.jsx";
+import * as Font from "expo-font";
+import { useEffect, useState } from "react";
 const Stack = createNativeStackNavigator();
-
 export default function App() {
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        Light: require("./assets/font/NanumSquareNeo-aLt.ttf"),
+        Regular: require("./assets/font/NanumSquareNeo-bRg.ttf"),
+        Medium: require("./assets/font/NanumSquareNeo-eHv.ttf"),
+        Bold: require("./assets/font/NanumSquareNeo-cBd.ttf"),
+        ExtraBold: require("./assets/font/NanumSquareNeo-dEb.ttf"),
+      });
+      setFontLoaded(true);
+    };
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) return null;
   return (
     // <View>
     <NavigationContainer>
@@ -33,8 +52,9 @@ export default function App() {
         <Stack.Screen name="IndexPage" component={IndexPage} />
         <Stack.Screen name="MainPage" component={MainPage} />
         <Stack.Screen name="SYTest" component={SYTest} />
-        <Stack.Screen name="계좌내역" component={AccountHistory}/>
-        <Stack.Screen name="거래내역조회" component={AccountScreen}/>
+        <Stack.Screen name="SYTest2" component={SYTest2} />
+        <Stack.Screen name="계좌내역" component={AccountHistory} />
+        <Stack.Screen name="거래내역조회" component={AccountScreen} />
         <Stack.Screen name="WHTest" component={WHTest} />
       </Stack.Navigator>
       <StatusBar style="auto" />
@@ -51,6 +71,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 100
+    paddingTop: 100,
   },
 });
