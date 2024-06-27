@@ -46,6 +46,14 @@ const Home = ({ navigation }) => {
         title="원희테스트입니다. 함부로 보면혼나요"
         onPress={() => navigation.navigate("WHTest")}
       />
+      <Button
+        title="Go to EditKeyword"
+        onPress={() => navigation.navigate("EditKeyword")}
+      />
+      <Button
+        title="Go to LoadingPage"
+        onPress={() => navigation.navigate("LoadingPage")}
+      />
     </View>
   );
 };

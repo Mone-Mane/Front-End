@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Animated, TouchableWithoutFeedback } from 'react-native';
-import MasterCard from '../assets/icons/mastercard.svg';
-import CardChip from '../assets/icons/cardchip.svg';
-import Nfc from '../assets/icons/nfc.svg';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  TouchableWithoutFeedback,
+  ImageBackground,
+} from "react-native";
+import MasterCard from "../assets/icons/mastercard.svg";
+import CardChip from "../assets/icons/cardchip.svg";
+import Nfc from "../assets/icons/nfc.svg";
 
 const CreditCard = () => {
   const [flipped, setFlipped] = useState(false);
@@ -29,43 +36,53 @@ const CreditCard = () => {
 
   const frontInterpolate = flipAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '180deg']
+    outputRange: ["0deg", "180deg"],
   });
 
   const backInterpolate = flipAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['180deg', '360deg']
+    outputRange: ["180deg", "360deg"],
   });
 
   const frontAnimatedStyle = {
-    transform: [
-      { rotateY: frontInterpolate }
-    ]
+    transform: [{ rotateY: frontInterpolate }],
   };
 
   const backAnimatedStyle = {
-    transform: [
-      { rotateY: backInterpolate }
-    ]
+    transform: [{ rotateY: backInterpolate }],
   };
 
   return (
     <TouchableWithoutFeedback onPress={flipCard}>
       <View style={styles.container}>
-        <Animated.View style={[styles.flipCard, styles.flipCardFront, frontAnimatedStyle]}>
-          <Text style={styles.heading}>Gold Plated</Text>
-          <MasterCard width={60} height={60} style={styles.logo} />
-          <CardChip width={40} height={40} style={styles.chip} />
-          <Text style={styles.name}>NAM WOOHYEON</Text>
+        <Animated.View
+          style={[styles.flipCard, styles.flipCardFront, frontAnimatedStyle]}
+        >
+          <ImageBackground
+            source={require("../assets/cardframe.png")}
+            style={styles.image}
+          >
+            <Text style={styles.heading}>Gold Plated</Text>
+            <MasterCard width={60} height={60} style={styles.logo} />
+            <CardChip width={40} height={40} style={styles.chip} />
+            <Text style={styles.name}>NAM WOOHYEON</Text>
+          </ImageBackground>
         </Animated.View>
-        <Animated.View style={[styles.flipCard, styles.flipCardBack, backAnimatedStyle]}>
-          <View style={styles.strip}></View>
-          <Nfc width={20} height={20} style={styles.contactless} />
-          <Text style={styles.number}>9759 2484 5269 6576</Text>
-          <Text style={styles.date}>12/24</Text>
-          <Text style={styles.exp}>EXP</Text>
-          <Text style={styles.cvc_number}>123</Text>
-          <Text style={styles.cvc}>CVC</Text>
+        <Animated.View
+          style={[styles.flipCard, styles.flipCardBack, backAnimatedStyle]}
+        >
+          <ImageBackground
+            source={require("../assets/cardframe.png")}
+            style={styles.image}
+          >
+            <View style={styles.strip}></View>
+            <Nfc width={20} height={20} style={styles.contactless} />
+            <Text style={styles.number}>9759 2484 5269 6576</Text>
+            <Text style={styles.date}>12/24</Text>
+            <Text style={styles.exp}>EXP</Text>
+            <Text style={styles.cvc_number}>123</Text>
+            <Text style={styles.cvc}>CVC</Text>
+          </ImageBackground>
         </Animated.View>
       </View>
     </TouchableWithoutFeedback>
@@ -78,119 +95,124 @@ const styles = StyleSheet.create({
     height: 190,
     perspective: 1000,
   },
-  flipCard: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    backfaceVisibility: 'hidden',
+  image: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
     borderRadius: 16,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    overflow: "hidden",
+  },
+  flipCard: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    backfaceVisibility: "hidden",
+    borderRadius: 16,
+    shadowColor: "rgba(0, 0, 0, 0.1)",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.8,
     shadowRadius: 10,
   },
   flipCardFront: {
-    backgroundColor: '#A2BFFF',
+    backgroundColor: "#A2BFFF",
     borderWidth: 1,
-    borderColor: '#A2BFFF',
-    justifyContent: 'center',
+    borderColor: "#F9F9F9",
+    justifyContent: "center",
   },
   flipCardBack: {
-    backgroundColor: '#5A73F5',
-    transform: [{ rotateY: '180deg' }],
-    justifyContent: 'center',
+    backgroundColor: "#5A73F5",
+    transform: [{ rotateY: "180deg" }],
+    justifyContent: "center",
   },
   heading: {
-    position: 'absolute',
+    position: "absolute",
     fontSize: 20,
     top: 20,
     left: 24,
-    fontWeight: '600',
-    textShadowColor: '#fff',
+    fontWeight: "600",
+    textShadowColor: "#fff",
     textShadowOffset: { width: -0.2, height: -0.2 },
     textShadowRadius: 0.2,
-    color: 'white',
+    color: "white",
   },
   logo: {
-    position: 'absolute',
+    position: "absolute",
     top: 120,
     left: 210,
   },
   chip: {
-    position: 'absolute',
+    position: "absolute",
     top: 70,
     left: 24,
   },
   contactless: {
-    position: 'absolute',
-    top: 68,
+    position: "absolute",
+    top: 88,
     left: 220,
   },
   name: {
-    position: 'absolute',
-    fontWeight: '400',
+    position: "absolute",
+    fontWeight: "400",
     fontSize: 16,
     top: 140,
     left: 24,
-    color: '#ffffff',
-    fontWeight: "bold"
+    color: "#ffffff",
+    fontWeight: "bold",
   },
   strip: {
-    position: 'absolute',
-    backgroundColor: '#A2BFFF',
+    position: "absolute",
+    backgroundColor: "#ffffff",
     width: 300,
     height: 36,
-    top: 0,
-    borderStartStartRadius: 16,
-    borderTopRightRadius:16
+    top: 30,
   },
   number: {
-    position: 'absolute',
-    fontWeight: '600',
+    position: "absolute",
+    fontWeight: "600",
     letterSpacing: 1,
     fontSize: 16,
-    top: 70,
+    top: 90,
     left: 24,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   date: {
-    position: 'absolute',
-    fontWeight: '600',
+    position: "absolute",
+    fontWeight: "600",
     fontSize: 12,
-    top:140,
+    top: 140,
     left: 24,
     letterSpacing: 2,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   cvc_number: {
-    position: 'absolute',
-    fontWeight: '600',
+    position: "absolute",
+    fontWeight: "600",
     fontSize: 12,
     top: 140,
     left: 106,
     letterSpacing: 2,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   cvc: {
-    position: 'absolute',
-    fontWeight: '600',
+    position: "absolute",
+    fontWeight: "600",
     fontSize: 8,
     top: 140,
     left: 135,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   exp: {
-    position: 'absolute',
-    fontWeight: '600',
+    position: "absolute",
+    fontWeight: "600",
     fontSize: 8,
     top: 140,
     left: 70,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
 });
 

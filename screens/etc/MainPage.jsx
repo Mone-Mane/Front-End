@@ -6,88 +6,121 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  FlatList,
 } from "react-native";
 import Flame from "../../assets/icons/flame.svg";
 import Palette from "../../assets/icons/palette.svg";
 import CreditCard from "../../components/CreditCard";
+import PayRatio from "../../components/PayRatio";
+import { ScrollView } from "react-native";
 
 const MainPage = () => {
+  const datas = [
+    {
+      name: "식비",
+      amount: 446000,
+      rate: 15,
+    },
+    {
+      name: "교통",
+      amount: 446000,
+      rate: 15,
+    },
+    {
+      name: "유흥",
+      amount: 446000,
+      rate: 20,
+    },
+    {
+      name: "카페",
+      amount: 132000,
+      rate: 20,
+    },
+    {
+      name: "기타",
+      amount: 112300,
+      rate: 30,
+    },
+  ];
+
+  const colors = ["#ef476f", "#ffd166", "#06d6a0", "#118ab2", "#073b4c"];
+
+  let paySum = 0;
+
+  datas.forEach((item) => {
+    paySum += item.amount;
+  });
+
+  const thisMonth = new Date().getMonth() + 1;
+
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={require("../../assets/mainLogo.png")} // 대체 이미지 URL을 사용합니다.
-        />
-        <View style={styles.profileContainer}>
-          <View style={styles.profilePersonContainer}>
-            <Image
-              style={styles.profileImage}
-              source={require("../../assets/ferren.png")} // 대체 이미지 URL을 사용합니다.
-            />
-            <Text style={styles.profileName}>임태규님</Text>
-          </View>
-          <View style={styles.profileInfoContainer}>
-            <Text style={styles.profileStatus}>진행중인 챌린지: 3개</Text>
-            <Text style={styles.profileStatus}>물감: 30통</Text>
-          </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <View style={styles.buttonTxtContainer}>
-              <Flame></Flame>
-              <Text style={styles.buttonText}>챌린지</Text>
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.container}>
+          <Image
+            style={styles.logo}
+            source={require("../../assets/mainLogo.png")} // 대체 이미지 URL을 사용합니다.
+          />
+          <View style={styles.profileContainer}>
+            <View style={styles.profilePersonContainer}>
+              <Image
+                style={styles.profileImage}
+                source={require("../../assets/ferren.png")} // 대체 이미지 URL을 사용합니다.
+              />
+              <Text style={styles.profileName}>임태규님</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <View style={styles.buttonTxtContainer}>
-              <Palette></Palette>
-              <Text style={styles.buttonText}>그림일기</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.cardContainer}>
-          <CreditCard></CreditCard>
-        </View>
-        <View style={styles.expenseContainer}>
-          <Text style={styles.expenseTitle}>7월</Text>
-          <Text style={styles.expenseAmount}>1,000,557원</Text>
-          <View style={styles.expenseBarContainer}>
-            <View
-              style={[
-                styles.expenseBar,
-                { backgroundColor: "#1DB9C3", width: "37.2%" },
-              ]}
-            />
-            <View
-              style={[
-                styles.expenseBar,
-                { backgroundColor: "#6C5CE7", width: "31.3%" },
-              ]}
-            />
-            <View
-              style={[
-                styles.expenseBar,
-                { backgroundColor: "#FDCB6E", width: "4.2%" },
-              ]}
-            />
-          </View>
-          <View style={styles.expenseDetails}>
-            <View style={styles.expenseDetail}>
-              <Text>이체</Text>
-              <Text>447,300원</Text>
-            </View>
-            <View style={styles.expenseDetail}>
-              <Text>식비</Text>
-              <Text>313,090원</Text>
-            </View>
-            <View style={styles.expenseDetail}>
-              <Text>쇼핑</Text>
-              <Text>42,500원</Text>
+            <View style={styles.profileInfoContainer}>
+              <Text style={styles.profileStatus}>진행중인 챌린지: 3개</Text>
+              <Text style={styles.profileStatus}>물감: 30통</Text>
             </View>
           </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button}>
+              <View style={styles.buttonTxtContainer}>
+                <Flame></Flame>
+                <Text style={styles.buttonText}>챌린지</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <View style={styles.buttonTxtContainer}>
+                <Palette></Palette>
+                <Text style={styles.buttonText}>그림일기</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cardContainer}>
+            <CreditCard></CreditCard>
+          </View>
+          <View style={styles.expenseContainer}>
+            <Text style={styles.expenseTitle}>{thisMonth}월</Text>
+            <Text style={styles.expenseAmount}>
+              {paySum.toLocaleString()}원
+            </Text>
+            <View style={styles.expenseBarContainer}>
+              {datas.map((data, index) => (
+                <View
+                  key={data.name}
+                  style={[
+                    styles.expenseBar,
+                    {
+                      backgroundColor: colors[index % colors.length],
+                      width: `${data.rate}%`,
+                    },
+                  ]}
+                />
+              ))}
+            </View>
+            {datas.map((item) => (
+              <PayRatio
+                key={item.name}
+                name={item.name}
+                amount={item.amount}
+                rate={item.rate}
+              />
+            ))}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -96,6 +129,9 @@ const styles = StyleSheet.create({
   safe: {
     backgroundColor: "white",
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
   },
   container: {
     flex: 1,
@@ -143,7 +179,7 @@ const styles = StyleSheet.create({
   },
   buttonTxtContainer: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   button: {
     backgroundColor: "#5A73F5",
@@ -170,6 +206,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     backgroundColor: "#ffffff",
+    marginBottom: 30,
   },
   expenseTitle: {
     fontSize: 20,
