@@ -8,7 +8,9 @@ const Participant = ({ name, percentage, imageSource }) => {
         <Image source={imageSource} style={styles.image} />
         <Text style={styles.name}>{name}</Text>
       </View>
-      <Text style={styles.percentage}>{percentage}%</Text>
+      <View>
+        <Text style={styles.percentage}>{percentage}%</Text>
+      </View>
     </View>
   );
 };
@@ -26,19 +28,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   profileContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   name: {
     fontSize: 14,
     fontFamily: "Heavy",
     marginLeft: 10,
-    flex: 1,
   },
   percentage: {
     fontSize: 12,
     color: "gray",
-    fontFamily: "Bold"
+    fontFamily: "Bold",
   },
 });
 
