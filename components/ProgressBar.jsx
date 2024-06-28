@@ -1,8 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
+import Arrow from "../assets/icons/downarrow.svg";
 import cavePainting from "../assets/cave_painting.png"; // Make sure the path is correct
 
-const ProgressBar = ({ progress }) => {
+const ProgressBar = ({ progress, sizeFont }) => {
   const displayProgress = Math.min(progress, 100); // 진행률은 최대 100으로 제한
   const barColor = progress > 85 ? "#FF4935" : "#5A73F5"; // 85% 초과 시 빨간색
   const iconPosition = Math.max(displayProgress - 100, 0); // 아이콘 위치 조정
@@ -18,11 +19,11 @@ const ProgressBar = ({ progress }) => {
           ]}
         >
           {/* 아이콘 */}
-          <Text style={[styles.icon, { right: `${iconPosition}%` }]}>🔻</Text>
+          <Text style={[styles.icon, { right: `${iconPosition}%` }]}><Arrow width={20} height={20}/></Text>
         </View>
         {/* 진행률 표시 */}
       </View>
-      <Text style={styles.percentageText}>{`${displayProgress}%`}</Text>
+      <Text style={[styles.percentageText, { fontSize: `${sizeFont}` }]}>{`${progress}%`}</Text>
     </View>
   );
 };
@@ -31,10 +32,8 @@ const styles = StyleSheet.create({
   container: {
     width: "100%", // 컨테이너의 너비를 부모의 전체 너비로 설정
     height: 10, // 막대의 높이 + 여유 공간
-    borderColor: "#ccc",
-    borderWidth: 1,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: "#e8e8e8",
     position: "absolute",
   },
   bar: {
@@ -53,9 +52,8 @@ const styles = StyleSheet.create({
     top: 5, // 막대 바 밑으로 텍스트를 이동
     // transform: [{ translateX: -50 }], /// 텍스트가 정중앙에 오도록 조정
     color: "black",
-    fontWeight: "bold",
+    fontFamily: "Bold",
     alignSelf:"flex-end",
-    fontSize:24
   },
 });
 

@@ -21,6 +21,9 @@ import { useEffect, useState } from "react";
 import SelectCategoryScreen from "./screens/picturediary/SelectCategoryScreen.jsx";
 import EditKeyword from "./screens/picturediary/EditKeyword.jsx";
 import DiaryCompleteScreen from "./screens/picturediary/DiaryCompleteScreen.jsx";
+import ChallengeMainPage from "./screens/Challenge/ChallengeMainPage.jsx";
+import ChallengeDetailPage from "./screens/Challenge/ChallengeDetailPage.jsx";
+import ConsumptionSelect from "./screens/ConsumptionSelect.jsx";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -51,7 +54,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Test" component={Test} />
-        <Stack.Screen name="ContatctList" component={ContatctList} />
+        {/* <Stack.Screen name="ContatctList" component={ContatctList} /> */}
         <Stack.Screen name="DiaryHome" component={DiaryHome} />
         <Stack.Screen name="MyPage" component={MyPage} />
         <Stack.Screen name="IndexPage" component={IndexPage} />
@@ -74,6 +77,12 @@ export default function App() {
           name="DiaryCompleteScreen"
           component={DiaryCompleteScreen}
         />
+        <Stack.Screen name="ChallengeMainPage" component={ChallengeMainPage} />
+        <Stack.Screen
+          name="ChallengeDetailPage"
+          component={ChallengeDetailPage}
+        />
+        <Stack.Screen name="ConsumptionSelect" component={ConsumptionSelect} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

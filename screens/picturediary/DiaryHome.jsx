@@ -1,6 +1,5 @@
-import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions,FlatList  } from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import React from 'react';
-import PagerView from 'react-native-pager-view';
 import { useState, useEffect, useRef } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
@@ -8,8 +7,6 @@ import color from '../../assets/colors/colors'
 import HotRankingCard from '../../components/HotRankingCard'
 import OilPic from "../../assets/oil_painting.png"
 import DrawIcon from "../../assets/icons/draw.svg"
-
-
 
 const images = [
     require('../../assets/cave_painting.png'),
@@ -45,44 +42,49 @@ const images = [
       participants: "2,337명",
     },
   ];
-  
+    
 const DiaryHome = ({navigation}) => {
     const pairedImages = getPairedImages(images);
   const pagerRef = useRef(null);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const picturecreate = () => navigation.navigate("ConsumptionSelect");
 
-  const handlePageSelected = (e) => {
-    const position = e.nativeEvent.position;
-    setCurrentPage(position);
-    if (position === pairedImages.length) {
-      pagerRef.current.setPageWithoutAnimation(0);
-    }
-  };
+  const windowWidth = Dimensions.get('window').width;
+
+  const renderImageItem = ({ item, index }) => (
+    <Image 
+      source={item} 
+      style={[
+        styles.image, 
+        { width: (windowWidth - 60) / 2 },
+        index % 2 === 0 ? { marginRight: 5 } : { marginLeft: 5 }
+      ]} 
+    />
+  );
+
+
+
+
     
   return (
     <SafeAreaView style={styles.safe}>
     <CustomHeader title="SYTest" navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <TouchableOpacity style={styles.createButton}>
+        <TouchableOpacity style={styles.createButton} onPress={picturecreate}>
           <DrawIcon marginLeft={-50}/>
           <Text style={styles.createButtonText}>그림일기 생성하기</Text>
         </TouchableOpacity>
         <View style={styles.container}>
         <Text style={styles.subHeader}>Sync가 그려준 일기</Text>
-          <PagerView
-              ref={pagerRef}
-              style={styles.pagerView}
-              initialPage={0}
-              onPageSelected={handlePageSelected}
-          >
-              {pairedImages.map((pair, index) => (
-                  <View style={styles.imageContainer} key={index.toString()}>
-                      {pair.map((image, idx) => (
-                      <Image key={idx.toString()} source={image} style={styles.image} />
-                      ))}
-                  </View>
-              ))}
-          </PagerView>
+        
+        <FlatList
+            data={images}
+            renderItem={renderImageItem}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={2}
+            columnWrapperStyle={styles.columnWrapper}
+            scrollEnabled={false}
+          />
           </View>
           <View>
             <Text style={styles.hotText}>주간 HOT! 그림체</Text>
@@ -111,6 +113,7 @@ const DiaryHome = ({navigation}) => {
 const styles = StyleSheet.create({
   safe: {
     backgroundColor: color.background,
+    flex:1
       },
       scrollContainer: {
         backgroundColor:color.background,
@@ -121,6 +124,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    borderRadius:5,
     backgroundColor: '#fff',
   },
   header: {
@@ -129,7 +133,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily:'Bold',
   },
   createButton: {
     flexDirection:"row",
@@ -141,26 +145,26 @@ const styles = StyleSheet.create({
     marginVertical:30
   },
   createButtonText: {
+    fontFamily:'Bold',
     color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 20,
     marginLeft: 10
   },
   subHeader: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily:'Bold',
     marginBottom: 10,
   },
   hotText:{
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily:'Bold',
     marginLeft:20,
     marginTop:15,
     alignSelf: 'flex-start',
   },
   subText:{
-    fontSize: 40,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontFamily:'Bold',
     marginLeft:20,
     marginTop:15,
     alignSelf: 'flex-start',
@@ -175,6 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   hotList: {
+    borderRadius:5,
     marginBottom: 20,
   },
   hotItem: {

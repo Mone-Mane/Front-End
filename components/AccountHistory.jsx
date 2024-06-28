@@ -57,21 +57,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderColor:'#eee', 
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
     padding: 10,
   },
   contactHistory: {
     flexDirection: 'row',
     padding: 10,
+    justifyContent:'center',
   },
   contactDate: {
     fontSize: 14,
+    fontFamily:"Light",
     color:'gray',
     marginRight:10
   },
   contactName: {
-    marginTop:-2,
+    marginTop:-1,
+    fontFamily:"Bold",
+    justifyContent:'center',
+    alignItems:'flex-start',
     fontSize: 16,
   },
   contactAmount: {
@@ -80,16 +83,16 @@ const styles = StyleSheet.create({
   },
   useAmount: {
     fontSize: 16,
-    fontWeight:'bold'
+    fontFamily:"Bold",
   },
   positiveAmount: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontFamily:"Bold",
     color: '#5A73F5', // 긍정적인 금액의 색상
   },
   negativeAmount: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontFamily:"Bold",
   },
   useBalance:{
     fontSize:12,

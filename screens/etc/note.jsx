@@ -7,18 +7,15 @@ import {
   TouchableOpacity,
   Alert,
   Pressable,
-  Dimensions,
-  FlatList,
-  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useState } from "react";
-import CustomHeader from "../components/CustomHeader";
-import AccountHistory from "../components/AccountHistory";
-import color from "../assets/colors/colors";
+import CustomHeader from "../../components/CustomHeader";
+import AccountHistory from "../../components/AccountHistory";
+import color from "../../assets/colors/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Button } from "react-native-web";
 
-const { width, height } = Dimensions.get("window");
 const data = [
   {
     id: "1",
@@ -69,69 +66,14 @@ const data = [
     amount: "+20,000",
     balance: "143,000",
   },
-  {
-    id: "8",
-    date: "06.12",
-    name: "스타벅스 한남",
-    amount: "-5,500",
-    balance: "137,500",
-  },
-  {
-    id: "9",
-    date: "06.11",
-    name: "GS25",
-    amount: "-3,200",
-    balance: "134,300",
-  },
-  {
-    id: "10",
-    date: "06.10",
-    name: "Subway",
-    amount: "-8,900",
-    balance: "125,400",
-  },
-  {
-    id: "11",
-    date: "06.09",
-    name: "KFC",
-    amount: "-13,500",
-    balance: "111,900",
-  },
-  {
-    id: "12",
-    date: "06.08",
-    name: "할리스 커피",
-    amount: "-4,500",
-    balance: "107,400",
-  },
-  {
-    id: "13",
-    date: "06.07",
-    name: "홈플러스",
-    amount: "-77,000",
-    balance: "30,400",
-  },
-  {
-    id: "14",
-    date: "06.06",
-    name: "CU 편의점",
-    amount: "-2,800",
-    balance: "27,600",
-  },
-  {
-    id: "15",
-    date: "06.05",
-    name: "Netflix",
-    amount: "-9,900",
-    balance: "17,700",
-  },
+
+  // 추가 거래 내역
 ];
 
 const ConsumptionSelect = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(data);
   const [selectedIds, setSelectedIds] = useState([]);
-
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -148,18 +90,6 @@ const ConsumptionSelect = ({ navigation }) => {
       setSelectedIds([...selectedIds, id]);
     }
   };
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleSelectItem(item.id)}>
-      <View
-        style={[
-          styles.accountItem,
-          selectedIds.includes(item.id) ? styles.selectedItem : null,
-        ]}
-      >
-        <AccountHistory transaction={item} />
-      </View>
-    </TouchableOpacity>
-  );
 
   const filterData = (text) => {
     setSearchQuery(text);
@@ -178,7 +108,7 @@ const ConsumptionSelect = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="소비 내역 선택" navigation={navigation} />
-      <View style={styles.containerSearch}>
+      <View style={styles.container}>
         <View style={styles.searchBar}>
           <TextInput
             style={styles.textInput}
@@ -191,28 +121,31 @@ const ConsumptionSelect = ({ navigation }) => {
             <Ionicons name="search" size={20} color="gray" marginRight={6} />
           </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.container1}>
-        <View style={{ flex: 1 }}>
-          <FlatList
-            nestedScrollEnabled
-            data={filteredData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()} // Ensure keyExtractor returns a string
-            numColumns={1}
-            scrollEnabled={true}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View>
-      </View>
-      {selectedIds.length != 0 ? 
-      (
-        <View style={styles.container2}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.accounthistorycontainer}>
+            {filteredData.map((item, index) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => handleSelectItem(item.id)}
+              >
+                <View
+                  style={[
+                    styles.accountItem,
+                    selectedIds.includes(item.id) ? styles.selectedItem : null,
+                  ]}
+                >
+                  <AccountHistory key={index} transaction={item} />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+        <View style={styles.buttonDiv}>
           <Pressable style={styles.button} onPress={onPress}>
             <Text style={styles.text}>{title}</Text>
           </Pressable>
         </View>
-      ) : null}
+      </View>
     </SafeAreaView>
   );
 };
@@ -221,33 +154,18 @@ export default ConsumptionSelect;
 
 const styles = StyleSheet.create({
   safe: {
-    flex: 1, // SafeAreaView가 전체 화면을 차지하도록 설정
+    // flex: 1,  // SafeAreaView가 전체 화면을 차지하도록 설정
     backgroundColor: color.background,
+    // backgroundColor:"red"
   },
-  flatListContent: {
-    flexGrow: 1,
-    overflow: "visible",
-    minHeight: height - (height / 11 + height / 10 + 20),
+  scrollContainer: {
+    // flexGrow: 1,  // 스크롤 뷰가 확장 가능하도록 설정
   },
-  containerSearch: {
-    height: height / 11,
-    marginTop: 10,
-    alignContent: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-  },
-  container1: {
-    flexGrow: 1,
-    height: height / 1.6,
-    marginBottom: 10,
-    paddingHorizontal: 20,
-  },
-  container2: {
-    flexGrow: 1,
-    height: height / 10,
-    alignContent: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
+  container: {
+    // flex: 1
+    padding: 10,
+    backgroundColor: "#f8f8f8",
+    // height: "100%"
   },
   accounthistorycontainer: {
     // flex: 1,
@@ -274,6 +192,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   searchBar: {
+    // flex:2,
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "gray",
@@ -283,7 +202,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textInput: {
-    flex: 1,
+    // flex: 1,
     height: 40,
   },
   itemText: {
@@ -302,18 +221,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 8,
+    borderRadius: 4,
     elevation: 3,
     backgroundColor: color.primary,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 21,
     fontFamily: "Bold",
     letterSpacing: 0.25,
     color: "white",
-  },
-  listContainer: {
-    paddingBottom: 20, // 리스트의 끝에 여백을 추가합니다.
   },
 });
