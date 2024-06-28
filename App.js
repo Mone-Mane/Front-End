@@ -20,10 +20,10 @@ import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import SelectCategoryScreen from "./screens/picturediary/SelectCategoryScreen.jsx";
 import EditKeyword from "./screens/picturediary/EditKeyword.jsx";
-import LoadingPage from "./screens/picturediary/LoadingPage.jsx";
+import DiaryCompleteScreen from "./screens/picturediary/DiaryCompleteScreen.jsx";
 import ChallengeMainPage from "./screens/Challenge/ChallengeMainPage.jsx";
 import ChallengeDetailPage from "./screens/Challenge/ChallengeDetailPage.jsx";
-import ConsumptionSelect from "./screens/ConsumptionSelect.jsx"
+import ConsumptionSelect from "./screens/ConsumptionSelect.jsx";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -73,9 +73,15 @@ export default function App() {
         <Stack.Screen name="거래내역조회" component={AccountScreen} />
         <Stack.Screen name="WHTest" component={WHTest} />
         <Stack.Screen name="EditKeyword" component={EditKeyword} />
-        <Stack.Screen name="LoadingPage" component={LoadingPage} />
+        <Stack.Screen
+          name="DiaryCompleteScreen"
+          component={DiaryCompleteScreen}
+        />
         <Stack.Screen name="ChallengeMainPage" component={ChallengeMainPage} />
-        <Stack.Screen name="ChallengeDetailPage" component={ChallengeDetailPage} />
+        <Stack.Screen
+          name="ChallengeDetailPage"
+          component={ChallengeDetailPage}
+        />
         <Stack.Screen name="ConsumptionSelect" component={ConsumptionSelect} />
       </Stack.Navigator>
       <StatusBar style="auto" />
