@@ -26,5 +26,13 @@
     "plugins": [
       "expo-font"
     ]
-  }
+  },
+    "resolve": {
+         "alias": {
+             "react-native$": "react-native-web",
+             "../Utilities/Platform": "react-native-web/dist/exports/Platform",
+             "../../Utilities/Platform": "react-native-web/dist/exports/Platform",
+             "./Platform": "react-native-web/dist/exports/Platform"
+         }
+     }
 }

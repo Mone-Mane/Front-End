@@ -14,7 +14,7 @@ import CreditCard from "../../components/CreditCard";
 import PayRatio from "../../components/PayRatio";
 import { ScrollView } from "react-native";
 
-const MainPage = () => {
+const MainPage = ({ navigation }) => {
   const datas = [
     {
       name: "식비",
@@ -53,6 +53,9 @@ const MainPage = () => {
 
   const thisMonth = new Date().getMonth() + 1;
 
+  const picturehome = () => navigation.navigate("DiaryHome");
+  
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView style={styles.scrollContainer}>
@@ -81,7 +84,7 @@ const MainPage = () => {
                 <Text style={styles.buttonText}>챌린지</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={picturehome}>
               <View style={styles.buttonTxtContainer}>
                 <Palette></Palette>
                 <Text style={styles.buttonText}>그림일기</Text>
