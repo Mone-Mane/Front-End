@@ -3,20 +3,15 @@ import {
   Text,
   View,
   SafeAreaView,
-  Keyboard,
   TouchableOpacity,
 } from "react-native";
 import React from "react";
 import CustomHeader from "../../components/CustomHeader";
 import Keyword from "../../components/Keyword";
-import FastImage from 'react-native-fast-image';
 
 const EditKeyword = ({ navigation }) => {
   const keywords = ["삼겹살", "이베리코", "게임", "귀멸의칼날"];
 
-  const dismissKeyboard = () => {
-    Keyboard.dismiss();
-  };
 
   return (
     <SafeAreaView style={styles.safe}>

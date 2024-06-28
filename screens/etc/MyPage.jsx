@@ -6,7 +6,7 @@ import CustomHeader from "../../components/CustomHeader";
 const MyPage = ({navigation}) => {
   return (
     <SafeAreaView style={styles.safe}>
-      <CustomHeader title="마이 페이지" navigation={navigation}/>
+      <CustomHeader title="마이 페이지" navigation={navigation} bgColor={"white"}/>
 
       <ScrollView style={styles.container}>
         <View style={styles.profileSection}>
@@ -16,7 +16,7 @@ const MyPage = ({navigation}) => {
           />
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>페른</Text>
-            <Text style={styles.profileDate}>1998 / 08 / 28</Text>
+            <Text style={styles.profileDate}>1998. 08. 28</Text>
           </View>
         </View>
         <View style={styles.section}>
@@ -95,10 +95,11 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "ExtraBold"
   },
   profileDate: {
     fontSize: 14,
+    fontFamily: "Bold",
     color: "gray",
   },
   section: {
@@ -109,23 +110,31 @@ const styles = StyleSheet.create({
   },
   sectionItem: {
     fontSize: 16,
+    fontFamily:"Bold"
   },
   sectionArrow: {
     fontSize: 16,
+    fontFamily:"ExtraBold"
   },
   infoSection: {
-    marginTop: 20,
+    marginVertical: 20,
   },
   infoHeader: {
     fontSize: 14,
+    fontFamily: "Regular",
+    marginBottom: 10,
+    color: "gray"
   },
   infoText: {
-    fontSize: 16,
-    marginTop: 10,
+    fontSize: 14,
+    fontFamily:"Regular",
+    marginVertical: 10,
+    color: "gray"
   },
   infoDetail: {
-    fontSize: 14,
-    color: "gray",
+    fontFamily: "Bold",
+    fontSize: 16,
+    color: "black",
     marginTop: 2,
   },
 });
