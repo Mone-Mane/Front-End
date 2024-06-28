@@ -1,5 +1,4 @@
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -9,6 +8,7 @@ import {
 import React, { useState } from "react";
 import CheckIcon from "../../assets/icons/check.svg";
 import RestartIcon from "../../assets/icons/restart.svg";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const DiaryCompleteScreen = () => {
   const [isLoading, setIsLoading] = useState(false);

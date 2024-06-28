@@ -6,6 +6,7 @@ import AccountHistory from '../components/AccountHistory';
 import CustomHeader from "../components/CustomHeader";
 import DownIcon from "../assets/icons/down.svg"
 import ProgreesBar from "../components/ProgressBar"
+import CreditCard from "../components/CreditCard";
 
 
 state = {
@@ -32,8 +33,8 @@ const AccountScreen = ({navigation}) => {
       <CustomHeader title="계좌내역조회" navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
-          <ProgreesBar progress={ProgressValue}/>
-            <View style={styles.cardBox}>              
+            <View style={styles.cardBox}>
+              <CreditCard></CreditCard>              
             </View>
             <View style={styles.searchMonth}>
                 <Text style={styles.textMonth}>1개월</Text>
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#f8f8f8'
+    backgroundColor: '#f9f9f9'
   },
   accounthistorycontainer: {
     flex: 1,
@@ -64,8 +65,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
   cardBox: {
-    width:150,
-    height:150,
     fontSize: 18,
     color: '#333',
     alignSelf: 'center',
