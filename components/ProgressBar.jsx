@@ -22,7 +22,7 @@ const ProgressBar = ({ progress }) => {
         </View>
         {/* 진행률 표시 */}
       </View>
-      <Text style={styles.percentageText}>{`${displayProgress}%`}</Text>
+      <Text style={styles.percentageText}>{`${progress}%`}</Text>
     </View>
   );
 };
@@ -51,9 +51,9 @@ const styles = StyleSheet.create({
     top: 5, // 막대 바 밑으로 텍스트를 이동
     // transform: [{ translateX: -50 }], /// 텍스트가 정중앙에 오도록 조정
     color: "black",
-    fontWeight: "bold",
+    fontFamily: "Bold",
     alignSelf:"flex-end",
-    fontSize:24
+    fontSize:20
   },
 });
 

@@ -45,11 +45,12 @@ const images = [
       participants: "2,337명",
     },
   ];
-  
+    
 const DiaryHome = ({navigation}) => {
     const pairedImages = getPairedImages(images);
   const pagerRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const picturecreate = () => navigation.navigate("ConsumptionSelect");
 
   const handlePageSelected = (e) => {
     const position = e.nativeEvent.position;
@@ -58,12 +59,13 @@ const DiaryHome = ({navigation}) => {
       pagerRef.current.setPageWithoutAnimation(0);
     }
   };
+
     
   return (
     <SafeAreaView style={styles.safe}>
     <CustomHeader title="SYTest" navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <TouchableOpacity style={styles.createButton}>
+        <TouchableOpacity style={styles.createButton} onPress={picturecreate}>
           <DrawIcon marginLeft={-50}/>
           <Text style={styles.createButtonText}>그림일기 생성하기</Text>
         </TouchableOpacity>

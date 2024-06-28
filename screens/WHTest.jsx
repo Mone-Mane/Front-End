@@ -5,10 +5,7 @@ import ConsumptionSelect from './ConsumptionSelect'
 
 const WHTest = ({navigation}) => {
   return (
-    <View>
-      <ConsumptionSelect navigation={navigation}/>
-      {/* <DiaryDetail navigation={navigation}/> */}
-    </View>
+    <ConsumptionSelect navigation={navigation}/>
   )
 }
 
