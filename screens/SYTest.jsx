@@ -14,6 +14,7 @@ import color from "../assets/colors/colors";
 import HotRankingCard from "../components/HotRankingCard";
 import ChallengeAcceptModal from "../components/ChallengeAcceptModal";
 import ChallengeCardInProgress from "../components/ChallengeCardInProgress";
+import ChallengeRequestModal from "../components/ChallengeRequestModal";
 
 const DATA = [
   {
@@ -125,6 +126,7 @@ const SYTest = ({ navigation }) => {
 
   // 모달
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isRequestModalVisible, setIsRequestModalVisible] = useState(false);
 
   // 챌린지 카드 데이터 쌍으로 그룹화
   const groupedChallenges = [];
@@ -138,9 +140,16 @@ const SYTest = ({ navigation }) => {
       <Pressable onPress={() => setIsModalVisible(true)}>
         <Text style={styles.textStyle}>Modal Open!</Text>
       </Pressable>
+      <Pressable onPress={() => setIsRequestModalVisible(true)}>
+        <Text style={styles.textStyle}>RequestModal Open!</Text>
+      </Pressable>
       <ChallengeAcceptModal
         isOpen={isModalVisible}
         setIsOpen={setIsModalVisible}
+      />
+      <ChallengeRequestModal
+        isOpen={isRequestModalVisible}
+        setIsOpen={setIsRequestModalVisible}
       />
       <View style={styles.full}>
         <Text>진행중인 챌린지</Text>
