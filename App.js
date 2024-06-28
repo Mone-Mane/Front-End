@@ -21,6 +21,9 @@ import { useEffect, useState } from "react";
 import SelectCategoryScreen from "./screens/picturediary/SelectCategoryScreen.jsx";
 import EditKeyword from "./screens/picturediary/EditKeyword.jsx";
 import LoadingPage from "./screens/picturediary/LoadingPage.jsx";
+import ChallengeMainPage from "./screens/Challenge/ChallengeMainPage.jsx";
+import ChallengeDetailPage from "./screens/Challenge/ChallengeDetailPage.jsx";
+
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -71,6 +74,8 @@ export default function App() {
         <Stack.Screen name="WHTest" component={WHTest} />
         <Stack.Screen name="EditKeyword" component={EditKeyword} />
         <Stack.Screen name="LoadingPage" component={LoadingPage} />
+        <Stack.Screen name="ChallengeMainPage" component={ChallengeMainPage} />
+        <Stack.Screen name="ChallengeDetailPage" component={ChallengeDetailPage} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

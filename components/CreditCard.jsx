@@ -62,7 +62,7 @@ const CreditCard = () => {
             source={require("../assets/cardframe.png")}
             style={styles.image}
           >
-            <Text style={styles.heading}>Gold Plated</Text>
+            <Text style={styles.heading}>Sync Credit</Text>
             <MasterCard width={60} height={60} style={styles.logo} />
             <CardChip width={40} height={40} style={styles.chip} />
             <Text style={styles.name}>NAM WOOHYEON</Text>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     top: 20,
     left: 24,
-    fontWeight: "600",
+    fontFamily:"ExtraBold",
     textShadowColor: "#fff",
     textShadowOffset: { width: -0.2, height: -0.2 },
     textShadowRadius: 0.2,
@@ -152,12 +152,11 @@ const styles = StyleSheet.create({
   },
   name: {
     position: "absolute",
-    fontWeight: "400",
-    fontSize: 16,
-    top: 140,
+    fontFamily: "Heavy",
+    fontSize: 14,
+    top: 150,
     left: 24,
     color: "#ffffff",
-    fontWeight: "bold",
   },
   strip: {
     position: "absolute",
@@ -168,51 +167,46 @@ const styles = StyleSheet.create({
   },
   number: {
     position: "absolute",
-    fontWeight: "600",
+    fontFamily:"Heavy",
     letterSpacing: 1,
     fontSize: 16,
-    top: 90,
+    top: 91,
     left: 24,
     color: "white",
-    fontWeight: "bold",
   },
   date: {
     position: "absolute",
-    fontWeight: "600",
+    fontFamily: "Heavy",
     fontSize: 12,
     top: 140,
     left: 24,
     letterSpacing: 2,
     color: "white",
-    fontWeight: "bold",
   },
   cvc_number: {
     position: "absolute",
-    fontWeight: "600",
+    fontFamily: "Heavy",
     fontSize: 12,
     top: 140,
     left: 106,
     letterSpacing: 2,
     color: "white",
-    fontWeight: "bold",
   },
   cvc: {
     position: "absolute",
-    fontWeight: "600",
+    fontFamily: "Heavy",
     fontSize: 8,
     top: 140,
     left: 135,
     color: "white",
-    fontWeight: "bold",
   },
   exp: {
     position: "absolute",
-    fontWeight: "600",
+    fontFamily: "Heavy",
     fontSize: 8,
     top: 140,
     left: 70,
     color: "white",
-    fontWeight: "bold",
   },
 });
 

@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 16,
     color: "#A2BFFF",
+    fontFamily: "Bold"
   },
   inputBox: {
     fontSize: 18,
@@ -72,11 +73,13 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: "#5A73F5",
-    padding: 10,
-    borderRadius: 16,
+    padding: 20,
+    borderRadius: 40,
   },
   loginButtonText: {
     color: "white",
     textAlign: "center",
+    fontFamily: "Bold",
+    fontSize: 16
   },
 });
