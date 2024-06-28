@@ -56,8 +56,8 @@ const DiaryHome = ({navigation}) => {
       source={item} 
       style={[
         styles.image, 
-        { width: (windowWidth - 60) / 2 },
-        index % 2 === 0 ? { marginRight: 5 } : { marginLeft: 5 }
+        { width: (windowWidth - 90) / 2 },
+        index % 2 === 0 ? { marginRight: 4 } : { marginLeft: 5 }
       ]} 
     />
   );
@@ -76,14 +76,14 @@ const DiaryHome = ({navigation}) => {
         </TouchableOpacity>
         <View style={styles.container}>
         <Text style={styles.subHeader}>Sync가 그려준 일기</Text>
-        
-        <FlatList
+          <FlatList
             data={images}
-            renderItem={renderImageItem}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.pagerView}
             keyExtractor={(item, index) => index.toString()}
-            numColumns={2}
-            columnWrapperStyle={styles.columnWrapper}
-            scrollEnabled={false}
+            renderItem={renderImageItem}
           />
           </View>
           <View>
@@ -174,9 +174,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 140,
+    height: 140,
     borderRadius: 10,
+    marginHorizontal:5
   },
   hotList: {
     borderRadius:5,
@@ -203,8 +204,8 @@ const styles = StyleSheet.create({
     height: 150,
   },
   page: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

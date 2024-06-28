@@ -5,12 +5,15 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
+  FlatList
 } from "react-native";
 import React from "react";
 import CustomHeader from "../../components/CustomHeader";
 import Flame from "../../assets/icons/flame.svg";
 import HotRankingCard from "../../components/HotRankingCard";
 import ChallengeCard from "../../components/ChallengeCard";
+import ChallengeCardInProgress from "../../components/ChallengeCardInProgress";
 import { useState } from "react";
 
 const ChallengeMainPage = () => {
@@ -47,6 +50,65 @@ const ChallengeMainPage = () => {
     },
   ];
 
+  const CHALLENGE_INPROGRESS = [
+    {
+      id: "1",
+      title: "카페 줄이기",
+      dateRange: "06.07 - 06.13",
+      progress: "80",
+    },
+    {
+      id: "2",
+      title: "유흥 줄이기",
+      dateRange: "06.07 - 06.13",
+      progress: "80",
+    },
+    {
+      id: "3",
+      title: "택시 이용 줄이기",
+      dateRange: "06.07 - 06.13",
+      progress: "80",
+    },
+    {
+      id: "4",
+      title: "쇼핑 줄이기",
+      dateRange: "06.07 - 06.13",
+      progress: "80",
+    },
+    {
+      id: "5",
+      title: "술 줄이기",
+      dateRange: "06.07 - 06.13",
+      progress: "80",
+    },
+    {
+      id: "6",
+      title: "야식 줄이기",
+      dateRange: "06.07 - 06.13",
+      progress: "80",
+    },
+    {
+      id: "7",
+      title: "배달 음식 줄이기",
+      dateRange: "06.07 - 06.13",
+      progress: "80",
+    },
+    {
+      id: "8",
+      title: "구독 서비스 줄이기",
+      dateRange: "06.07 - 06.13",
+      progress: "80",
+    },
+  ];
+
+  const screenWidth = Dimensions.get("window").width;
+
+  const groupedChallenges = [];
+
+  for (let i = 0; i < CHALLENGE_INPROGRESS.length; i += 2) {
+    groupedChallenges.push(CHALLENGE_INPROGRESS.slice(i, i + 2));
+  }
+
   const [containerWidth, setContainerWidth] = useState(0);
   const margins = 10 * 2; // Padding on each side
   const numColumns = 2; // Number of columns
@@ -67,6 +129,28 @@ const ChallengeMainPage = () => {
           <View style={styles.inProgressContainer}>
             <View>
               <Text style={styles.inProgressText}>진행중인 챌린지</Text>
+              <FlatList
+                data={groupedChallenges}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.pagerView}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <View
+                    style={[styles.page, { width: screenWidth - 40 }]} // Subtracting padding
+                  >
+                    {item.map((challenge) => (
+                      <ChallengeCardInProgress
+                        key={challenge.id}
+                        title={challenge.title}
+                        dateRange={challenge.dateRange}
+                        progress={challenge.progress}
+                      />
+                    ))}
+                  </View>
+                )}
+              />
             </View>
             <View></View>
           </View>
@@ -83,7 +167,10 @@ const ChallengeMainPage = () => {
             </View>
           </View>
           <Text style={styles.hotText}>완료된 챌린지</Text>
-          <View style={styles.doneContainer} onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}>
+          <View
+            style={styles.doneContainer}
+            onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
+          >
             {DATA.map((item) => (
               <View
                 key={item.id}
@@ -151,7 +238,9 @@ const styles = StyleSheet.create({
     fontFamily: "Heavy",
     fontSize: 20,
   },
-  hotContainer: {},
+  hotContainer: {
+    marginBottom:20
+  },
   hotText: {
     fontFamily: "Heavy",
     fontSize: 20,
@@ -168,4 +257,18 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
   },
+  pagerView: {
+    marginBottom: 20,
+    justifyContent: "space-between",
+  },
+  page: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // paddingHorizontal: 10,
+  },
+  inProgressText:{
+    fontFamily: "Heavy",
+    fontSize: 20,
+    marginBottom: 20,
+  }
 });
