@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, SafeAreaView } from "react-native";
 import React from "react";
 
 const Home = ({ navigation }) => {
   return (
-    <View>
+    <SafeAreaView style={styles.safe}>
+      <View>
       <Text>Home</Text>
       <Button
         title="Go to Profile"
@@ -71,9 +72,16 @@ const Home = ({ navigation }) => {
         onPress={() => navigation.navigate("ChallengeDetailPage")}
       />
     </View>
+    </SafeAreaView>
+    
   );
 };
 
 export default Home;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safe: {
+    backgroundColor: "white",
+    flex: 1
+  },
+});
