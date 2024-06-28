@@ -31,10 +31,8 @@ const styles = StyleSheet.create({
   container: {
     width: "100%", // 컨테이너의 너비를 부모의 전체 너비로 설정
     height: 10, // 막대의 높이 + 여유 공간
-    borderColor: "#ccc",
-    borderWidth: 1,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: "#e8e8e8",
     position: "absolute",
   },
   bar: {

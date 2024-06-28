@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    borderRadius:5,
     backgroundColor: '#fff',
   },
   header: {
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily:'Bold',
   },
   createButton: {
     flexDirection:"row",
@@ -141,26 +142,26 @@ const styles = StyleSheet.create({
     marginVertical:30
   },
   createButtonText: {
+    fontFamily:'Bold',
     color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 20,
     marginLeft: 10
   },
   subHeader: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily:'Bold',
     marginBottom: 10,
   },
   hotText:{
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily:'Bold',
     marginLeft:20,
     marginTop:15,
     alignSelf: 'flex-start',
   },
   subText:{
-    fontSize: 40,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontFamily:'Bold',
     marginLeft:20,
     marginTop:15,
     alignSelf: 'flex-start',
@@ -175,6 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   hotList: {
+    borderRadius:5,
     marginBottom: 20,
   },
   hotItem: {
