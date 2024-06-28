@@ -1,8 +1,9 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import CustomHeader from "../../components/CustomHeader";
 import ProgressBar from "../../components/ProgressBar.jsx";
 import Participant from "../../components/Participant.jsx";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ChallengeDetailPage = () => {
 

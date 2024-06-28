@@ -1,12 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
-import SuccessIcon from "../assets/icons/success.svg";
-import FailIcon from "../assets/icons/fail.svg";
 import ProgressBar from "./ProgressBar";
 import Drink from "../assets/icons/paydrink.svg";
 import Bus from "../assets/icons/paybus.svg";
 import Coffee from "../assets/icons/paycafe.svg";
-import Etc from "../assets/icons/payetc.svg";
 import Food from "../assets/icons/payfood.svg";
 const ChallengeCardInProgress = ({ title, dateRange, progress }) => {
   const screenWidth = Dimensions.get("window").width;
@@ -96,7 +93,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#ffffff",
-    fontSize: 16,
     fontSize: 16,
     fontWeight: "Bold",
   },

@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     // padding: 15,
     alignItems: "center",
     marginBottom: 10,
+    overflow: 'hidden'
   },
   successCard: {
     backgroundColor: "#ffffff",
@@ -65,7 +66,6 @@ const styles = StyleSheet.create({
   text: {
     color: "#ffffff",
     fontSize: 16,
-    fontSize: 16,
     fontWeight: "Bold",
   },
   medal: {
@@ -79,6 +79,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     alignSelf: "flex-start",
     paddingLeft: 16,
+    borderEndEndRadius: 16,
+    borderEndStartRadius: 16,
   },
   status: {
     height: 49,

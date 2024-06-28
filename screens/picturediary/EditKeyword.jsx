@@ -2,12 +2,12 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   TouchableOpacity,
 } from "react-native";
 import React from "react";
 import CustomHeader from "../../components/CustomHeader";
 import Keyword from "../../components/Keyword";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const EditKeyword = ({ navigation }) => {
   const keywords = ["삼겹살", "이베리코", "게임", "귀멸의칼날"];

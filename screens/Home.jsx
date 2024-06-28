@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, Button, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safe}>
       <View>
-      <Text>Home</Text>
       <Button
         title="Go to Profile"
         onPress={() => navigation.navigate("Profile")}
@@ -73,7 +73,6 @@ const Home = ({ navigation }) => {
       />
     </View>
     </SafeAreaView>
-    
   );
 };
 

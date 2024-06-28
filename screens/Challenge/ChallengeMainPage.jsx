@@ -1,22 +1,22 @@
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  FlatList
+  FlatList,
 } from "react-native";
 import React from "react";
 import CustomHeader from "../../components/CustomHeader";
 import Flame from "../../assets/icons/flame.svg";
 import HotRankingCard from "../../components/HotRankingCard";
 import ChallengeCard from "../../components/ChallengeCard";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ChallengeCardInProgress from "../../components/ChallengeCardInProgress";
 import { useState } from "react";
 
-const ChallengeMainPage = () => {
+const ChallengeMainPage = ({ navigation }) => {
   const DATA = [
     {
       id: "1",
@@ -115,8 +115,8 @@ const ChallengeMainPage = () => {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <CustomHeader title={"챌린지"}></CustomHeader>
-      <ScrollView>
+      <CustomHeader title={"챌린지"} navigation={navigation}/>
+      <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.container}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity>
@@ -159,6 +159,7 @@ const ChallengeMainPage = () => {
             <View style={styles.hotList}>
               {DATA1.map((DATA) => (
                 <HotRankingCard
+                  key={DATA.id}
                   medal={DATA.medal}
                   title={DATA.title}
                   participants={DATA.participants}
@@ -180,6 +181,7 @@ const ChallengeMainPage = () => {
                 ]}
               >
                 <ChallengeCard
+                  key={item.id}
                   title={item.title}
                   dateRange={item.dateRange}
                   status={item.status}
@@ -239,7 +241,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   hotContainer: {
-    marginBottom:20
+    marginBottom: 20,
   },
   hotText: {
     fontFamily: "Heavy",
@@ -266,9 +268,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     // paddingHorizontal: 10,
   },
-  inProgressText:{
+  inProgressText: {
     fontFamily: "Heavy",
     fontSize: 20,
     marginBottom: 20,
-  }
+  },
 });
