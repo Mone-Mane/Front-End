@@ -9,7 +9,6 @@ import {
 import React from "react";
 import CustomHeader from "../../components/CustomHeader";
 import Keyword from "../../components/Keyword";
-import FastImage from 'react-native-fast-image';
 
 const EditKeyword = ({ navigation }) => {
   const keywords = ["삼겹살", "이베리코", "게임", "귀멸의칼날"];

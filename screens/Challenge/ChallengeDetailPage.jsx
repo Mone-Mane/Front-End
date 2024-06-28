@@ -62,7 +62,7 @@ const ChallengeDetailPage = () => {
             </View>
           </View>
           <View style={styles.barContainer}>
-            <ProgressBar progress={120}></ProgressBar>
+            <ProgressBar progress={30} sizeFont={20}></ProgressBar>
           </View>
           <View style={styles.normContainer}>
             <Text style={[styles.titleFont, styles.marginSmall]}>기간</Text>
