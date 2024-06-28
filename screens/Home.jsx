@@ -59,8 +59,8 @@ const Home = ({ navigation }) => {
         onPress={() => navigation.navigate("EditKeyword")}
       />
       <Button
-        title="Go to LoadingPage"
-        onPress={() => navigation.navigate("LoadingPage")}
+        title="Go to DiaryCompleteScreen"
+        onPress={() => navigation.navigate("DiaryCompleteScreen")}
       />
       <Button
         title="Go to ChallengeMainPage"
