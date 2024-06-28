@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
         margin: 4
     },
     textInput: {
+        fontFamily: "Bold",
         marginRight:8
     }
 

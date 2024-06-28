@@ -62,6 +62,14 @@ const Home = ({ navigation }) => {
         title="Go to LoadingPage"
         onPress={() => navigation.navigate("LoadingPage")}
       />
+      <Button
+        title="Go to ChallengeMainPage"
+        onPress={() => navigation.navigate("ChallengeMainPage")}
+      />
+      <Button
+        title="Go to ChallengeDetailPage"
+        onPress={() => navigation.navigate("ChallengeDetailPage")}
+      />
     </View>
   );
 };

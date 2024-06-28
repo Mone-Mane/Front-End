@@ -167,10 +167,11 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "ExtraBold"
   },
   profileStatus: {
-    fontSize: 14,
+    fontFamily:"Regular",
+    fontSize: 12,
     color: "#777",
   },
   buttonContainer: {
@@ -185,15 +186,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#5A73F5",
     paddingVertical: 10,
     paddingLeft: 20,
-    paddingRight: 30,
+    paddingRight: 20,
     borderRadius: 10,
     marginHorizontal: 5,
   },
   buttonText: {
     color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-    paddingLeft: 20,
+    fontSize: 18,
+    fontFamily: "ExtraBold",
+    paddingLeft: 10,
   },
   cardContainer: {
     padding: 20,
@@ -209,18 +210,19 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   expenseTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontFamily: "ExtraBold",
     marginBottom: 10,
   },
   expenseAmount: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 20,
     marginBottom: 10,
+    fontFamily: "ExtraBold"
   },
   expenseBarContainer: {
     flexDirection: "row",
     height: 10,
+    marginTop: 10,
     marginBottom: 20,
     backgroundColor: "#b2bec3",
     borderRadius: 5,

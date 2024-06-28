@@ -31,12 +31,12 @@ const PayRatio = ({ name, amount, rate }) => {
           {renderIcon()}
         </View>
         <View style={styles.txtContainer}>
-          <Text>{name}</Text>
-          <Text>{parseFloat(rate).toFixed(2)}%</Text>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.percentage}>{parseFloat(rate).toFixed(2)}%</Text>
         </View>
       </View>
       <View style={styles.rightContainer}>
-        <Text>{amount}원</Text>
+        <Text style={styles.price}>{parseInt(amount).toLocaleString()}원</Text>
       </View>
     </View>
   );
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 10
+    marginVertical: 10,
   },
   leftContainer: {
     flexDirection: "row",
@@ -62,4 +62,17 @@ const styles = StyleSheet.create({
   rightContainer: {
     justifyContent: "center",
   },
+  name: {
+    fontFamily: "Bold",
+    fontSize: 16
+  },
+  percentage: {
+    fontFamily: "Bold",
+    color: "gray",
+    marginTop:5
+  },
+  price:{
+    fontFamily:"Bold",
+    fontSize: 16
+  }
 });
