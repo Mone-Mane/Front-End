@@ -97,9 +97,10 @@ const styles = StyleSheet.create({
 
   modalTextStyle: {
     color: "#17191c",
-    fontWeight: "Bold",
+    fontFamily: "Bold",
     textAlign: "center",
     alignSelf: "center",
+    fontSize: 16
   },
 
   centeredView: {

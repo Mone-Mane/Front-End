@@ -69,14 +69,16 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#5A73F5",
-    padding: 20,
+    padding: 12,
     alignItems: "center",
-    borderRadius: 16,
+    borderRadius: 8,
     marginTop: 15
   },
   buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 18,
+    lineHeight: 21,
+    fontFamily: "Bold", 
+    letterSpacing: 0.25,
     color: "white",
   },
   gif: {

@@ -32,14 +32,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   name: {
-    fontSize: 14,
-    fontFamily: "Heavy",
+    fontSize: 16,
+    fontFamily: "Bold",
     marginLeft: 10,
   },
   percentage: {
-    fontSize: 12,
+    fontSize: 14,
     color: "gray",
-    fontFamily: "Bold",
+    fontFamily: "Regular",
   },
 });
 

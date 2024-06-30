@@ -76,8 +76,8 @@ const DiaryHome = ({ navigation }) => {
           <DrawIcon marginLeft={-50} />
           <Text style={styles.createButtonText}>그림일기 생성하기</Text>
         </TouchableOpacity>
+        <Text style={styles.subHeader}>Sync가 그려준 일기</Text>
         <View style={styles.container}>
-          <Text style={styles.subHeader}>Sync가 그려준 일기</Text>
           <FlatList
             data={images}
             horizontal
@@ -153,14 +153,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   subHeader: {
-    fontSize: 20,
-    fontFamily: "Bold",
+    fontSize: 18,
+    fontFamily: "ExtraBold",
     marginBottom: 10,
   },
   hotText: {
-    fontSize: 28,
-    fontFamily: "Bold",
-    marginLeft: 20,
+    fontSize: 18,
+    fontFamily: "ExtraBold",
     marginTop: 15,
     alignSelf: "flex-start",
   },

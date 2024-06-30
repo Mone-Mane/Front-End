@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   percentage: {
+    fontSize: 12,
     fontFamily: "Bold",
     color: "gray",
     marginTop:5

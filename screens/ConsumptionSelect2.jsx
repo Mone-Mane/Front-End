@@ -54,7 +54,7 @@ const ConsumptionSelect = ({ navigation }) => {
       setSelectedIds(selectedIds.filter((item) => item !== id));
     } else {
       if (selectedIds.length >= 5) {
-        Alert.alert("거래내역은 최대 5개 까지만 선택가능합니다");
+        Alert.alert("거래내역은 최대 5개까지 선택가능합니다");
         return;
       }
       setSelectedIds([...selectedIds, id]);

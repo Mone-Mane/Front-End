@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
     justifyContent:'center',
   },
   contactDate: {
-    fontSize: 14,
-    fontFamily:"Light",
+    fontSize: 10,
+    fontFamily:"Regular",
     color:'gray',
     marginRight:10
   },
@@ -87,15 +87,17 @@ const styles = StyleSheet.create({
   },
   positiveAmount: {
     fontSize: 14,
-    fontFamily:"Bold",
+    fontFamily:"ExtraBold",
     color: '#5A73F5', // 긍정적인 금액의 색상
+    marginBottom: 5
   },
   negativeAmount: {
     fontSize: 14,
-    fontFamily:"Bold",
+    fontFamily:"ExtraBold",
+    marginBottom: 5
   },
   useBalance:{
     fontSize:12,
-    color:"gray"
+    color:"gray",
   }
 })

@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: "Bold",
     marginBottom: 10,
     textAlign: "center",
@@ -108,21 +108,24 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#5A73F5",
-    paddingVertical: 15,
-    borderRadius: 10,
+    paddingVertical: 12,
+    borderRadius: 8,
     alignItems: "center",
     marginHorizontal: 5,
     justifyContent: "center", // 중앙 정렬
     position: "relative", // 아이콘을 절대 위치로 배치하기 위해 사용
   },
   buttonText: {
+    fontSize: 18,
+    lineHeight: 21,
+    fontFamily: "Bold", 
+    letterSpacing: 0.25,
     color: "white",
-    fontSize: 16,
-    fontFamily: "Heavy",
   },
   iconContainer: {
     position: "absolute",
-    right: 5, // 버튼 왼쪽에 고정
+    right: 7,
+    bottom: 13
   },
   icon: {
     marginRight: 5, // 아이콘과 텍스트 사이의 간격 조정

@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 10,
-    marginTop: 28,
+    marginTop: 20,
     marginRight: 7,
   },
   title: {
     fontSize: 16,
-    fontWeight: "Bold",
+    fontFamily: "Bold",
     paddingLeft: 16,
     maxWidth: 100,
   },
@@ -66,14 +66,14 @@ const styles = StyleSheet.create({
   text: {
     color: "#ffffff",
     fontSize: 16,
-    fontWeight: "Bold",
+    fontFamily: "Bold",
   },
   medal: {
     width: 20,
     height: 20,
   },
   dateRange: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#888",
     fontFamily: "Regular",
     marginBottom: 12,

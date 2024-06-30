@@ -21,6 +21,13 @@ const transactions = [
   { id: '1', date: '06.16', name: '비디버거 성수', amount: '-17,400',balance: "143,000" },
   { id: '2', date: '06.16', name: '베트남 쌀국수', amount: '-17,400',balance: "143,000" },
   { id: '3', date: '06.16', name: '임태규', amount: '+50,000',balance: "143,000" },
+  { id: '3', date: '06.16', name: '임태규', amount: '+50,000',balance: "143,000" },
+  { id: '3', date: '06.16', name: '임태규', amount: '+50,000',balance: "143,000" },
+  { id: '3', date: '06.16', name: '임태규', amount: '+50,000',balance: "143,000" },
+  { id: '3', date: '06.16', name: '임태규', amount: '+50,000',balance: "143,000" },
+  { id: '3', date: '06.16', name: '임태규', amount: '+50,000',balance: "143,000" },
+  { id: '3', date: '06.16', name: '임태규', amount: '+50,000',balance: "143,000" },
+  { id: '3', date: '06.16', name: '임태규', amount: '+50,000',balance: "143,000" },
   // 추가 거래 내역
 ];
 
@@ -40,6 +47,7 @@ const AccountScreen = ({navigation}) => {
                 <Text style={styles.textMonth}>1개월</Text>
                 <DownIcon width={24} height={24}/>
             </View>
+            
             <View style={styles.accounthistorycontainer}>
             {transactions.map((item,index)=>(
               <AccountHistory key={index} transaction={item} />
