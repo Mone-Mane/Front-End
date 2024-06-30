@@ -29,8 +29,9 @@ const styles = StyleSheet.create({
         margin: 4
     },
     textInput: {
-        fontFamily: "Bold",
-        marginRight:8
+        fontFamily: "Regular",
+        marginRight:8,
+        fontSize:14
     }
 
 });

@@ -53,19 +53,19 @@ const ChallengeMainPage = ({ navigation }) => {
   const CHALLENGE_INPROGRESS = [
     {
       id: "1",
-      title: "카페 줄이기",
+      title: "카페 덜 가기",
       dateRange: "06.07 - 06.13",
       progress: "80",
     },
     {
       id: "2",
-      title: "유흥 줄이기",
+      title: "유흥 안하기",
       dateRange: "06.07 - 06.13",
       progress: "80",
     },
     {
       id: "3",
-      title: "택시 이용 줄이기",
+      title: "택시 덜 타기",
       dateRange: "06.07 - 06.13",
       progress: "80",
     },
@@ -77,25 +77,25 @@ const ChallengeMainPage = ({ navigation }) => {
     },
     {
       id: "5",
-      title: "술 줄이기",
+      title: "술 덜 마시기",
       dateRange: "06.07 - 06.13",
       progress: "80",
     },
     {
       id: "6",
-      title: "야식 줄이기",
+      title: "야식 덜 먹기",
       dateRange: "06.07 - 06.13",
       progress: "80",
     },
     {
       id: "7",
-      title: "배달 음식 줄이기",
+      title: "배달 덜 먹기",
       dateRange: "06.07 - 06.13",
       progress: "80",
     },
     {
       id: "8",
-      title: "구독 서비스 줄이기",
+      title: "구독 좀 끊기",
       dateRange: "06.07 - 06.13",
       progress: "80",
     },
@@ -237,14 +237,15 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   inProgressText: {
-    fontFamily: "Heavy",
+    fontFamily: "ExtraBold",
     fontSize: 20,
+    marginBottom: 20,
   },
   hotContainer: {
     marginBottom: 20,
   },
   hotText: {
-    fontFamily: "Heavy",
+    fontFamily: "ExtraBold",
     fontSize: 20,
     marginBottom: 20,
   },
@@ -267,10 +268,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     // paddingHorizontal: 10,
-  },
-  inProgressText: {
-    fontFamily: "Heavy",
-    fontSize: 20,
-    marginBottom: 20,
   },
 });

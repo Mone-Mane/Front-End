@@ -170,8 +170,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   profileName: {
-    fontSize: 18,
-    fontFamily: "ExtraBold"
+    fontSize: 16,
+    fontFamily: "Bold"
   },
   profileStatus: {
     fontFamily:"Regular",
@@ -196,8 +196,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontSize: 18,
-    fontFamily: "ExtraBold",
+    fontSize: 16,
+    fontFamily: "Heavy",
     paddingLeft: 10,
   },
   cardContainer: {
@@ -214,12 +214,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   expenseTitle: {
-    fontSize: 24,
+    fontSize: 16,
     fontFamily: "ExtraBold",
     marginBottom: 10,
   },
   expenseAmount: {
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 10,
     fontFamily: "ExtraBold"
   },
