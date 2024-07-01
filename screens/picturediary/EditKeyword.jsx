@@ -13,9 +13,9 @@ import EX from "../../assets/icons/ex.svg"
 
 const Keyword = ({ keyword, onDelete }) => (
   <View style={styles.keyword}>
-    <Text style={styles.keywordText}>{keyword}</Text>
+    <Text style={styles.keywordText}># {keyword}</Text>
     <TouchableOpacity onPress={() => onDelete(keyword)}>
-      <EX marginLeft={5}/>
+      <EX/>
     </TouchableOpacity>
   </View>
 );
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 10,
   },
   stickerContainer: {
@@ -145,22 +145,21 @@ const styles = StyleSheet.create({
     color: "white",
   },
   keyword: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#DFEAFF",
     padding: 10,
     borderRadius: 20,
-    margin: 5,
+    marginHorizontal: 5,
+    marginVertical: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent:"center"
   },
   keywordText: {
-    fontSize: 16,
+    fontSize: 14,
+    fontFamily: "Regular",
+    color: "#000",
   },
   deleteButton: {
     marginLeft: 10,
-    color: "red",
-    fontWeight: "bold",
-    marginLeft:6,
-
   },
 });

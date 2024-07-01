@@ -5,14 +5,17 @@ import {
   View,
   Image,
   TouchableOpacity,
-
+  TouchableWithoutFeedback,
 } from "react-native";
 import Flame from "../../assets/icons/flame.svg";
 import Palette from "../../assets/icons/palette.svg";
+import Prev from "../../assets/icons/prev.svg";
+import Next from "../../assets/icons/next.svg";
 import CreditCard from "../../components/CreditCard";
 import PayRatio from "../../components/PayRatio";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 
 const MainPage = ({ navigation }) => {
   const datas = [
@@ -51,7 +54,20 @@ const MainPage = ({ navigation }) => {
     paySum += item.amount;
   });
 
-  const thisMonth = new Date().getMonth() + 1;
+  const currentMonth = new Date().getMonth() + 1;
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+
+  const goToPrevMonth = () => {
+    if (selectedMonth > 1) {
+      setSelectedMonth(selectedMonth - 1);
+    }
+  };
+
+  const goToNextMonth = () => {
+    if (selectedMonth < 12) {
+      setSelectedMonth(selectedMonth + 1);
+    }
+  };
 
   const challengehome = () => navigation.navigate("ChallengeMainPage");
   const picturehome = () => navigation.navigate("DiaryHome");
@@ -63,13 +79,13 @@ const MainPage = ({ navigation }) => {
         <View style={styles.container}>
           <Image
             style={styles.logo}
-            source={require("../../assets/mainLogo.png")} // 대체 이미지 URL을 사용합니다.
+            source={require("../../assets/mainLogo.png")}
           />
           <View style={styles.profileContainer}>
             <View style={styles.profilePersonContainer}>
               <Image
                 style={styles.profileImage}
-                source={require("../../assets/ferren.png")} // 대체 이미지 URL을 사용합니다.
+                source={require("../../assets/ferren.png")}
               />
               <Text style={styles.profileName}>임태규님</Text>
             </View>
@@ -92,11 +108,19 @@ const MainPage = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           </View>
-          <View style={styles.cardContainer}>
+          <TouchableOpacity style={styles.cardContainer} onPress={accountscreen}>
             <CreditCard></CreditCard>
-          </View>
+          </TouchableOpacity>
           <View style={styles.expenseContainer}>
-            <Text style={styles.expenseTitle}>{thisMonth}월</Text>
+            <View style={styles.monthContainer}>
+              <TouchableOpacity onPress={goToPrevMonth}>
+                {selectedMonth > currentMonth - 6 ? <Prev></Prev> : null}
+              </TouchableOpacity>
+              <Text style={styles.expenseTitle}>{selectedMonth}월</Text>
+              <TouchableOpacity onPress={goToNextMonth}>
+                {selectedMonth < currentMonth ? <Next></Next> : null}
+              </TouchableOpacity>
+            </View>
             <Text style={styles.expenseAmount}>
               {paySum.toLocaleString()}원
             </Text>
@@ -217,6 +241,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "ExtraBold",
     marginBottom: 10,
+    marginHorizontal: 10,
   },
   expenseAmount: {
     fontSize: 16,
@@ -230,6 +255,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "#b2bec3",
     borderRadius: 5,
+    overflow: "hidden",
   },
   expenseBar: {
     height: "100%",
@@ -240,6 +266,11 @@ const styles = StyleSheet.create({
   },
   expenseDetail: {
     alignItems: "center",
+  },
+  monthContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start", // 가로 방향으로 가운데 정렬합니다.
+    marginBottom: 10,
   },
 });
 
