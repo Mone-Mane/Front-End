@@ -14,7 +14,6 @@ import AccountHistory from "../../components/AccountHistory";
 import color from "../../assets/colors/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button } from "react-native-web";
 
 const data = [
   {

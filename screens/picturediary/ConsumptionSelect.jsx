@@ -2,19 +2,16 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   Alert,
-  Pressable,
   Dimensions,
   FlatList,
-  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useState } from "react";
-import CustomHeader from "../components/CustomHeader";
-import AccountHistory from "../components/AccountHistory";
-import color from "../assets/colors/colors";
+import CustomHeader from "../../components/CustomHeader";
+import AccountHistory from "../../components/AccountHistory";
+import color from "../../assets/colors/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -142,7 +139,7 @@ const ConsumptionSelect = ({ navigation }) => {
       setSelectedIds(selectedIds.filter((item) => item !== id));
     } else {
       if (selectedIds.length >= 5) {
-        Alert.alert("거래내역은 최대 5개 까지만 선택가능합니다");
+        Alert.alert("거래내역은 최대 5개까지 선택가능합니다");
         return;
       }
       setSelectedIds([...selectedIds, id]);
@@ -173,7 +170,8 @@ const ConsumptionSelect = ({ navigation }) => {
       setFilteredData(data);
     }
   };
-  const { onPress, title = "소비 내역 추출하기" } = navigation;
+  const editkeyword = () => navigation.navigate("EditKeyword");
+
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -208,9 +206,9 @@ const ConsumptionSelect = ({ navigation }) => {
       {selectedIds.length != 0 ? 
       (
         <View style={styles.container2}>
-          <Pressable style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>{title}</Text>
-          </Pressable>
+          <TouchableOpacity style={styles.button} onPress={editkeyword}>
+            <Text style={styles.text}>소비 내역 추출하기</Text>
+          </TouchableOpacity>
         </View>
       ) : null}
     </SafeAreaView>

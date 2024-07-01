@@ -7,15 +7,19 @@ import {
   Dimensions,
   Pressable,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import OilPic from "../../assets/oil_painting.png";
 import DetailIcon from "../../assets/icons/detail.svg";
 import color from "../../assets/colors/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
+import CustomHeader from "../../components/CustomHeader";
+
 
 const { width } = Dimensions.get("window"); // 화면의 전체 너비를 가져옵니다.
 
-const DiaryCheck = () => {
+const DiaryCheck = ({ navigation }) => {
   const images = [
     {
       id: "id",
@@ -61,37 +65,48 @@ const DiaryCheck = () => {
       },
     ]);
   };
+
+  const diarydetail = (id) => navigation.navigate("DiaryDetail", { id });
   return (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.container}>
-        {images.map((item, index) => (
-          <View key={index} style={styles.imageContainer}>
-            <View style={styles.descriptionHeader}>
-              <Text style={styles.description}>{item.description}</Text>
-              <View style={styles.descriptionRigth}>
-                <Text style={styles.dateStyle}>{item.date}</Text>
-                <Pressable onPress={handleDetailButton}>
-                  <DetailIcon width={20} height={20} />
-                </Pressable>
+    <SafeAreaView style={styles.safe}>
+      <CustomHeader title="그림일기" navigation={navigation} />
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.container}>
+          {images.map((item, index) => (
+            <View key={index} style={styles.imageContainer}>
+              <View style={styles.descriptionHeader}>
+                <Text style={styles.description}>{item.description}</Text>
+                <View style={styles.descriptionRigth}>
+                  <Text style={styles.dateStyle}>{item.date}</Text>
+                  <Pressable onPress={handleDetailButton}>
+                    <DetailIcon width={20} height={20} />
+                  </Pressable>
+                </View>
               </View>
+              <TouchableOpacity onPress={() => diarydetail(item.id)}>
+                <Image source={OilPic} style={styles.image} />
+                <View style={styles.tagContainer}>
+                  {item.tags.map((tag, idx) => (
+                    <Text key={idx} style={styles.tag}>
+                      # {tag}
+                    </Text>
+                  ))}
+                </View>
+              </TouchableOpacity>
             </View>
-            <Image source={OilPic} style={styles.image} />
-            <View style={styles.tagContainer}>
-              {item.tags.map((tag, idx) => (
-                <Text key={idx} style={styles.tag}>
-                  # {tag}
-                </Text>
-              ))}
-            </View>
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 export default DiaryCheck;
 const styles = StyleSheet.create({
+  safe: {
+    backgroundColor: color.background,
+    flex: 1,
+  },
   scrollView: {
     backgroundColor: color.background,
   },
@@ -113,7 +128,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     backgroundColor: "#ffffff",
     width: "100%", // 이미지 컨테이너 화면 너비에 맞춤
-    alignItems: "center", // 중앙 정렬
     marginBottom: 20,
   },
   image: {
@@ -141,7 +155,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     flexDirection: "row",
-    alignSelf: "flex-start",
+    alignItems: "flex-start",
     paddingLeft: 10,
   },
   tag: {

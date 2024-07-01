@@ -5,14 +5,14 @@ import {
   View,
   Image,
   TouchableOpacity,
-  SafeAreaView,
-  FlatList,
+
 } from "react-native";
 import Flame from "../../assets/icons/flame.svg";
 import Palette from "../../assets/icons/palette.svg";
 import CreditCard from "../../components/CreditCard";
 import PayRatio from "../../components/PayRatio";
 import { ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MainPage = ({ navigation }) => {
   const datas = [
@@ -53,8 +53,9 @@ const MainPage = ({ navigation }) => {
 
   const thisMonth = new Date().getMonth() + 1;
 
+  const challengehome = () => navigation.navigate("ChallengeMainPage");
   const picturehome = () => navigation.navigate("DiaryHome");
-  
+  const accountscreen = () => navigation.navigate("AccountScreen");
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -78,7 +79,7 @@ const MainPage = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={challengehome}>
               <View style={styles.buttonTxtContainer}>
                 <Flame></Flame>
                 <Text style={styles.buttonText}>챌린지</Text>
@@ -169,11 +170,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   profileName: {
-    fontSize: 18,
-    fontFamily: "ExtraBold"
+    fontSize: 16,
+    fontFamily: "Bold",
   },
   profileStatus: {
-    fontFamily:"Regular",
+    fontFamily: "Regular",
     fontSize: 12,
     color: "#777",
   },
@@ -195,8 +196,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontSize: 18,
-    fontFamily: "ExtraBold",
+    fontSize: 16,
+    fontFamily: "Heavy",
     paddingLeft: 10,
   },
   cardContainer: {
@@ -213,14 +214,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   expenseTitle: {
-    fontSize: 24,
+    fontSize: 16,
     fontFamily: "ExtraBold",
     marginBottom: 10,
   },
   expenseAmount: {
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 10,
-    fontFamily: "ExtraBold"
+    fontFamily: "ExtraBold",
   },
   expenseBarContainer: {
     flexDirection: "row",

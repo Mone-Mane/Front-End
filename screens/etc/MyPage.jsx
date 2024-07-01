@@ -1,12 +1,18 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, Pressable} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
 
-const MyPage = ({navigation}) => {
+const MyPage = ({ navigation }) => {
+  const diarycheck = () => navigation.navigate("DiaryCheck");
+
   return (
     <SafeAreaView style={styles.safe}>
-      <CustomHeader title="마이 페이지" navigation={navigation} bgColor={"white"}/>
+      <CustomHeader
+        title="마이 페이지"
+        navigation={navigation}
+        bgColor={"white"}
+      />
 
       <ScrollView style={styles.container}>
         <View style={styles.profileSection}>
@@ -23,10 +29,12 @@ const MyPage = ({navigation}) => {
           <Text style={styles.sectionItem}>나의 챌린지</Text>
           <Text style={styles.sectionArrow}>⟩</Text>
         </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionItem}>나의 그림일기</Text>
-          <Text style={styles.sectionArrow}>⟩</Text>
-        </View>
+        <TouchableOpacity onPress={diarycheck}>
+          <View style={styles.section}>
+            <Text style={styles.sectionItem}>나의 그림일기</Text>
+            <Text style={styles.sectionArrow}>⟩</Text>
+          </View>
+        </TouchableOpacity>
         <View style={styles.infoSection}>
           <Text style={styles.infoHeader}>내 정보</Text>
           <Text style={styles.infoText}>연락처</Text>
@@ -67,12 +75,12 @@ const MyPage = ({navigation}) => {
 export default MyPage;
 
 const styles = StyleSheet.create({
-  header:{
-    backgroundColor: "white"
+  header: {
+    backgroundColor: "white",
   },
   safe: {
     backgroundColor: "white",
-    flex: 1
+    flex: 1,
   },
   container: {
     flex: 1,
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 20,
-    fontFamily: "ExtraBold"
+    fontFamily: "ExtraBold",
   },
   profileDate: {
     fontSize: 14,
@@ -110,11 +118,11 @@ const styles = StyleSheet.create({
   },
   sectionItem: {
     fontSize: 16,
-    fontFamily:"Bold"
+    fontFamily: "Bold",
   },
   sectionArrow: {
     fontSize: 16,
-    fontFamily:"ExtraBold"
+    fontFamily: "ExtraBold",
   },
   infoSection: {
     marginVertical: 20,
@@ -123,13 +131,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Regular",
     marginBottom: 10,
-    color: "gray"
+    color: "gray",
   },
   infoText: {
     fontSize: 14,
-    fontFamily:"Regular",
+    fontFamily: "Regular",
     marginVertical: 10,
-    color: "gray"
+    color: "gray",
   },
   infoDetail: {
     fontFamily: "Bold",

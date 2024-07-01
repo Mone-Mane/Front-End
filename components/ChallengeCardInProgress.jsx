@@ -1,35 +1,32 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
-import SuccessIcon from "../assets/icons/success.svg";
-import FailIcon from "../assets/icons/fail.svg";
 import ProgressBar from "./ProgressBar";
 import Drink from "../assets/icons/paydrink.svg";
 import Bus from "../assets/icons/paybus.svg";
 import Coffee from "../assets/icons/paycafe.svg";
-import Etc from "../assets/icons/payetc.svg";
 import Food from "../assets/icons/payfood.svg";
 const ChallengeCardInProgress = ({ title, dateRange, progress }) => {
   const screenWidth = Dimensions.get("window").width;
 
   const renderIcon = () => {
     switch (title) {
-      case "카페 줄이기":
+      case "카페 덜 가기":
         return <Coffee width={50} height={50} />;
-      case "유흥 줄이기":
+      case "유흥 안하기":
         return <Drink width={50} height={50} />;
-      case "택시 이용 줄이기":
+      case "택시 덜 타기":
         return <Bus width={50} height={50} />;
       case "쇼핑 줄이기":
         return <Food width={50} height={50} />;
       // return <Shopping width={50} height={50} />;
-      case "술 줄이기":
+      case "술 덜 마시기":
         return <Drink width={50} height={50} />;
-      case "야식 줄이기":
+      case "야식 덜 먹기":
         return <Food width={50} height={50} />;
-      case "배달 음식 줄이기":
+      case "배달 덜 먹기":
         return <Food width={50} height={50} />;
       // return <Delivery width={50} height={50} />;
-      case "구독 서비스 줄이기":
+      case "구독 좀 끊기":
         return <Food width={50} height={50} />;
       // return <Subscription width={50} height={50} />;
       default:
@@ -87,16 +84,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: "Bold",
     paddingLeft: 16,
     maxWidth: 100,
+    fontFamily: "Bold"
   },
   icon: {
     marginRight: 7,
   },
   text: {
     color: "#ffffff",
-    fontSize: 16,
     fontSize: 16,
     fontWeight: "Bold",
   },
@@ -105,7 +101,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   dateRange: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#888",
     fontFamily: "Regular",
     marginBottom: 12,

@@ -25,12 +25,12 @@ const IndexPage = () => {
           />
           <View>
             <Text style={styles.inputLabel}>ID</Text>
-            <TextInput style={styles.inputBox}></TextInput>
+            <TextInput style={styles.inputBox}/>
             <Text style={styles.inputLabel}>PWD</Text>
             <TextInput
               secureTextEntry={true}
               style={styles.inputBox}
-            ></TextInput>
+            />
             <TouchableOpacity style={styles.loginButton}>
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>

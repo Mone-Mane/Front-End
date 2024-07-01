@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     color: "#aaaaaa",
     fontSize: 10,
     paddingBottom: 8,
+    fontFamily:"Regular"
   },
   participantNumWrapper: {
     flexDirection: "row",

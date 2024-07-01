@@ -1,12 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import Arrow from "../assets/icons/downarrow.svg";
-import cavePainting from "../assets/cave_painting.png"; // Make sure the path is correct
+import Arrow from "../assets/icons/newarrow.svg";
+import Flame from "../assets/icons/flame.svg";
+import Palette from "../assets/icons/palette.svg";
+
 
 const ProgressBar = ({ progress, sizeFont }) => {
   const displayProgress = Math.min(progress, 100); // 진행률은 최대 100으로 제한
   const barColor = progress > 85 ? "#FF4935" : "#5A73F5"; // 85% 초과 시 빨간색
   const iconPosition = Math.max(displayProgress - 100, 0); // 아이콘 위치 조정
+  const number = sizeFont;
 
   return (
     <View style={styles.progressBar}>
@@ -18,12 +21,13 @@ const ProgressBar = ({ progress, sizeFont }) => {
             { width: `${displayProgress}%`, backgroundColor: barColor },
           ]}
         >
+          {/* 🚗✈🚀🚩🏳🏴🏳‍🌈🔥💸 */}
           {/* 아이콘 */}
-          <Text style={[styles.icon, { right: `${iconPosition}%` }]}><Arrow width={20} height={20}/></Text>
+          <Text style={[styles.icon, { right: `${iconPosition}%` }]}>🚀</Text>
         </View>
         {/* 진행률 표시 */}
       </View>
-      <Text style={[styles.percentageText, { fontSize: `${sizeFont}` }]}>{`${progress}%`}</Text>
+      <Text style={[styles.percentageText, { fontSize:number}]}>{`${progress}%`}</Text>
     </View>
   );
 };
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     fontSize: 16,
     top: "50%", // 아이콘을 막대 중앙에 위치시킴
-    transform: [{ translateY: -21 }, {translateX: 7}],
+    transform: [{ translateY: -10.5 }, {translateX: 7}],
   },
   percentageText: {
     marginTop:20,

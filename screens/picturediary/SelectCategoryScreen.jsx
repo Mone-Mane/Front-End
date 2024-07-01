@@ -38,7 +38,9 @@ const tags = [
 
 const SelectCategoryScreen = ({ navigation }) => {
   const [selectedTag, setSelectedTag] = useState(null);
-
+  const diarycompletescreen = () =>  navigation.navigate("DiaryCompleteScreen")
+  
+  
   const handleTagPress = (tag) => {
     setSelectedTag(tag);
   };
@@ -51,7 +53,7 @@ const SelectCategoryScreen = ({ navigation }) => {
       <Text
         style={[styles.tagText, selectedTag === item && styles.selectedTagText]}
       >
-        {item}
+        # {item}
       </Text>
     </Pressable>
   );
@@ -87,11 +89,11 @@ const SelectCategoryScreen = ({ navigation }) => {
           columnWrapperStyle={styles.columnWrapper}
           contentContainerStyle={styles.scrollContainer}
         />
-        <View style={styles.confirmButtonContainer}>
-          <Pressable style={styles.confirmButton}>
-            <Text style={styles.confirmButtonText}>그림일기 생성하기</Text>
-          </Pressable>
-        </View>
+      </View>
+      <View style={styles.confirmButtonContainer}>
+        <Pressable style={styles.confirmButton} onPress={diarycompletescreen}>
+          <Text style={styles.confirmButtonText}>그림일기 생성하기</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
     fontFamily: "Bold",
-    fontSize: 10,
+    fontSize: 12,
   },
   tagContainer: {
     marginBottom: 20,
@@ -163,26 +165,29 @@ const styles = StyleSheet.create({
   },
   tagText: {
     color: "#000",
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "Regular",
   },
   selectedTagText: {
     color: "#FFF",
   },
   confirmButtonContainer: {
-    padding: 20,
-    backgroundColor: "#ffffff",
+    paddingHorizontal: 20,
+    paddingBottom:20,
+    paddingTop:10,
     borderRadius: 16,
   },
   confirmButton: {
     backgroundColor: color.primary,
-    paddingVertical: 15,
+    paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
   },
   confirmButtonText: {
-    color: "white",
     fontSize: 18,
-    fontFamily: "Heavy",
+    lineHeight: 21,
+    fontFamily: "Bold",
+    letterSpacing: 0.25,
+    color: "white",
   },
 });
