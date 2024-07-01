@@ -1,18 +1,46 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
-import React from "react";
+import { Ionicons } from "@expo/vector-icons"; // Ionicons 라이브러리 임포트
 import CustomHeader from "../../components/CustomHeader";
-import Keyword from "../../components/Keyword";
 import { SafeAreaView } from "react-native-safe-area-context";
+import EX from "../../assets/icons/ex.svg"
+
+const Keyword = ({ keyword, onDelete }) => (
+  <View style={styles.keyword}>
+    <Text style={styles.keywordText}>{keyword}</Text>
+    <TouchableOpacity onPress={() => onDelete(keyword)}>
+      <EX marginLeft={5}/>
+    </TouchableOpacity>
+  </View>
+);
 
 const EditKeyword = ({ navigation }) => {
-  const keywords = ["삼겹살", "이베리코", "게임", "귀멸의칼날"];
-  const selectcategoryscreen = () => navigation.navigate("SelectCategoryScreen")
+  const [keywords, setKeywords] = useState([
+    "삼겹살",
+    "이베리코",
+    "게임",
+    "귀멸의칼날",
+  ]);
+  const [newKeyword, setNewKeyword] = useState("");
 
+  const selectcategoryscreen = () => navigation.navigate("SelectCategoryScreen");
+
+  const addKeyword = () => {
+    if (newKeyword.trim() !== "" && !keywords.includes(newKeyword.trim())) {
+      setKeywords([...keywords, newKeyword.trim()]);
+      setNewKeyword("");
+    }
+  };
+
+  const deleteKeyword = (keyword) => {
+    setKeywords(keywords.filter((k) => k !== keyword));
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -25,8 +53,19 @@ const EditKeyword = ({ navigation }) => {
           </View>
           <View style={styles.stickerContainer}>
             {keywords.map((keyword) => (
-              <Keyword key={keyword} Keyword={keyword} />
+              <Keyword key={keyword} keyword={keyword} onDelete={deleteKeyword} />
             ))}
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="새 키워드 입력"
+              value={newKeyword}
+              onChangeText={setNewKeyword}
+            />
+            <TouchableOpacity onPress={addKeyword} style={styles.addButton}>
+              <Text style={styles.addButtonText}>추가</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <TouchableOpacity onPress={selectcategoryscreen}>
@@ -44,11 +83,11 @@ export default EditKeyword;
 const styles = StyleSheet.create({
   safe: {
     backgroundColor: "#f9f9f9",
-    flex: 1, // SafeAreaView가 화면 전체를 차지하도록 설정
+    flex: 1,
   },
   container: {
     padding: 20,
-    flex: 1, // 컨테이너가 화면 전체를 차지하도록 설정
+    flex: 1,
   },
   keywordContainer: {
     backgroundColor: "white",
@@ -66,24 +105,62 @@ const styles = StyleSheet.create({
   },
   stickerContainer: {
     flexDirection: "row",
-    flexWrap: "wrap", // 키워드들을 줄바꿈하여 표시
+    flexWrap: "wrap",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    marginTop: 20,
+    alignItems: "center",
+  },
+  textInput: {
+    flex: 1,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+  },
+  addButton: {
+    marginLeft: 10,
+    backgroundColor: "#5A73F5",
+    padding: 10,
+    borderRadius: 8,
+  },
+  addButtonText: {
+    color: "white",
+    fontWeight: "bold",
   },
   button: {
     backgroundColor: "#5A73F5",
     padding: 12,
     alignItems: "center",
     borderRadius: 8,
-    marginTop: 15
+    marginTop: 15,
   },
   buttonText: {
     fontSize: 18,
     lineHeight: 21,
-    fontFamily: "Bold", 
+    fontFamily: "Bold",
     letterSpacing: 0.25,
     color: "white",
   },
-  gif: {
-    width: 200,
-    height: 200,
+  keyword: {
+    backgroundColor: "#e0e0e0",
+    padding: 10,
+    borderRadius: 20,
+    margin: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent:"center"
+  },
+  keywordText: {
+    fontSize: 16,
+  },
+  deleteButton: {
+    marginLeft: 10,
+    color: "red",
+    fontWeight: "bold",
+    marginLeft:6,
+
   },
 });
