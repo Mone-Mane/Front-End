@@ -6,7 +6,7 @@ import {
   Dimensions,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../components/CustomHeader";
 import ChallengeCard from "../components/ChallengeCard";
@@ -15,6 +15,10 @@ import HotRankingCard from "../components/HotRankingCard";
 import ChallengeAcceptModal from "../components/ChallengeAcceptModal";
 import ChallengeCardInProgress from "../components/ChallengeCardInProgress";
 import ChallengeRequestModal from "../components/ChallengeRequestModal";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { getUserMyPage, login } from "../apis/users";
+import { myPageInfoAtom } from "../recoil/atoms/challenge";
+import { useRecoilState } from "recoil";
 
 const DATA = [
   {
@@ -122,7 +126,32 @@ const CHALLENGE_INPROGRESS = [
 ];
 
 const SYTest = ({ navigation }) => {
+  const queryClient = new QueryClient();
   const screenWidth = Dimensions.get("window").width;
+  const [fetchChallenge, setFetchChallenge] = useState(false);
+  const [myPageInfo, setMyPageInfo] = useRecoilState(myPageInfoAtom);
+
+  //GET요청 시
+  const { data: myPageData, error } = useQuery({
+    queryKey: ["getUserMyPage"],
+    queryFn: () => getUserMyPage(),
+    enabled: fetchChallenge,
+  });
+
+  //POST 요청 시
+  const loginMutation = useMutation({
+    mutationFn: ({ userId, userPwd }) => login(userId, userPwd),
+    onSuccess: (data) => {
+      console.log("로그인 성공!:", data);
+    },
+    onError: (error) => {
+      console.error("로그인 실패:", error);
+    },
+  });
+
+  const handleLogin = async ({ userId, userPwd }) => {
+    loginMutation.mutate({ userId, userPwd });
+  };
 
   // 모달
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -134,11 +163,32 @@ const SYTest = ({ navigation }) => {
     groupedChallenges.push(CHALLENGE_INPROGRESS.slice(i, i + 2));
   }
 
+  useEffect(() => {
+    console.log("myPageData", myPageData);
+    if (myPageData) {
+      setMyPageInfo(myPageData);
+    }
+  }, [myPageData]);
+
+  //recoil atom 저장
+  useEffect(() => {
+    console.log("recoil state🥰", myPageData);
+  }, [myPageData]);
+
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="SYTest" navigation={navigation} />
-      <Pressable onPress={() => setIsModalVisible(true)}>
+      <Pressable style={{ height: 90 }} onPress={() => setIsModalVisible(true)}>
         <Text style={styles.textStyle}>Modal Open!</Text>
+      </Pressable>
+      <Pressable
+        style={{ height: 90 }}
+        onPress={() => handleLogin({ userId: "test", userPwd: "1234" })}
+      >
+        <Text>로그인 테스트</Text>
+      </Pressable>
+      <Pressable style={{ height: 90 }} onPress={() => setFetchChallenge(true)}>
+        <Text>fetch</Text>
       </Pressable>
       <Pressable onPress={() => setIsRequestModalVisible(true)}>
         <Text style={styles.textStyle}>RequestModal Open!</Text>
