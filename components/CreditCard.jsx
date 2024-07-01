@@ -59,7 +59,7 @@ const CreditCard = () => {
           style={[styles.flipCard, styles.flipCardFront, frontAnimatedStyle]}
         >
           <ImageBackground
-            source={require("../assets/cardframe.png")}
+            source={require("../assets/cardframe4.png")}
             style={styles.image}
           >
             <Text style={styles.heading}>Sync Credit</Text>
@@ -72,7 +72,7 @@ const CreditCard = () => {
           style={[styles.flipCard, styles.flipCardBack, backAnimatedStyle]}
         >
           <ImageBackground
-            source={require("../assets/cardframe.png")}
+            source={require("../assets/cardframe4.png")}
             style={styles.image}
           >
             <View style={styles.strip}></View>
