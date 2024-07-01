@@ -14,7 +14,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
 import color from "../../assets/colors/colors";
 import HotRankingCard from "../../components/HotRankingCard";
-import OilPic from "../../assets/oil_painting.png";
 import DrawIcon from "../../assets/icons/draw.svg";
 import PrecautionsIcon from "../../assets/icons/diary-precautions"
 
@@ -158,8 +157,9 @@ const styles = StyleSheet.create({
   hotText: {
     fontSize: 18,
     fontFamily: "ExtraBold",
-    marginTop: 15,
+    marginTop: 30,
     alignSelf: "flex-start",
+    marginBottom: 10,
   },
   subText: {
     fontSize: 32,
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginBottom: 20,
+    marginTop:30
   },
   chartImage: {
     borderRadius: 10,

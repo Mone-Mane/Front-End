@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const EditKeyword = ({ navigation }) => {
   const keywords = ["삼겹살", "이베리코", "게임", "귀멸의칼날"];
+  const selectcategoryscreen = () => navigation.navigate("SelectCategoryScreen")
 
 
   return (
@@ -28,7 +29,7 @@ const EditKeyword = ({ navigation }) => {
             ))}
           </View>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={selectcategoryscreen}>
           <View style={styles.button}>
             <Text style={styles.buttonText}>그림체 선택하기</Text>
           </View>

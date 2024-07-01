@@ -11,7 +11,7 @@ import RestartIcon from "../../assets/icons/restart.svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const DiaryCompleteScreen = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <SafeAreaView style={styles.safe}>

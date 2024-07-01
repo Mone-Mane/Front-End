@@ -7,7 +7,7 @@ const Keyword = ({Keyword}) => {
   return (
     <View style={styles.button}>
         <Text># </Text>
-        <TextInput style={styles.textInput}>{Keyword}</TextInput>
+        <TextInput style={styles.textInput} value={Keyword}/>
         <View style={styles.logo}>
             <Ex></Ex>
         </View>
