@@ -16,6 +16,7 @@ import color from "../../assets/colors/colors";
 import HotRankingCard from "../../components/HotRankingCard";
 import OilPic from "../../assets/oil_painting.png";
 import DrawIcon from "../../assets/icons/draw.svg";
+import PrecautionsIcon from "../../assets/icons/diary-precautions"
 
 const images = [
   require("../../assets/cave_painting.png"),
@@ -102,10 +103,7 @@ const DiaryHome = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.chart}>
-          <View style={styles.subText}>
-            <Text style={styles.subHeader}>그림일기 이용 약관</Text>
-          </View>
-          <Image source={OilPic} style={styles.chartImage} />
+          <PrecautionsIcon/>
         </View>
       </ScrollView>
     </SafeAreaView>
