@@ -24,9 +24,12 @@ import DiaryCompleteScreen from "./screens/picturediary/DiaryCompleteScreen.jsx"
 import ChallengeMainPage from "./screens/Challenge/ChallengeMainPage.jsx";
 import ChallengeDetailPage from "./screens/Challenge/ChallengeDetailPage.jsx";
 import ConsumptionSelect from "./screens/ConsumptionSelect.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RecoilRoot } from "recoil";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
+  const queryClient = new QueryClient();
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
@@ -46,46 +49,56 @@ export default function App() {
   if (!fontLoaded) return null;
   return (
     // <View>
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Test" component={Test} />
-        {/* <Stack.Screen name="ContatctList" component={ContatctList} /> */}
-        <Stack.Screen name="DiaryHome" component={DiaryHome} />
-        <Stack.Screen name="MyPage" component={MyPage} />
-        <Stack.Screen name="IndexPage" component={IndexPage} />
-        <Stack.Screen name="MainPage" component={MainPage} />
-        <Stack.Screen name="SYTest" component={SYTest} />
-        <Stack.Screen name="SYTest2" component={SYTest2} />
-        <Stack.Screen name="계좌내역" component={AccountHistory} />
-        <Stack.Screen
-          name="DoneChallengeScreen"
-          component={DoneChallengeScreen}
-        />
-        <Stack.Screen
-          name="SelectCategoryScreen"
-          component={SelectCategoryScreen}
-        />
-        <Stack.Screen name="거래내역조회" component={AccountScreen} />
-        <Stack.Screen name="WHTest" component={WHTest} />
-        <Stack.Screen name="EditKeyword" component={EditKeyword} />
-        <Stack.Screen
-          name="DiaryCompleteScreen"
-          component={DiaryCompleteScreen}
-        />
-        <Stack.Screen name="ChallengeMainPage" component={ChallengeMainPage} />
-        <Stack.Screen
-          name="ChallengeDetailPage"
-          component={ChallengeDetailPage}
-        />
-        <Stack.Screen name="ConsumptionSelect" component={ConsumptionSelect} />
-      </Stack.Navigator>
-      <StatusBar style="auto" />
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="Test" component={Test} />
+            {/* <Stack.Screen name="ContatctList" component={ContatctList} /> */}
+            <Stack.Screen name="DiaryHome" component={DiaryHome} />
+            <Stack.Screen name="MyPage" component={MyPage} />
+            <Stack.Screen name="IndexPage" component={IndexPage} />
+            <Stack.Screen name="MainPage" component={MainPage} />
+            <Stack.Screen name="SYTest" component={SYTest} />
+            <Stack.Screen name="SYTest2" component={SYTest2} />
+            <Stack.Screen name="계좌내역" component={AccountHistory} />
+            <Stack.Screen
+              name="DoneChallengeScreen"
+              component={DoneChallengeScreen}
+            />
+            <Stack.Screen
+              name="SelectCategoryScreen"
+              component={SelectCategoryScreen}
+            />
+            <Stack.Screen name="거래내역조회" component={AccountScreen} />
+            <Stack.Screen name="WHTest" component={WHTest} />
+            <Stack.Screen name="EditKeyword" component={EditKeyword} />
+            <Stack.Screen
+              name="DiaryCompleteScreen"
+              component={DiaryCompleteScreen}
+            />
+            <Stack.Screen
+              name="ChallengeMainPage"
+              component={ChallengeMainPage}
+            />
+            <Stack.Screen
+              name="ChallengeDetailPage"
+              component={ChallengeDetailPage}
+            />
+            <Stack.Screen
+              name="ConsumptionSelect"
+              component={ConsumptionSelect}
+            />
+          </Stack.Navigator>
+          <StatusBar style="auto" />
+        </NavigationContainer>
+      </RecoilRoot>
+    </QueryClientProvider>
     // <View className="flex-1 items-center justify-center bg-green-500">
     //   <Text>Open up App.js to start working on your app!</Text>
     // </View>
