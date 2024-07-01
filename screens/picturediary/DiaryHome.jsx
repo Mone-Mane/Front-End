@@ -73,7 +73,7 @@ const DiaryHome = ({ navigation }) => {
       <CustomHeader title="그림일기" navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <TouchableOpacity style={styles.createButton} onPress={picturecreate}>
-          <DrawIcon marginLeft={-50} />
+          <DrawIcon marginleft={-50} />
           <Text style={styles.createButtonText}>그림일기 생성하기</Text>
         </TouchableOpacity>
         <Text style={styles.subHeader}>Sync가 그려준 일기</Text>

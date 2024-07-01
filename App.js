@@ -62,7 +62,7 @@ export default function App() {
         <Stack.Screen name="MainPage" component={MainPage} />
         <Stack.Screen name="SYTest" component={SYTest} />
         <Stack.Screen name="SYTest2" component={SYTest2} />
-        <Stack.Screen name="계좌내역" component={AccountHistory} />
+        <Stack.Screen name="AccountHistory" component={AccountHistory} />
         <Stack.Screen name="DiaryDetail" component={DiaryDetail}/>
         <Stack.Screen name="DiaryCheck" component={DiaryCheck}/>
 

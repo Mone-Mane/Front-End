@@ -5,7 +5,7 @@ import {
   View,
   Image,
   TouchableOpacity,
-  FlatList,
+
 } from "react-native";
 import Flame from "../../assets/icons/flame.svg";
 import Palette from "../../assets/icons/palette.svg";
@@ -55,7 +55,7 @@ const MainPage = ({ navigation }) => {
 
   const challengehome = () => navigation.navigate("ChallengeMainPage");
   const picturehome = () => navigation.navigate("DiaryHome");
-  
+  const accountscreen = () => navigation.navigate("AccountScreen");
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -171,10 +171,10 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 16,
-    fontFamily: "Bold"
+    fontFamily: "Bold",
   },
   profileStatus: {
-    fontFamily:"Regular",
+    fontFamily: "Regular",
     fontSize: 12,
     color: "#777",
   },
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   expenseAmount: {
     fontSize: 16,
     marginBottom: 10,
-    fontFamily: "ExtraBold"
+    fontFamily: "ExtraBold",
   },
   expenseBarContainer: {
     flexDirection: "row",
