@@ -14,7 +14,6 @@ import SYTest2 from "./screens/SYTest2.jsx";
 import AccountScreen from "./screens/AccountScreen.jsx";
 import SYTest from "./screens/SYTest.jsx";
 import DoneChallengeScreen from "./screens/Challenge/DoneChallengeScreen.jsx";
-import ContatctList from "./screens/ContatctList.jsx";
 import WHTest from "./screens/WHTest.jsx";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
@@ -23,7 +22,9 @@ import EditKeyword from "./screens/picturediary/EditKeyword.jsx";
 import DiaryCompleteScreen from "./screens/picturediary/DiaryCompleteScreen.jsx";
 import ChallengeMainPage from "./screens/Challenge/ChallengeMainPage.jsx";
 import ChallengeDetailPage from "./screens/Challenge/ChallengeDetailPage.jsx";
-import ConsumptionSelect from "./screens/ConsumptionSelect.jsx";
+import ConsumptionSelect from "./screens/picturediary/ConsumptionSelect.jsx";
+import DiaryDetail from "./screens/picturediary/DiaryDetail.jsx";
+import DiaryCheck from "./screens/picturediary/DiaryCheck.jsx";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -62,6 +63,9 @@ export default function App() {
         <Stack.Screen name="SYTest" component={SYTest} />
         <Stack.Screen name="SYTest2" component={SYTest2} />
         <Stack.Screen name="계좌내역" component={AccountHistory} />
+        <Stack.Screen name="DiaryDetail" component={DiaryDetail}/>
+        <Stack.Screen name="DiaryCheck" component={DiaryCheck}/>
+
         <Stack.Screen
           name="DoneChallengeScreen"
           component={DoneChallengeScreen}

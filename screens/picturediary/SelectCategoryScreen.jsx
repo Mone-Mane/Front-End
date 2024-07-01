@@ -38,7 +38,9 @@ const tags = [
 
 const SelectCategoryScreen = ({ navigation }) => {
   const [selectedTag, setSelectedTag] = useState(null);
-
+  const diarycompletescreen = () =>  navigation.navigate("DiaryCompleteScreen")
+  
+  
   const handleTagPress = (tag) => {
     setSelectedTag(tag);
   };
@@ -89,7 +91,7 @@ const SelectCategoryScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.confirmButtonContainer}>
-        <Pressable style={styles.confirmButton}>
+        <Pressable style={styles.confirmButton} onPress={diarycompletescreen}>
           <Text style={styles.confirmButtonText}>그림일기 생성하기</Text>
         </Pressable>
       </View>
