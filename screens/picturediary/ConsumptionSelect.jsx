@@ -8,126 +8,40 @@ import {
   Dimensions,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomHeader from "../../components/CustomHeader";
 import AccountHistory from "../../components/AccountHistory";
 import color from "../../assets/colors/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getUsersAccountsLogsPeriod } from "../../apis/history";
+import { useQuery } from "@tanstack/react-query";
 
 const { width, height } = Dimensions.get("window");
-const data = [
-  {
-    id: "1",
-    date: "06.16",
-    name: "비디버거 성수",
-    amount: "-17,400",
-    balance: "143,000",
-  },
-  {
-    id: "2",
-    date: "06.16",
-    name: "베트남 쌀국수",
-    amount: "-17,400",
-    balance: "143,000",
-  },
-  {
-    id: "3",
-    date: "06.16",
-    name: "임태규",
-    amount: "+50,000",
-    balance: "143,000",
-  },
-  {
-    id: "4",
-    date: "06.15",
-    name: "롯데리아",
-    amount: "-50,000",
-    balance: "143,000",
-  },
-  {
-    id: "5",
-    date: "06.15",
-    name: "투썸플레이스",
-    amount: "+50,000",
-    balance: "143,000",
-  },
-  {
-    id: "6",
-    date: "06.14",
-    name: "나이스두잉",
-    amount: "+50,000",
-    balance: "143,000",
-  },
-  {
-    id: "7",
-    date: "06.12",
-    name: "임태규",
-    amount: "+20,000",
-    balance: "143,000",
-  },
-  {
-    id: "8",
-    date: "06.12",
-    name: "스타벅스 한남",
-    amount: "-5,500",
-    balance: "137,500",
-  },
-  {
-    id: "9",
-    date: "06.11",
-    name: "GS25",
-    amount: "-3,200",
-    balance: "134,300",
-  },
-  {
-    id: "10",
-    date: "06.10",
-    name: "Subway",
-    amount: "-8,900",
-    balance: "125,400",
-  },
-  {
-    id: "11",
-    date: "06.09",
-    name: "KFC",
-    amount: "-13,500",
-    balance: "111,900",
-  },
-  {
-    id: "12",
-    date: "06.08",
-    name: "할리스 커피",
-    amount: "-4,500",
-    balance: "107,400",
-  },
-  {
-    id: "13",
-    date: "06.07",
-    name: "홈플러스",
-    amount: "-77,000",
-    balance: "30,400",
-  },
-  {
-    id: "14",
-    date: "06.06",
-    name: "CU 편의점",
-    amount: "-2,800",
-    balance: "27,600",
-  },
-  {
-    id: "15",
-    date: "06.05",
-    name: "Netflix",
-    amount: "-9,900",
-    balance: "17,700",
-  },
-];
 
 const ConsumptionSelect = ({ navigation }) => {
+  
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
+
+  const { data: myAccountHistory, error,isLoading  } = useQuery({
+    queryKey: ["getUsersAccountsLogsPeriod"],
+    queryFn: () => getUsersAccountsLogsPeriod(3),
+    // onSuccess: (data) => {
+    //   setFilteredData(data.data); // 데이터가 로드되면 filteredData 설정
+    // },
+  });
+
+  useEffect(() => {
+    if (myAccountHistory) {
+      setFilteredData(myAccountHistory.data)
+    }
+  }, [myAccountHistory]);
+
+  if (!myAccountHistory) return <></>;
+  if (isLoading) return <Text>Loading...</Text>;
 
 
   const handleSearch = (text) => {
@@ -146,11 +60,11 @@ const ConsumptionSelect = ({ navigation }) => {
     }
   };
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleSelectItem(item.id)}>
+    <TouchableOpacity onPress={() => handleSelectItem(item.historyCode)}>
       <View
         style={[
           styles.accountItem,
-          selectedIds.includes(item.id) ? styles.selectedItem : null,
+          selectedIds.includes(item.historyCode) ? styles.selectedItem : null,
         ]}
       >
         <AccountHistory transaction={item} />
@@ -161,13 +75,13 @@ const ConsumptionSelect = ({ navigation }) => {
   const filterData = (text) => {
     setSearchQuery(text);
     if (text) {
-      const newData = data.filter(
+      const newData = myAccountHistory.data.filter(
         (item) =>
-          item.name && item.name.toLowerCase().includes(text.toLowerCase())
+          item.historyOpposit && item.historyOpposit.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredData(newData);
     } else {
-      setFilteredData(data);
+      setFilteredData(myAccountHistory.data);
     }
   };
   const editkeyword = () => navigation.navigate("EditKeyword");
@@ -196,7 +110,7 @@ const ConsumptionSelect = ({ navigation }) => {
             nestedScrollEnabled
             data={filteredData}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()} // Ensure keyExtractor returns a string
+            keyExtractor={(item) => item.historyCode.toString()} // Ensure keyExtractor returns a string
             numColumns={1}
             scrollEnabled={true}
             contentContainerStyle={styles.flatListContent}

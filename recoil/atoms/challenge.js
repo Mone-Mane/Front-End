@@ -4,3 +4,4 @@ export const myPageInfoAtom = atom({
   key: "myPageInfoAtom",
   default: null,
 });
+ 
