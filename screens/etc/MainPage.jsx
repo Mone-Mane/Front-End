@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,8 +16,28 @@ import PayRatio from "../../components/PayRatio";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getUsersStatistics } from "../../apis/mainPage";
+import { getUsersMyPage } from "../../apis/mypage";
 
 const MainPage = ({ navigation }) => {
+
+  const { data: myData, error } = useQuery({
+    queryKey: ["getUsersMyPage"],
+    queryFn: () => getUsersMyPage(),
+  });
+
+  // const { data: myStatistics, error2 } = useQuery({
+  //   queryKey: ["getUsersStatistics"],
+  //   queryFn: () => getUsersStatistics(),
+  // })
+
+  useEffect(() => {
+    if(myData){
+      console.log(myData.data.account.card)
+    }
+  },[myData])
+
   const datas = [
     {
       name: "식비",
@@ -73,6 +93,7 @@ const MainPage = ({ navigation }) => {
   const picturehome = () => navigation.navigate("DiaryHome");
   const accountscreen = () => navigation.navigate("AccountScreen");
 
+  if(!myData) return <></>
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView style={styles.scrollContainer}>
@@ -91,7 +112,7 @@ const MainPage = ({ navigation }) => {
             </View>
             <View style={styles.profileInfoContainer}>
               <Text style={styles.profileStatus}>진행중인 챌린지: 3개</Text>
-              <Text style={styles.profileStatus}>물감: 30통</Text>
+              <Text style={styles.profileStatus}>물감: {myData.data.userCredit}통</Text>
             </View>
           </View>
           <View style={styles.buttonContainer}>
@@ -109,7 +130,7 @@ const MainPage = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.cardContainer} onPress={accountscreen}>
-            <CreditCard></CreditCard>
+            <CreditCard cardInfo={myData.data.account.card} engName={myData.data.userName}></CreditCard>
           </TouchableOpacity>
           <View style={styles.expenseContainer}>
             <View style={styles.monthContainer}>
@@ -155,7 +176,7 @@ const MainPage = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   safe: {
-    backgroundColor: "white",
+    backgroundColor: "#f9f9f9",
     flex: 1,
   },
   scrollContainer: {

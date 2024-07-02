@@ -16,9 +16,10 @@ import ChallengeAcceptModal from "../components/ChallengeAcceptModal";
 import ChallengeCardInProgress from "../components/ChallengeCardInProgress";
 import ChallengeRequestModal from "../components/ChallengeRequestModal";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { getUserMyPage, login } from "../apis/login";
+import { login } from "../apis/login";
 import { myPageInfoAtom } from "../recoil/atoms/challenge";
 import { useRecoilState } from "recoil";
+import getUsersMyPage from "../apis/mypage"
 
 const DATA = [
   {
@@ -134,7 +135,7 @@ const SYTest = ({ navigation }) => {
   //GET요청 시
   const { data: myPageData, error } = useQuery({
     queryKey: ["getUserMyPage"],
-    queryFn: () => getUserMyPage(),
+    queryFn: () => getUsersMyPage(),
     enabled: fetchChallenge,
   });
 
