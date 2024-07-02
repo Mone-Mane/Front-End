@@ -19,6 +19,6 @@ export const getUsersStatistics = async () => {
 export const getUsersAccount = async () => {
   return await onRequest({
     method: "GET",
-    url: `/users/account`,
+    url: `/users/accounts`,
   });
 };

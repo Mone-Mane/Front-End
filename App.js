@@ -80,7 +80,7 @@ export default function App() {
               name="SelectCategoryScreen"
               component={SelectCategoryScreen}
             />
-            <Stack.Screen name="거래내역조회" component={AccountScreen} />
+            <Stack.Screen name="AccountScreen" component={AccountScreen} />
             <Stack.Screen name="WHTest" component={WHTest} />
             <Stack.Screen name="EditKeyword" component={EditKeyword} />
             <Stack.Screen

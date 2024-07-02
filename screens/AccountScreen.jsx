@@ -1,154 +1,75 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
   FlatList,
   Text,
+  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AccountHistory from "../components/AccountHistory";
 import CustomHeader from "../components/CustomHeader";
 import DownIcon from "../assets/icons/down.svg";
 import CreditCard from "../components/CreditCard";
-
-
-state = {
-    search: '',
-  };
-
-  updateSearch = (search) => {
-    this.setState({ search });
-  };
-
-
-const data = [
-  {
-    id: "1",
-    date: "06.16",
-    name: "비디버거 성수",
-    amount: "-17,400",
-    balance: "143,000",
-  },
-  {
-    id: "2",
-    date: "06.16",
-    name: "베트남 쌀국수",
-    amount: "-17,400",
-    balance: "143,000",
-  },
-  {
-    id: "3",
-    date: "06.16",
-    name: "임태규",
-    amount: "+50,000",
-    balance: "143,000",
-  },
-  {
-    id: "4",
-    date: "06.15",
-    name: "롯데리아",
-    amount: "-50,000",
-    balance: "143,000",
-  },
-  {
-    id: "5",
-    date: "06.15",
-    name: "투썸플레이스",
-    amount: "+50,000",
-    balance: "143,000",
-  },
-  {
-    id: "6",
-    date: "06.14",
-    name: "나이스두잉",
-    amount: "+50,000",
-    balance: "143,000",
-  },
-  {
-    id: "7",
-    date: "06.12",
-    name: "임태규",
-    amount: "+20,000",
-    balance: "143,000",
-  },
-  {
-    id: "8",
-    date: "06.12",
-    name: "스타벅스 한남",
-    amount: "-5,500",
-    balance: "137,500",
-  },
-  {
-    id: "9",
-    date: "06.11",
-    name: "GS25",
-    amount: "-3,200",
-    balance: "134,300",
-  },
-  {
-    id: "10",
-    date: "06.10",
-    name: "Subway",
-    amount: "-8,900",
-    balance: "125,400",
-  },
-  {
-    id: "11",
-    date: "06.09",
-    name: "KFC",
-    amount: "-13,500",
-    balance: "111,900",
-  },
-  {
-    id: "12",
-    date: "06.08",
-    name: "할리스 커피",
-    amount: "-4,500",
-    balance: "107,400",
-  },
-  {
-    id: "13",
-    date: "06.07",
-    name: "홈플러스",
-    amount: "-77,000",
-    balance: "30,400",
-  },
-  {
-    id: "14",
-    date: "06.06",
-    name: "CU 편의점",
-    amount: "-2,800",
-    balance: "27,600",
-  },
-  {
-    id: "15",
-    date: "06.05",
-    name: "Netflix",
-    amount: "-9,900",
-    balance: "17,700",
-  },
-];
+import { getUsersAccountsLogsPeriod } from "../apis/history";
+import { useQuery } from "@tanstack/react-query";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const AccountScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
+  const [period, setPeriod] = useState(1); // 초기값을 적절히 설정하세요
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([
+    { label: "1개월", value: 1 },
+    { label: "3개월", value: 3 },
+    { label: "6개월", value: 6 },
+  ]);
+
+  const handlePeriodChange = (value) => {
+    setPeriod(value); // period 값을 업데이트
+  };
+
+  const { data: myAccountHistory, error } = useQuery({
+    queryKey: ["getUsersAccountsLogsPeriod", period],
+    queryFn: () => getUsersAccountsLogsPeriod(period),
+  });
+
+  useEffect(() => {
+    if (myAccountHistory) {
+      console.log(myAccountHistory.data);
+    }
+  }, [myAccountHistory]);
+
+  if (!myAccountHistory) return <></>;
 
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="계좌내역조회" navigation={navigation} />
       <View style={styles.cardBox}>
-              <CreditCard />
-            </View>
-            <View style={styles.searchMonth}>
-              <Text style={styles.textMonth}>1개월</Text>
-              <DownIcon width={24} height={24} />
-            </View>
+        <CreditCard />
+      </View>
+      <View style={styles.searchMonth}>
+        <DropDownPicker
+          open={open}
+          value={period}
+          items={items}
+          setOpen={setOpen}
+          setValue={setPeriod}
+          setItems={setItems}
+          onChangeValue={handlePeriodChange}
+          containerStyle={styles.pickerContainer}
+          style={styles.picker}
+          dropDownContainerStyle={styles.dropDown}
+          textStyle={styles.text} // 폰트 스타일을 지정
+        />
+      </View>
       <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()} // keyExtractor가 문자열을 반환하도록 설정
+        data={myAccountHistory.data}
+        keyExtractor={(item) => item.historyCode} // keyExtractor가 문자열을 반환하도록 설정
         contentContainerStyle={styles.flatListContent}
-        renderItem={({ item }) => (
+        renderItem={({ item,index}) => (
           <View style={styles.accounthistorycontainer}>
-            <AccountHistory key={item.id} transaction={item} />
+            <AccountHistory keys={item.historyCode} transaction={item} />
           </View>
         )}
       />
@@ -159,7 +80,7 @@ const AccountScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   container: {
     flex: 1,
@@ -179,18 +100,35 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   searchMonth: {
-    flexDirection: "row",
     padding: 20,
-    marginRight: 2,
     alignSelf: "flex-end",
+    zIndex: 1000, // DropDownPicker가 다른 뷰보다 위에 있도록 설정
   },
   textMonth: {
-    fontSize: 16,
+    fontSize: 12,
     marginRight: 10,
   },
   flatListContent: {
     paddingBottom: 20,
   },
+  pickerContainer: {
+    height: 40,
+    width: 90,
+  },
+  picker: {
+    backgroundColor: '#fafafa',
+    borderWidth: 0, // 테두리 제거
+    elevation: 0, // 그림자 제거 (안드로이드)
+  
+  },
+  dropDown: {
+    backgroundColor: '#ffffff',
+    borderWidth: 0, // 드롭다운 리스트의 테두리 제거
+    elevation: 0, // 그림자 제거 (안드로이드)
+  },
+  text:{
+    fontSize:16
+  }
 });
 
 export default AccountScreen;

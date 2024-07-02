@@ -9,5 +9,5 @@ export const getUsersAccount = async () =>
 export const getUsersAccountsLogsPeriod = async (period) =>
   await onRequest({
     method: "GET",
-    url: `users/accounts/logs/${period}`,
+    url: `/users/accounts/logs/${period}`,
   });
