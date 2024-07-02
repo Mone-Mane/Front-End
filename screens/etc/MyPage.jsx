@@ -1,74 +1,109 @@
-import React from "react";
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, Pressable} from "react-native";
+import React, { useEffect } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getUsersMyPage } from "../../apis/mypage";
+import Pencil from "../../assets/icons/pencil.svg"
 
 const MyPage = ({ navigation }) => {
   const diarycheck = () => navigation.navigate("DiaryCheck");
+  
+  
+  const { data: myPageData, error } = useQuery({
+    queryKey: ["getUsersMyPage"],
+    queryFn: () => getUsersMyPage(),
+  });
+
+  useEffect(()=>{
+    if(myPageData){
+      console.log("ggd",myPageData.data);
+    }
+  },[myPageData])
+
+  if(!myPageData) return <></>
+
+
+  // const queryClient = useQueryClient();
+  // const test = () => {
+  //   queryClient.invalidateQueries({ queryKey: ["getUsersMyPage"] });
+  // };
+
+  // 위 주석은 지우지 말 것,,,!
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <CustomHeader
-        title="마이 페이지"
-        navigation={navigation}
-        bgColor={"white"}
-      />
+    <Text>123</Text>
+    // <SafeAreaView style={styles.safe}>
+    //   <CustomHeader
+    //     title="마이 페이지"
+    //     navigation={navigation}
+    //     bgColor={"white"}
+    //   />
 
-      <ScrollView style={styles.container}>
-        <View style={styles.profileSection}>
-          <Image
-            style={styles.profileImage}
-            source={require("../../assets/ferren.png")} // 대체 이미지 URL을 사용합니다.
-          />
-          <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>페른</Text>
-            <Text style={styles.profileDate}>1998. 08. 28</Text>
-          </View>
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionItem}>나의 챌린지</Text>
-          <Text style={styles.sectionArrow}>⟩</Text>
-        </View>
-        <TouchableOpacity onPress={diarycheck}>
-          <View style={styles.section}>
-            <Text style={styles.sectionItem}>나의 그림일기</Text>
-            <Text style={styles.sectionArrow}>⟩</Text>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.infoSection}>
-          <Text style={styles.infoHeader}>내 정보</Text>
-          <Text style={styles.infoText}>연락처</Text>
-          <Text style={styles.infoDetail}>010-2434-6736</Text>
-          <Text style={styles.infoText}>주소</Text>
-          <Text style={styles.infoDetail}>
-            경기도 안양시 만안구 병목안로 103
-          </Text>
-          <Text style={styles.infoText}>크레딧</Text>
-          <Text style={styles.infoDetail}>17등</Text>
-          <Text style={styles.infoText}>계좌 번호</Text>
-          <Text style={styles.infoDetail}>02-3424-24-12341</Text>
-        </View>
-        <View style={styles.infoSection}>
-          <Text style={styles.infoHeader}>이용안내</Text>
-          <View style={styles.section}>
-            <Text style={styles.infoText}>앱 버전</Text>
-            <Text style={styles.infoDetail}>1.0.0</Text>
-          </View>
-          <View style={styles.section}>
-            <Text style={styles.sectionItem}>서비스 이용약관</Text>
-            <Text style={styles.sectionArrow}>⟩</Text>
-          </View>
-          <View style={styles.section}>
-            <Text style={styles.sectionItem}>탈퇴하기</Text>
-            <Text style={styles.sectionArrow}>⟩</Text>
-          </View>
-          <View style={styles.section}>
-            <Text style={styles.sectionItem}>로그아웃</Text>
-            <Text style={styles.sectionArrow}>⟩</Text>
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    //   <ScrollView style={styles.container}>
+    //     <View style={styles.profileSection}>
+    //       <Image
+    //         style={styles.profileImage}
+    //         source={require("../../assets/ferren.png")} // 대체 이미지 URL을 사용합니다.
+    //       />
+    //       <Pencil style={styles.pencil} onPress={() => {console.log("efwf")}}></Pencil>
+    //       <View style={styles.profileInfo}>
+    //         <Text style={styles.profileName}>{myPageData.data.userName}</Text>
+    //         <Text style={styles.profileDate}>{myPageData.data.userBirth}</Text>
+    //       </View>
+    //     </View>
+    //     <View style={styles.section}>
+    //       <Text style={styles.sectionItem}>나의 챌린지</Text>
+    //       <Text style={styles.sectionArrow}>⟩</Text>
+    //     </View>
+    //     <TouchableOpacity onPress={diarycheck}>
+    //       <View style={styles.section}>
+    //         <Text style={styles.sectionItem}>나의 그림일기</Text>
+    //         <Text style={styles.sectionArrow}>⟩</Text>
+    //       </View>
+    //     </TouchableOpacity>
+    //     <View style={styles.infoSection}>
+    //       <Text style={styles.infoHeader}>내 정보</Text>
+    //       <Text style={styles.infoText}>연락처</Text>
+    //       <Text style={styles.infoDetail}>{myPageData.data.userPhone}</Text>
+    //       <Text style={styles.infoText}>주소</Text>
+    //       <Text style={styles.infoDetail}>
+    //       {myPageData.data.userAddress}
+    //       </Text>
+    //       <Text style={styles.infoText}>크레딧</Text>
+    //       <Text style={styles.infoDetail}>{myPageData.data.userCredit}통</Text>
+    //       <Text style={styles.infoText}>계좌 번호</Text>
+    //       <Text style={styles.infoDetail}>{myPageData.data.userBirth}</Text>
+    //     </View>
+    //     <View style={styles.infoSection}>
+    //       <Text style={styles.infoHeader}>이용안내</Text>
+    //       <View style={styles.section}>
+    //         <Text style={styles.infoText}>앱 버전</Text>
+    //         <Text style={styles.infoDetail}>1.0.0</Text>
+    //       </View>
+    //       <View style={styles.section}>
+    //         <Text style={styles.sectionItem}>서비스 이용약관</Text>
+    //         <Text style={styles.sectionArrow}>⟩</Text>
+    //       </View>
+    //       <View style={styles.section}>
+    //         <Text style={styles.sectionItem}>탈퇴하기</Text>
+    //         <Text style={styles.sectionArrow}>⟩</Text>
+    //       </View>
+    //       <View style={styles.section}>
+    //         <Text style={styles.sectionItem}>로그아웃</Text>
+    //         <Text style={styles.sectionArrow}>⟩</Text>
+    //       </View>
+    //     </View>
+    //   </ScrollView>
+    // </SafeAreaView>
   );
 };
 
@@ -91,6 +126,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    position:"relative"
+  },
+  pencil:{
+    position: "absolute",
+    left : 40,
+    top: 45
   },
   profileImage: {
     width: 80,
