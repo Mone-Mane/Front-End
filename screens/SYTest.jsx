@@ -16,7 +16,7 @@ import ChallengeAcceptModal from "../components/ChallengeAcceptModal";
 import ChallengeCardInProgress from "../components/ChallengeCardInProgress";
 import ChallengeRequestModal from "../components/ChallengeRequestModal";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { getUserMyPage, login } from "../apis/users";
+import { getUserMyPage, login } from "../apis/login";
 import { myPageInfoAtom } from "../recoil/atoms/challenge";
 import { useRecoilState } from "recoil";
 

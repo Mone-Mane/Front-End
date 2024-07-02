@@ -30,10 +30,3 @@ export const postUserToken = async (userToken) =>
       refreshToekn: userInfo.refreshToekn,
     },
   });
-
-export const getUserMyPage = async () => {
-  return await onRequest({
-    method: "GET",
-    url: `/users/my-page`,
-  });
-};

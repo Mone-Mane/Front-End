@@ -9,7 +9,6 @@ const createAxiosInstance = () => {
     timeout: 1000,
   });
 
-  console.log("Axios instance created with baseURL:", SERVER_URL);
 
   instance.interceptors.request.use(
     async (config) => {
@@ -18,7 +17,6 @@ const createAxiosInstance = () => {
         config.headers["Authorization"] = `Bearer ${accessToken}`;
       }
 
-      console.log("Request config:", config);
       return config;
     },
     (error) => {
@@ -104,7 +102,6 @@ const getToken = async () => {
 const onRequest = async ({ method, url, data = null }) => {
   const axiosInstance = createAxiosInstance();
 
-  console.log(`Making ${method} request to URL: ${url}`);
 
   try {
     const config = {
