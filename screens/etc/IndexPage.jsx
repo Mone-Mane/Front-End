@@ -6,13 +6,36 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Alert
 } from "react-native";
-import React from "react";
+import React, { useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../apis/login";
 
-const IndexPage = () => {
+const IndexPage = ({ navigation }) => {
   const dismissKeyboard = () => {
     Keyboard.dismiss();
+  };
+
+  const userIdRef = useRef("");
+  const userPwdRef = useRef("");
+
+  const loginMutation = useMutation({
+    mutationFn: ({ userId, userPwd }) => login(userId, userPwd),
+    onSuccess: (data) => {
+      console.log("로그인 성공!:", data);
+      navigation.navigate("MainPage");
+    },
+    onError: (error) => {
+      Alert.alert("로그인 실패", "비밀번호가 틀렸습니다.")
+    },
+  });
+
+  const handleLogin = () => {
+    const userId = userIdRef.current;
+    const userPwd = userPwdRef.current;
+    loginMutation.mutate({ userId, userPwd });
   };
 
   return (
@@ -25,14 +48,18 @@ const IndexPage = () => {
           />
           <View>
             <Text style={styles.inputLabel}>ID</Text>
-            <TextInput style={styles.inputBox}/>
+            <TextInput
+              style={styles.inputBox}
+              onChangeText={(text) => (userIdRef.current = text)}
+            />
             <Text style={styles.inputLabel}>PWD</Text>
             <TextInput
               secureTextEntry={true}
               style={styles.inputBox}
+              onChangeText={(text) => (userPwdRef.current = text)}
             />
-            <TouchableOpacity style={styles.loginButton}>
-              <Text style={styles.loginButtonText}>Login</Text>
+            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+              <Text style={styles.loginButtonText}>LOGIN</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -60,7 +87,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 16,
     color: "#A2BFFF",
-    fontFamily: "Bold"
+    fontFamily: "Bold",
   },
   inputBox: {
     fontSize: 18,
@@ -69,17 +96,19 @@ const styles = StyleSheet.create({
     color: "#5A73F5",
     marginBottom: 20,
     paddingBottom: 3,
-    paddingLeft: 1
+    paddingLeft: 1,
   },
   loginButton: {
     backgroundColor: "#5A73F5",
-    padding: 20,
-    borderRadius: 40,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
   },
   loginButtonText: {
-    color: "white",
-    textAlign: "center",
+    fontSize: 18,
+    lineHeight: 21,
     fontFamily: "Bold",
-    fontSize: 16
+    letterSpacing: 0.25,
+    color: "white",
   },
 });

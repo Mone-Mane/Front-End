@@ -11,7 +11,7 @@ import MasterCard from "../assets/icons/mastercard.svg";
 import CardChip from "../assets/icons/cardchip.svg";
 import Nfc from "../assets/icons/nfc.svg";
 
-const CreditCard = () => {
+const CreditCard = ({ cardInfo, engName }) => {
   const [flipped, setFlipped] = useState(false);
   const flipAnim = useState(new Animated.Value(0))[0];
 
@@ -52,6 +52,13 @@ const CreditCard = () => {
     transform: [{ rotateY: backInterpolate }],
   };
 
+  const formattedDate = ((inputDate) => {
+    const dateObj = new Date(inputDate);
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const year = String(dateObj.getFullYear()).slice(-2);
+    return `${month}/${year}`;
+  })(cardInfo.cardExpiredDate);
+
   return (
     <TouchableWithoutFeedback onPress={flipCard}>
       <View style={styles.container}>
@@ -65,7 +72,7 @@ const CreditCard = () => {
             <Text style={styles.heading}>Sync Credit</Text>
             <MasterCard width={60} height={60} style={styles.logo} />
             <CardChip width={40} height={40} style={styles.chip} />
-            <Text style={styles.name}>NAM WOOHYEON</Text>
+            <Text style={styles.name}>{engName}</Text>
           </ImageBackground>
         </Animated.View>
         <Animated.View
@@ -77,10 +84,10 @@ const CreditCard = () => {
           >
             <View style={styles.strip}></View>
             <Nfc width={20} height={20} style={styles.contactless} />
-            <Text style={styles.number}>9759 2484 5269 6576</Text>
-            <Text style={styles.date}>12/24</Text>
+            <Text style={styles.number}>{cardInfo.cardNum}</Text>
+            <Text style={styles.date}>{formattedDate}</Text>
             <Text style={styles.exp}>EXP</Text>
-            <Text style={styles.cvc_number}>123</Text>
+            <Text style={styles.cvc_number}>{cardInfo.cardCvc}</Text>
             <Text style={styles.cvc}>CVC</Text>
           </ImageBackground>
         </Animated.View>
@@ -129,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     top: 20,
     left: 24,
-    fontFamily:"ExtraBold",
+    fontFamily: "ExtraBold",
     textShadowColor: "#fff",
     textShadowOffset: { width: -0.2, height: -0.2 },
     textShadowRadius: 0.2,
@@ -167,7 +174,7 @@ const styles = StyleSheet.create({
   },
   number: {
     position: "absolute",
-    fontFamily:"Heavy",
+    fontFamily: "Heavy",
     letterSpacing: 1,
     fontSize: 16,
     top: 91,

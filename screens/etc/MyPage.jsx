@@ -23,12 +23,6 @@ const MyPage = ({ navigation }) => {
     queryFn: () => getUsersMyPage(),
   });
 
-  useEffect(()=>{
-    if(myPageData){
-      console.log("ggd",myPageData.data);
-    }
-  },[myPageData])
-
   if(!myPageData) return <></>
 
 
@@ -40,70 +34,69 @@ const MyPage = ({ navigation }) => {
   // 위 주석은 지우지 말 것,,,!
 
   return (
-    <Text>123</Text>
-    // <SafeAreaView style={styles.safe}>
-    //   <CustomHeader
-    //     title="마이 페이지"
-    //     navigation={navigation}
-    //     bgColor={"white"}
-    //   />
+    <SafeAreaView style={styles.safe}>
+      <CustomHeader
+        title="마이 페이지"
+        navigation={navigation}
+        bgColor={"white"}
+      />
 
-    //   <ScrollView style={styles.container}>
-    //     <View style={styles.profileSection}>
-    //       <Image
-    //         style={styles.profileImage}
-    //         source={require("../../assets/ferren.png")} // 대체 이미지 URL을 사용합니다.
-    //       />
-    //       <Pencil style={styles.pencil} onPress={() => {console.log("efwf")}}></Pencil>
-    //       <View style={styles.profileInfo}>
-    //         <Text style={styles.profileName}>{myPageData.data.userName}</Text>
-    //         <Text style={styles.profileDate}>{myPageData.data.userBirth}</Text>
-    //       </View>
-    //     </View>
-    //     <View style={styles.section}>
-    //       <Text style={styles.sectionItem}>나의 챌린지</Text>
-    //       <Text style={styles.sectionArrow}>⟩</Text>
-    //     </View>
-    //     <TouchableOpacity onPress={diarycheck}>
-    //       <View style={styles.section}>
-    //         <Text style={styles.sectionItem}>나의 그림일기</Text>
-    //         <Text style={styles.sectionArrow}>⟩</Text>
-    //       </View>
-    //     </TouchableOpacity>
-    //     <View style={styles.infoSection}>
-    //       <Text style={styles.infoHeader}>내 정보</Text>
-    //       <Text style={styles.infoText}>연락처</Text>
-    //       <Text style={styles.infoDetail}>{myPageData.data.userPhone}</Text>
-    //       <Text style={styles.infoText}>주소</Text>
-    //       <Text style={styles.infoDetail}>
-    //       {myPageData.data.userAddress}
-    //       </Text>
-    //       <Text style={styles.infoText}>크레딧</Text>
-    //       <Text style={styles.infoDetail}>{myPageData.data.userCredit}통</Text>
-    //       <Text style={styles.infoText}>계좌 번호</Text>
-    //       <Text style={styles.infoDetail}>{myPageData.data.userBirth}</Text>
-    //     </View>
-    //     <View style={styles.infoSection}>
-    //       <Text style={styles.infoHeader}>이용안내</Text>
-    //       <View style={styles.section}>
-    //         <Text style={styles.infoText}>앱 버전</Text>
-    //         <Text style={styles.infoDetail}>1.0.0</Text>
-    //       </View>
-    //       <View style={styles.section}>
-    //         <Text style={styles.sectionItem}>서비스 이용약관</Text>
-    //         <Text style={styles.sectionArrow}>⟩</Text>
-    //       </View>
-    //       <View style={styles.section}>
-    //         <Text style={styles.sectionItem}>탈퇴하기</Text>
-    //         <Text style={styles.sectionArrow}>⟩</Text>
-    //       </View>
-    //       <View style={styles.section}>
-    //         <Text style={styles.sectionItem}>로그아웃</Text>
-    //         <Text style={styles.sectionArrow}>⟩</Text>
-    //       </View>
-    //     </View>
-    //   </ScrollView>
-    // </SafeAreaView>
+      <ScrollView style={styles.container}>
+        <View style={styles.profileSection}>
+          <Image
+            style={styles.profileImage}
+            source={{uri:myPageData.data.userProfileUrl}}
+          />
+          <Pencil style={styles.pencil} onPress={() => {console.log("efwf")}}></Pencil>
+          <View style={styles.profileInfo}>
+            <Text style={styles.profileName}>{myPageData.data.userName}</Text>
+            <Text style={styles.profileDate}>{myPageData.data.userBirth}</Text>
+          </View>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionItem}>나의 챌린지</Text>
+          <Text style={styles.sectionArrow}>⟩</Text>
+        </View>
+        <TouchableOpacity onPress={diarycheck}>
+          <View style={styles.section}>
+            <Text style={styles.sectionItem}>나의 그림일기</Text>
+            <Text style={styles.sectionArrow}>⟩</Text>
+          </View>
+        </TouchableOpacity>
+        <View style={styles.infoSection}>
+          <Text style={styles.infoHeader}>내 정보</Text>
+          <Text style={styles.infoText}>연락처</Text>
+          <Text style={styles.infoDetail}>{myPageData.data.userPhone}</Text>
+          <Text style={styles.infoText}>주소</Text>
+          <Text style={styles.infoDetail}>
+          {myPageData.data.userAddress}
+          </Text>
+          <Text style={styles.infoText}>크레딧</Text>
+          <Text style={styles.infoDetail}>{myPageData.data.userCredit}통</Text>
+          <Text style={styles.infoText}>계좌 번호</Text>
+          <Text style={styles.infoDetail}>{myPageData.data.account.accountNum}</Text>
+        </View>
+        <View style={styles.infoSection}>
+          <Text style={styles.infoHeader}>이용안내</Text>
+          <View style={styles.section}>
+            <Text style={styles.infoText}>앱 버전</Text>
+            <Text style={styles.infoDetail}>1.0.0</Text>
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionItem}>서비스 이용약관</Text>
+            <Text style={styles.sectionArrow}>⟩</Text>
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionItem}>탈퇴하기</Text>
+            <Text style={styles.sectionArrow}>⟩</Text>
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionItem}>로그아웃</Text>
+            <Text style={styles.sectionArrow}>⟩</Text>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
