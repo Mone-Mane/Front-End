@@ -16,6 +16,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getUsersAccountsLogsPeriod } from "../../apis/history";
 import { useQuery } from "@tanstack/react-query";
+import { useRecoilState } from "recoil";
+import { diaryRequest } from "../../recoil/atoms/diary";
 
 const { width, height } = Dimensions.get("window");
 
@@ -33,6 +35,8 @@ const ConsumptionSelect = ({ navigation }) => {
     //   setFilteredData(data.data); // 데이터가 로드되면 filteredData 설정
     // },
   });
+
+  const[selectRequest, setSelectRequest] = useRecoilState(diaryRequest)
 
   useEffect(() => {
     if (myAccountHistory) {
@@ -72,6 +76,7 @@ const ConsumptionSelect = ({ navigation }) => {
     </TouchableOpacity>
   );
 
+
   const filterData = (text) => {
     setSearchQuery(text);
     if (text) {
@@ -84,7 +89,12 @@ const ConsumptionSelect = ({ navigation }) => {
       setFilteredData(myAccountHistory.data);
     }
   };
-  const editkeyword = () => navigation.navigate("EditKeyword");
+  const toEditkeyword = () => {
+    const copy = {...selectRequest};
+    copy.diaryPayments = selectedIds;
+    setSelectRequest(copy)
+    navigation.navigate("EditKeyword");
+  }
 
 
   return (
@@ -120,7 +130,7 @@ const ConsumptionSelect = ({ navigation }) => {
       {selectedIds.length != 0 ? 
       (
         <View style={styles.container2}>
-          <TouchableOpacity style={styles.button} onPress={editkeyword}>
+          <TouchableOpacity style={styles.button} onPress={toEditkeyword}>
             <Text style={styles.text}>소비 내역 추출하기</Text>
           </TouchableOpacity>
         </View>

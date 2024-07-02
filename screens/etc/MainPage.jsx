@@ -34,7 +34,7 @@ const MainPage = ({ navigation }) => {
 
   useEffect(() => {
     if(myData){
-      console.log(myData.data.account.card)
+      console.log(myData.data)
     }
   },[myData])
 
@@ -108,7 +108,7 @@ const MainPage = ({ navigation }) => {
                 style={styles.profileImage}
                 source={require("../../assets/ferren.png")}
               />
-              <Text style={styles.profileName}>임태규님</Text>
+              <Text style={styles.profileName}>{myData.data.userName}님</Text>
             </View>
             <View style={styles.profileInfoContainer}>
               <Text style={styles.profileStatus}>진행중인 챌린지: 3개</Text>

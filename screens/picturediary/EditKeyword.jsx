@@ -10,6 +10,8 @@ import { Ionicons } from "@expo/vector-icons"; // Ionicons 라이브러리 임�
 import CustomHeader from "../../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EX from "../../assets/icons/ex.svg"
+import { useRecoilState } from "recoil";
+import { diaryRequest } from "../../recoil/atoms/diary";
 
 const Keyword = ({ keyword, onDelete }) => (
   <View style={styles.keyword}>
@@ -29,7 +31,12 @@ const EditKeyword = ({ navigation }) => {
   ]);
   const [newKeyword, setNewKeyword] = useState("");
 
-  const selectcategoryscreen = () => navigation.navigate("SelectCategoryScreen");
+  const toSelectCategoryScreen = () => {
+    const copy = {...keywordRequest};
+    copy.diaryTags = keywords;
+    setKeywordRequest(copy);
+    navigation.navigate("SelectCategoryScreen")
+  }
 
   const addKeyword = () => {
     if (newKeyword.trim() !== "" && !keywords.includes(newKeyword.trim())) {
@@ -41,6 +48,8 @@ const EditKeyword = ({ navigation }) => {
   const deleteKeyword = (keyword) => {
     setKeywords(keywords.filter((k) => k !== keyword));
   };
+
+  const [keywordRequest, setKeywordRequest] = useRecoilState(diaryRequest)
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -68,7 +77,7 @@ const EditKeyword = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity onPress={selectcategoryscreen}>
+        <TouchableOpacity onPress={toSelectCategoryScreen} disabled={keywords.length === 0}>
           <View style={styles.button}>
             <Text style={styles.buttonText}>그림체 선택하기</Text>
           </View>

@@ -6,10 +6,12 @@ import {
   Image,
   Text,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
 import color from "../../assets/colors/colors";
+import { useRecoilState } from "recoil";
+import { diaryRequest } from "../../recoil/atoms/diary";
 
 const images = [
   { source: require("../../assets/cave_painting.png"), label: "#동굴 벽화" },
@@ -38,8 +40,15 @@ const tags = [
 
 const SelectCategoryScreen = ({ navigation }) => {
   const [selectedTag, setSelectedTag] = useState(null);
-  const diarycompletescreen = () =>  navigation.navigate("DiaryCompleteScreen")
-  
+  const [conceptRequest, setConceptRequest] = useRecoilState(diaryRequest);
+
+  const toDiaryCompleteScreen = () => {
+    const copy = {...conceptRequest};
+    copy.diaryConcept = selectedTag;
+    setConceptRequest(copy);
+    navigation.navigate("DiaryCompleteScreen")
+  }
+
   
   const handleTagPress = (tag) => {
     setSelectedTag(tag);
@@ -91,7 +100,7 @@ const SelectCategoryScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.confirmButtonContainer}>
-        <Pressable style={styles.confirmButton} onPress={diarycompletescreen}>
+        <Pressable style={styles.confirmButton} onPress={toDiaryCompleteScreen} disabled={selectedTag === null}>
           <Text style={styles.confirmButtonText}>그림일기 생성하기</Text>
         </Pressable>
       </View>
