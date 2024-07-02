@@ -24,6 +24,12 @@ export const getDiaryInfo = async (code) =>
     url: `/diary/Info?diaryCode=${code}`,
   });
 
+  export const getDiaryHot = async () =>
+    await onRequest({
+      method: "GET",
+      url: `/diary/hot`,
+    });
+
 export const postDiaryKeywords = async (keywords) =>
   await onRequest({
     method: "POST",

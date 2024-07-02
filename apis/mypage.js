@@ -8,3 +8,17 @@ export const getUsersMyPage = async () => {
     url: `/users/my-page`,
   });
 };
+
+export const uploadUserProfileImage = async (imageFile) => {
+  const formData = new FormData();
+  formData.append('userProfile', imageFile);
+
+  return await axios({
+    method: 'PUT',
+    url: '/users/my-profile',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};

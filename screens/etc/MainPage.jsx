@@ -21,7 +21,6 @@ import { getUsersStatistics } from "../../apis/mainPage";
 import { getUsersMyPage } from "../../apis/mypage";
 
 const MainPage = ({ navigation }) => {
-
   const { data: myData, error } = useQuery({
     queryKey: ["getUsersMyPage"],
     queryFn: () => getUsersMyPage(),
@@ -31,12 +30,11 @@ const MainPage = ({ navigation }) => {
   //   queryKey: ["getUsersStatistics"],
   //   queryFn: () => getUsersStatistics(),
   // })
-
   useEffect(() => {
-    if(myData){
-      console.log(myData.data)
+    if (myData) {
+      console.log(myData.data);
     }
-  },[myData])
+  }, [myData]);
 
   const datas = [
     {
@@ -92,8 +90,9 @@ const MainPage = ({ navigation }) => {
   const challengehome = () => navigation.navigate("ChallengeMainPage");
   const picturehome = () => navigation.navigate("DiaryHome");
   const accountscreen = () => navigation.navigate("AccountScreen");
+  const toMyPage = () => navigation.navigate("MyPage");
 
-  if(!myData) return <></>
+  if (!myData) return <></>;
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView style={styles.scrollContainer}>
@@ -102,19 +101,25 @@ const MainPage = ({ navigation }) => {
             style={styles.logo}
             source={require("../../assets/mainLogo.png")}
           />
-          <View style={styles.profileContainer}>
-            <View style={styles.profilePersonContainer}>
-              <Image
-                style={styles.profileImage}
-                source={require("../../assets/ferren.png")}
-              />
-              <Text style={styles.profileName}>{myData.data.userName}님</Text>
+          <TouchableOpacity onPress={toMyPage}>
+            <View style={styles.profileContainer}>
+              <View style={styles.profilePersonContainer}>
+                <Image
+                  style={styles.profileImage}
+                  source={{ uri: myData.data.userProfileUrl }}
+                />
+                <Text style={styles.profileName}>{myData.data.userName}님</Text>
+              </View>
+              <View style={styles.profileInfoContainer}>
+                <Text style={styles.profileStatus}>
+                  진행중인 챌린지: {myData.data.challengeCount}개
+                </Text>
+                <Text style={styles.profileStatus}>
+                  물감: {myData.data.userCredit}통
+                </Text>
+              </View>
             </View>
-            <View style={styles.profileInfoContainer}>
-              <Text style={styles.profileStatus}>진행중인 챌린지: 3개</Text>
-              <Text style={styles.profileStatus}>물감: {myData.data.userCredit}통</Text>
-            </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={challengehome}>
               <View style={styles.buttonTxtContainer}>
@@ -129,8 +134,14 @@ const MainPage = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.cardContainer} onPress={accountscreen}>
-            <CreditCard cardInfo={myData.data.account.card} engName={myData.data.userName}></CreditCard>
+          <TouchableOpacity
+            style={styles.cardContainer}
+            onPress={accountscreen}
+          >
+            <CreditCard
+              cardInfo={myData.data.account.card}
+              engName={myData.data.userName}
+            ></CreditCard>
           </TouchableOpacity>
           <View style={styles.expenseContainer}>
             <View style={styles.monthContainer}>

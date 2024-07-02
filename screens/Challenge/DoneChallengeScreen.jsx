@@ -5,11 +5,13 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
 import ChallengeCard from "../../components/ChallengeCard";
 import color from "../../assets/colors/colors";
+import { useQuery } from "@tanstack/react-query";
+import { getChallengesDone } from "../../apis/challenge";
 
 const DATA = [
   {
@@ -75,6 +77,17 @@ const DoneChallengeScreen = ({ navigation }) => {
   const margins = 33 * 2; // Padding on each side
   const numColumns = 2; // Number of columns
 
+  const { data: doneChallengeList, error } = useQuery({
+    queryKey: ["getChallengesDone"],
+    queryFn: () => getChallengesDone(),
+  });
+
+  useEffect(() => {
+    if (doneChallengeList) {
+      console.log(doneChallengeList);
+    }
+  }, []);
+
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="완료된 챌린지" navigation={navigation} />
@@ -83,27 +96,24 @@ const DoneChallengeScreen = ({ navigation }) => {
           style={styles.full}
           onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
         >
-          <FlatList
-            data={DATA}
-            columnWrapperStyle={styles.columnWrapper}
-            renderItem={({ item }) => (
+          <View style={styles.gridContainer}>
+            {doneChallengeList.data.map((item) => (
               <View
+                key={item.id}
                 style={[
                   styles.gridItem,
                   { width: (containerWidth - margins) / numColumns },
                 ]}
               >
                 <ChallengeCard
-                  title={item.title}
-                  dateRange={item.dateRange}
+                  title={item.challengeName}
+                  dateRange={"1413424234"}
                   status={item.status}
                   success={item.success}
                 />
               </View>
-            )}
-            keyExtractor={(item) => item.id}
-            numColumns={numColumns}
-          />
+            ))}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -123,9 +133,10 @@ const styles = StyleSheet.create({
   full: {
     padding: 20,
   },
-  columnWrapper: {
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 10,
   },
   gridItem: {
     marginBottom: 10,
