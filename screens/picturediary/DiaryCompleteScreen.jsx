@@ -5,13 +5,30 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CheckIcon from "../../assets/icons/check.svg";
 import RestartIcon from "../../assets/icons/restart.svg";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { diaryRequest } from "../../recoil/atoms/diary";
+import { useMutation } from "@tanstack/react-query";
+import { postDiary } from "../../apis/diary";
 
 const DiaryCompleteScreen = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const requestData = useRecoilValue(diaryRequest);
+
+  const diaryMutation = useMutation({
+    mutationFn: ({requestData}) => postDiary(requestData),
+    onError:() => {
+      setIsLoading(false)
+    }
+  })
+
+  useEffect(() => {
+    diaryMutation.mutate({requestData:requestData})
+  },[])
+
 
   return (
     <SafeAreaView style={styles.safe}>

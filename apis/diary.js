@@ -38,8 +38,8 @@ export const postDiaryKeywords = async (keywords) =>
       method: "POST",
       url: `/diary`,
       data: {
-        payments: diaryInfo.payments,
-        diaryTags: diaryInfo.tags,
-        diaryConcept: diaryInfo.concept
+        payments: diaryInfo.diaryPayments,
+        diaryTags: diaryInfo.diaryTags,
+        diaryConcept: diaryInfo.diaryConcept
       },
     });
