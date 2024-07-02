@@ -39,6 +39,7 @@ const getPairedImages = (images) => {
 };
 
 const DiaryHome = ({ navigation }) => {
+  
   const picturecreate = () => navigation.navigate("ConsumptionSelect");
   
   const { data: diaryHotList, error } = useQuery({
