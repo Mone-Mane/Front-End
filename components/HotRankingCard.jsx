@@ -2,10 +2,26 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import PersonIcon from "../assets/icons/person.svg";
 const HotRankingCard = ({ medal, title, participants }) => {
+  let medalEmoji;
+  switch (medal) {
+    case 0:
+      medalEmoji = "🥇";
+      break;
+    case 1:
+      medalEmoji = "🥈";
+      break;
+    case 2:
+      medalEmoji = "🥉";
+      break;
+    default:
+      medalEmoji = ""; // 예외 처리
+      break;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.medalContainer}>
-        <Text style={styles.medal}>{medal}</Text>
+        <Text style={styles.medal}>{medalEmoji}</Text>
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{title}</Text>
@@ -56,7 +72,7 @@ const styles = StyleSheet.create({
     color: "#aaaaaa",
     fontSize: 10,
     paddingBottom: 8,
-    fontFamily:"Regular"
+    fontFamily: "Regular",
   },
   participantNumWrapper: {
     flexDirection: "row",

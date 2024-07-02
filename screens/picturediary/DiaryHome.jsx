@@ -16,6 +16,8 @@ import color from "../../assets/colors/colors";
 import HotRankingCard from "../../components/HotRankingCard";
 import DrawIcon from "../../assets/icons/draw.svg";
 import PrecautionsIcon from "../../assets/icons/diary-precautions"
+import { useQuery } from "@tanstack/react-query";
+import { getDiaryHot } from "../../apis/diary";
 
 const images = [
   require("../../assets/cave_painting.png"),
@@ -36,24 +38,19 @@ const getPairedImages = (images) => {
   return pairedImages;
 };
 
-const DATA1 = [
-  { id: "1", medal: "🥇", title: "픽셀아트", participants: "2,337명" },
-  {
-    id: "2",
-    medal: "🥈",
-    title: "동굴벽화",
-    participants: "2,337명",
-  },
-  {
-    id: "3",
-    medal: "🥉",
-    title: "일본 애니메이션",
-    participants: "2,337명",
-  },
-];
-
 const DiaryHome = ({ navigation }) => {
   const picturecreate = () => navigation.navigate("ConsumptionSelect");
+  
+  const { data: diaryHotList, error } = useQuery({
+    queryKey: ["getDiaryHot"],
+    queryFn: () => getDiaryHot(),
+  });
+
+  useEffect(() => {
+    if(diaryHotList){
+      console.log(diaryHotList.data)
+    }
+  }, [diaryHotList])
 
   const windowWidth = Dimensions.get("window").width;
 
@@ -91,12 +88,12 @@ const DiaryHome = ({ navigation }) => {
         <View>
           <Text style={styles.hotText}>주간 HOT! 그림체</Text>
           <View style={styles.hotList}>
-            {DATA1.map((item, index) => (
+            {diaryHotList.data.map((item, index) => (
               <HotRankingCard
                 key={index}
-                medal={item.medal}
-                title={item.title}
-                participants={item.participants}
+                medal={index}
+                title={item.diaryConcept}
+                participants={item.diaryConceptCount}
               />
             ))}
           </View>
