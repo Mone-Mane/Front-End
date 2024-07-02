@@ -78,7 +78,7 @@ const EditKeyword = ({ navigation }) => {
           </View>
         </View>
         <TouchableOpacity onPress={toSelectCategoryScreen} disabled={keywords.length === 0}>
-          <View style={styles.button}>
+          <View style={[styles.button, keywords.length === 0 ? styles.grayBack : styles.blueBack]}>
             <Text style={styles.buttonText}>그림체 선택하기</Text>
           </View>
         </TouchableOpacity>
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   button: {
-    backgroundColor: "#5A73F5",
     padding: 12,
     alignItems: "center",
     borderRadius: 8,
@@ -171,4 +170,10 @@ const styles = StyleSheet.create({
   deleteButton: {
     marginLeft: 10,
   },
+  blueBack:{
+    backgroundColor: "#5A73F5"
+  },
+  grayBack:{
+    backgroundColor: "gray"
+  }
 });

@@ -43,13 +43,12 @@ const SelectCategoryScreen = ({ navigation }) => {
   const [conceptRequest, setConceptRequest] = useRecoilState(diaryRequest);
 
   const toDiaryCompleteScreen = () => {
-    const copy = {...conceptRequest};
+    const copy = { ...conceptRequest };
     copy.diaryConcept = selectedTag;
     setConceptRequest(copy);
-    navigation.navigate("DiaryCompleteScreen")
-  }
+    navigation.navigate("DiaryCompleteScreen");
+  };
 
-  
   const handleTagPress = (tag) => {
     setSelectedTag(tag);
   };
@@ -100,7 +99,14 @@ const SelectCategoryScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.confirmButtonContainer}>
-        <Pressable style={styles.confirmButton} onPress={toDiaryCompleteScreen} disabled={selectedTag === null}>
+        <Pressable
+          style={[
+            styles.confirmButton,
+            selectedTag === null ? styles.grayBack : styles.blueBack,
+          ]}
+          onPress={toDiaryCompleteScreen}
+          disabled={selectedTag === null}
+        >
           <Text style={styles.confirmButtonText}>그림일기 생성하기</Text>
         </Pressable>
       </View>
@@ -182,8 +188,8 @@ const styles = StyleSheet.create({
   },
   confirmButtonContainer: {
     paddingHorizontal: 20,
-    paddingBottom:20,
-    paddingTop:10,
+    paddingBottom: 20,
+    paddingTop: 10,
     borderRadius: 16,
   },
   confirmButton: {
@@ -198,5 +204,11 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     letterSpacing: 0.25,
     color: "white",
+  },
+  blueBack: {
+    backgroundColor: "#5A73F5",
+  },
+  grayBack: {
+    backgroundColor: "gray",
   },
 });

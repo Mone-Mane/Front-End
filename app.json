@@ -24,15 +24,16 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "expo-asset"
     ]
   },
-    "resolve": {
-         "alias": {
-             "react-native$": "react-native-web",
-             "../Utilities/Platform": "react-native-web/dist/exports/Platform",
-             "../../Utilities/Platform": "react-native-web/dist/exports/Platform",
-             "./Platform": "react-native-web/dist/exports/Platform"
-         }
-     }
+  "resolve": {
+    "alias": {
+      "react-native$": "react-native-web",
+      "../Utilities/Platform": "react-native-web/dist/exports/Platform",
+      "../../Utilities/Platform": "react-native-web/dist/exports/Platform",
+      "./Platform": "react-native-web/dist/exports/Platform"
+    }
+  }
 }
