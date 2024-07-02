@@ -3,13 +3,13 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "../assets/kawaii.png"
 
-const UserComponents = ({props}) => {
+const UserComponents_small = ({props}) => {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
       <View style={styles.imageContainer}>
         <ImageBackground 
-          source={Icon}// 이곳에 이미지를 제공하는 URL을 넣으세요.
+          source={props.img}// 이곳에 이미지를 제공하는 URL을 넣으세요.
           style={styles.image}
           imageStyle={{ borderRadius: 50 }}
         />
@@ -20,7 +20,7 @@ const UserComponents = ({props}) => {
   );
 };
 
-export default UserComponents;
+export default UserComponents_small;
 
 const styles = StyleSheet.create({
     safe:{
@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
         margin: 10,
       },
       imageContainer: {
-        width: 60,  // 이미지의 크기
-        height: 60, // 이미지의 크기
-        borderRadius: 30, // 이미지를 둥글게 만들기 위해 반으로 나눔
+        width: 50,  // 이미지의 크기
+        height: 50, // 이미지의 크기
+        borderRadius: 25, // 이미지를 둥글게 만들기 위해 반으로 나눔
         overflow: 'hidden',
         backgroundColor: '#fff',
       },
