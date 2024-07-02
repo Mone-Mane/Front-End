@@ -14,8 +14,15 @@ import CreditCard from "../components/CreditCard";
 import { getUsersAccountsLogsPeriod } from "../apis/history";
 import { useQuery } from "@tanstack/react-query";
 import DropDownPicker from "react-native-dropdown-picker";
+import { getUsersMyPage } from "../apis/mypage";
+
 
 const AccountScreen = ({ navigation }) => {
+  const { data: myData, error1 } = useQuery({
+    queryKey: ["getUsersMyPage"],
+    queryFn: () => getUsersMyPage(),
+  });
+  
   const [search, setSearch] = useState("");
   const [period, setPeriod] = useState(1); // 초기값을 적절히 설정하세요
   const [open, setOpen] = useState(false);
@@ -46,7 +53,7 @@ const AccountScreen = ({ navigation }) => {
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="계좌내역조회" navigation={navigation} />
       <View style={styles.cardBox}>
-        <CreditCard />
+        <CreditCard cardInfo={myData.data.account.card} engName={myData.data.userName}></CreditCard>
       </View>
       <View style={styles.searchMonth}>
         <DropDownPicker
