@@ -9,12 +9,11 @@ export const getUsersMyInfo = async () => {
   });
 };
 
-export const getUsersStatistics = async () => {
-  return await onRequest({
+export const getUsersStatistics = async (period) => 
+  await onRequest({
     method: "GET",
-    url: `/users/statistics`,
+    url: `/users/statistics/${period}`,
   });
-};
 
 export const getUsersAccount = async () => {
   return await onRequest({

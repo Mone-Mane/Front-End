@@ -27,6 +27,7 @@ const ConsumptionSelect = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [idsCategory, setIdsCategory] = useState([]);
 
   const { data: myAccountHistory, error,isLoading  } = useQuery({
     queryKey: ["getUsersAccountsLogsPeriod"],
@@ -35,6 +36,7 @@ const ConsumptionSelect = ({ navigation }) => {
     //   setFilteredData(data.data); // 데이터가 로드되면 filteredData 설정
     // },
   });
+  console.log(selectedIds)
 
   const[selectRequest, setSelectRequest] = useRecoilState(diaryRequest)
 
@@ -61,6 +63,7 @@ const ConsumptionSelect = ({ navigation }) => {
         return;
       }
       setSelectedIds([...selectedIds, id]);
+      setIdsCategory([...idsCategory, id]);
     }
   };
   const renderItem = ({ item }) => (

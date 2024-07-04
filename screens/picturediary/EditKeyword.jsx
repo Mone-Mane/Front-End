@@ -17,7 +17,7 @@ const Keyword = ({ keyword, onDelete }) => (
   <View style={styles.keyword}>
     <Text style={styles.keywordText}># {keyword}</Text>
     <TouchableOpacity onPress={() => onDelete(keyword)}>
-      <EX/>
+      <EX marginLeft={6}/>
     </TouchableOpacity>
   </View>
 );
