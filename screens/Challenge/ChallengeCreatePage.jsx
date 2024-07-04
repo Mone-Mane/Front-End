@@ -62,17 +62,17 @@ const ChallengeCreatePage = ({ navigation }) => {
 
   const renderImageItem = ({ item, index }) => <UserComponents props={item} />;
   const renderCategoryItem = ({ item, index }) => (
-    <View style={[styles.item, { marginHorizontal: itemSpacing / 4 }]}>
+    <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
       <ChallengeBtn Keyword={item.name} users={item.users} />
     </View>
   );
   const renderCostItem = ({ item, index }) => (
-    <View style={[styles.item, { marginHorizontal: itemSpacing / 4 }]}>
+    <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
       <ChallengeBtn Keyword={item} />
     </View>
   );
   const renderDateItem = ({ item }) => (
-    <View style={[styles.item, { marginHorizontal: itemSpacing / 4 }]}>
+    <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
       <ChallengeBtn Keyword={item} />
     </View>
   );
@@ -217,6 +217,9 @@ const styles = StyleSheet.create({
   flatListContent: {
     flexDirection: "row",
     marginBottom: 20, // 필요에 따라 상하 패딩 추가
+  },
+  itemContainer:{
+    marginTop:5
   },
   categorySpot: {
     paddingHorizontal: 10,

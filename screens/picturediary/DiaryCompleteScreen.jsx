@@ -23,6 +23,7 @@ import * as MediaLibrary from "expo-media-library";
 import { Asset } from "expo-asset";
 import * as IntentLauncher from "expo-intent-launcher";
 import * as Sharing from 'expo-sharing';
+ 
 
 
 const DiaryCompleteScreen = ({ navigation }) => {
@@ -31,35 +32,9 @@ const DiaryCompleteScreen = ({ navigation }) => {
   const [confirm, setConfirm] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState("");
   const resetDiaryRequest = useResetRecoilState(diaryRequest);
-
-  // 이미지
-  const handleGenerateImage = () => {
-    fetch("http://172.30.1.53:5000/generate-image", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt: prompt }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setImageUrl(data.image_url);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        setError("Failed to fetch image.");
-      });
-  };
 
   // 이미지 인스타 공유
   const InstagramShare = async () => {
@@ -131,31 +106,26 @@ const DiaryCompleteScreen = ({ navigation }) => {
   };
 
   const diaryMutation = useMutation({
-    mutationFn: ({ requestData }) => postDiary(requestData),
-    onError: () => {
+    mutationFn: async(diaryinfo) => await postDiary(diaryinfo),
+    onSuccess: (response) => {
+      console.log("이미지 생성!:", response.data);
+      setImageUrl(response.data.diaryImage);
       setIsLoading(false);
+    },
+    onError: () => {
+      setIsLoading(true);
     },
   });
 
   useEffect(() => {
     console.log(requestData);
-    // diaryMutation.mutate({ requestData: requestData });
-  }, []);
-
-  useEffect(() => {
-    // requestData에서 diaryConcept와 diaryTags를 추출하여 prompt 상태에 설정
-    const { diaryConcept, diaryTags } = requestData;
-    const promptString = `${diaryConcept}  ${diaryTags.join(", ")}`;
-    setPrompt(promptString);
+    diaryMutation.mutate(requestData);
   }, [requestData]);
 
-  useEffect(() => {
-    if (prompt) {
-      handleGenerateImage();
-    }
-  }, [prompt]);
+  useEffect(()=>{
+    console.log(imageUrl);
+  },[imageUrl])
 
-  console.log(prompt);
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
