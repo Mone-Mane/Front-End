@@ -39,13 +39,16 @@ export const postDiaryKeywords = async (keywords) =>
     },
   });
 
-  export const postDiary = async (diaryInfo) =>
-    await onRequest({
+  export const postDiary = async (diaryInfo) =>{
+    console.log("diaryInfo:");
+    console.log(diaryInfo);
+    return await onRequest({
       method: "POST",
       url: `/diary`,
       data: {
-        payments: diaryInfo.diaryPayments,
+        diaryPayments: diaryInfo.diaryPayments,
         diaryTags: diaryInfo.diaryTags,
         diaryConcept: diaryInfo.diaryConcept
       },
-    });
+    })
+    };

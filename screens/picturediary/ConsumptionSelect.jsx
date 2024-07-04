@@ -32,9 +32,6 @@ const ConsumptionSelect = ({ navigation }) => {
   const { data: myAccountHistory, error,isLoading  } = useQuery({
     queryKey: ["getUsersAccountsLogsPeriod"],
     queryFn: () => getUsersAccountsLogsPeriod(3),
-    // onSuccess: (data) => {
-    //   setFilteredData(data.data); // 데이터가 로드되면 filteredData 설정
-    // },
   });
   console.log(selectedIds)
 
