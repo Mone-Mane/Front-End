@@ -22,6 +22,7 @@ import EditKeyword from "./screens/picturediary/EditKeyword.jsx";
 import DiaryCompleteScreen from "./screens/picturediary/DiaryCompleteScreen.jsx";
 import ChallengeMainPage from "./screens/Challenge/ChallengeMainPage.jsx";
 import ChallengeDetailPage from "./screens/Challenge/ChallengeDetailPage.jsx";
+import ChallengeCreatePage from "./screens/Challenge/ChallengeCreatePage.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
 import ConsumptionSelect from "./screens/picturediary/ConsumptionSelect.jsx";
@@ -94,6 +95,10 @@ export default function App() {
             <Stack.Screen
               name="ChallengeDetailPage"
               component={ChallengeDetailPage}
+            />
+            <Stack.Screen
+              name="ChallengeCreatePage"
+              component={ChallengeCreatePage}
             />
             <Stack.Screen
               name="ConsumptionSelect"

@@ -16,8 +16,8 @@ const Home = ({ navigation }) => {
         onPress={() => navigation.navigate("DiaryHome")}
       />
       <Button
-        title="Go to AccountHistory"
-        onPress={() => navigation.navigate("거래내역조회")}
+        title="Go to 챌린지생성화면"
+        onPress={() => navigation.navigate("ChallengeCreatePage")}
       />
       <Button
         title="Go to ContatctList"

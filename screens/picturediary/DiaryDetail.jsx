@@ -6,46 +6,97 @@ import {
   Text,
   TouchableHighlight,
   ScrollView,
+  TextInput,
+  Pressable,
+  TouchableOpacity,
 } from "react-native";
-import React from "react";
-import OilPic from "../../assets/oil_painting.png";
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import DetailIcon from "../../assets/icons/detail.svg";
 import color from "../../assets/colors/colors";
 import AccountHistory from "../../components/AccountHistory";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
-import { keys } from "@babel/runtime/regenerator";
-const DiaryDetail = ({ navigation, id }) => {
-  const data = {
-    id: "id",
-    uri: require("../../assets/oil_painting.png"),
-    tags: ["우가우가", "치킨먹기", "tag3"],
-    description: "쌀국수 추억",
-    date: "06.18",
+import { getDiaryInfo, putDiaryTitle } from "../../apis/diary";
+import Pencil from "../../assets/icons/pencil.svg";
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${month}.${day}`;
+};
+
+const DiaryDetail = ({ navigation, route }) => {
+  const { id } = route.params;
+  const [detail, setDetail] = useState({
+    diaryTags: { tags: [] },
+    diaryTitle: "",
+    isEditing: false,
+  });
+
+  const {
+    data: myDiaryInfo,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["getDiaryInfo", id],
+    queryFn: () => getDiaryInfo(id),
+  });
+
+  useEffect(() => {
+    if (myDiaryInfo) {
+      console.log(myDiaryInfo.data);
+      setDetail(myDiaryInfo.data);
+    }
+  }, [myDiaryInfo]);
+
+  const handleTitleChange = (text) => {
+    setDetail((prevDetails) => ({
+      ...prevDetails,
+      diaryTitle: text,
+    }));
   };
-  const transactions = [
-    {
-      id: "1",
-      date: "06.16",
-      name: "비디버거 성수",
-      amount: "-17,400",
-      balance: "143,000",
+
+  const editTitle = useMutation({
+    mutationFn: ({ id, title }) => putDiaryTitle(id, title),
+    onSuccess: (data) => {
+      console.log("수정 성공!:", data);
+      alert("제목이 수정되었습니다!");
     },
-    {
-      id: "2",
-      date: "06.16",
-      name: "베트남 쌀국수",
-      amount: "-17,400",
-      balance: "143,000",
+    onError: (error) => {
+      console.error("수정 실패:", error);
+      alert(`Error updating title: ${error.message}`);
     },
-    {
-      id: "3",
-      date: "06.16",
-      name: "임태규",
-      amount: "+50,000",
-      balance: "143,000",
-    },
-  ];
+  });
+
+  const toggleEdit = () => {
+    setDetail((prevDetails) => ({
+      ...prevDetails,
+      isEditing: !prevDetails.isEditing,
+    }));
+  };
+
+  const saveUpdatedTitle = ({ id, title }) => {
+    editTitle.mutate({ id, title });
+    setDetail((prevDetails) => ({
+      ...prevDetails,
+      isEditing: false,
+    }));
+  };
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text>Error: {error.message}</Text>;
+  }
+
+  if (!myDiaryInfo) {
+    return <Text>No data available</Text>;
+  }
+
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="Sync가 그려준 일기" navigation={navigation} />
@@ -53,16 +104,39 @@ const DiaryDetail = ({ navigation, id }) => {
         <View style={styles.container}>
           <View style={styles.imageContainer}>
             <View style={styles.descriptionHeader}>
-              <Text style={styles.description}>{data.description}</Text>
+              <TouchableOpacity
+                style={styles.inputContainer}
+                onPress={toggleEdit}
+              >
+                <TextInput
+                  value={detail.diaryTitle}
+                  onChangeText={handleTitleChange}
+                  style={styles.description}
+                  editable={detail.isEditing}
+                />
+                {!detail.isEditing && <Pencil width={30} height={30} />}
+              </TouchableOpacity>
+              {detail.isEditing && (
+                <Pressable
+                  onPress={() =>
+                    saveUpdatedTitle({ id: id, title: detail.diaryTitle })
+                  }
+                  style={styles.confirmButton}
+                >
+                  <Text style={styles.buttonText}>저장</Text>
+                </Pressable>
+              )}
               <View style={styles.descriptionRigth}>
-                <Text style={styles.dateStyle}>{data.date}</Text>
-                <DetailIcon width={20} height={20} />
+                <Text style={styles.dateStyle}>
+                  {formatDate(detail.createdDate)}
+                </Text>
+                <DetailIcon width={20} height={20}/>
               </View>
             </View>
-            <Image source={OilPic} style={styles.image} />
+            <Image source={{ uri: detail.diaryImage }} style={styles.image} />
             <View style={styles.tagContainer}>
-              {data.tags.map((tag, idx) => (
-                <Text key={idx} style={styles.tag}>
+              {detail.diaryTags.tags.map((tag, idx) => (
+                <Text key={idx} style={styles.tagstyle}>
                   # {tag}
                 </Text>
               ))}
@@ -70,10 +144,10 @@ const DiaryDetail = ({ navigation, id }) => {
           </View>
           <View style={styles.accounthistorycontainer}>
             <Text style={styles.accounthistorytext}>소비내역</Text>
-            {transactions.map((item) => (
-                <View key={item.id} style={styles.itemContainer}>
-                  <AccountHistory transaction={item} />
-                </View>
+            {detail.diaryPayments?.map((item, index) => (
+              <View key={index} style={styles.itemContainer}>
+                <AccountHistory transaction={item} />
+              </View>
             ))}
           </View>
         </View>
@@ -115,33 +189,57 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%", // 이미지 화면 너비에 맞춤
-    height: 250, // 이미지 높이 설정
+    height: 350, // 이미지 높이 설정
+  },
+  inputContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
   },
   description: {
     fontSize: 16,
-    fontWeight: "bold",
-    alignSelf: "flex-start",
+    fontFamily: "Bold",
+    alignSelf: "center",
     marginLeft: 15,
-    marginBottom: 5,
+  },
+  confirmButton: {
+    flexDirection: "row",
+    height: 30,
+    width:48,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#5A73F5",
+    borderRadius: 8,
+    marginRight:40
+  },
+  buttonText: {
+    alignSelf: "center",
+    fontSize: 12,
+    color: "#ffffff",
+    fontFamily: "Bold",
   },
   dateStyle: {
-    fontSize: 13,
-    fontWeight: "rigth",
+    fontSize: 14,
+    fontFamily: "Light",
     marginRight: 15,
   },
   descriptionRigth: {
     flexDirection: "row",
-    alignSelf: "flex-end",
+    alignSelf: "center",
+    justifyContent: "center",
     marginRight: 10,
+    marginBottom: -6,
   },
   tagContainer: {
     marginTop: 18,
     marginBottom: 18,
+    height:30,
     flexDirection: "row",
     alignSelf: "flex-start",
     paddingLeft: 10,
+    justifyContent:"center"
   },
-  tag: {
+  tagstyle: {
     backgroundColor: "#C5D9FF",
     borderRadius: 60,
     fontSize: 14,

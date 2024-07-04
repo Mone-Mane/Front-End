@@ -2,8 +2,9 @@ import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { SERVER_URL } from "@env";
 //SERVER_URL이 안변함
-//const SERVER_URL = "http://54.180.140.196:8080/api";
-const SERVER_URL = "http://172.16.21.86/api"
+const SERVER_URL = "http://54.180.140.196:8080/api";
+//const SERVER_URL = "http://172.16.21.86/api";
+
 const createAxiosInstance = () => {
   const instance = Axios.create({
     baseURL: SERVER_URL,

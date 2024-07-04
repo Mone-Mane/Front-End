@@ -16,6 +16,7 @@ const ChallengeBtn = ({ Keyword, users }) => {
           clicked ? styles.clickedBtn : styles.notClickedBtn,
         ]}
         onPress={handleClicked}
+        disabled={clicked}
       >
         <Text
           style={[
@@ -31,7 +32,7 @@ const ChallengeBtn = ({ Keyword, users }) => {
           <Image
             key={index}
             source={user.img}
-            style={[styles.userImage, { left: index * 20 }]}
+            style={[styles.userImage, { left: index * 12 }]}
           />
         ))}
       </View>
@@ -79,12 +80,12 @@ const styles = StyleSheet.create({
   },
   usersContainer: {
     position: "absolute",
-    top: -10,
+    top: -4,
     flexDirection: "row",
   },
   userImage: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     borderRadius: 15,
     borderWidth: 1,
     borderColor: "white",

@@ -21,7 +21,7 @@ export const getDiaryPaintAgain = async (code) =>
 export const getDiaryInfo = async (code) =>
   await onRequest({
     method: "GET",
-    url: `/diary/Info?diaryCode=${code}`,
+    url: `/diary/info?diaryCode=${code}`,
   });
 
   export const getDiaryHot = async () =>
@@ -39,9 +39,17 @@ export const postDiaryKeywords = async (keywords) =>
     },
   });
 
+  export const putDiaryTitle = async (id,title)=>
+    await onRequest({
+      method:"PUT",
+      url:`/diary/title`,
+      data:{
+        diaryId: id,
+        diaryTitle : title
+      }
+    });
+
   export const postDiary = async (diaryInfo) =>{
-    console.log("diaryInfo:");
-    console.log(diaryInfo);
     return await onRequest({
       method: "POST",
       url: `/diary`,
