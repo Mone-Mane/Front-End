@@ -27,9 +27,7 @@ const PayRatio = ({ name, amount, rate }) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
-        <View style={styles.imgContainer}>
-          {renderIcon()}
-        </View>
+        <View style={styles.imgContainer}>{renderIcon()}</View>
         <View style={styles.txtContainer}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.percentage}>{parseFloat(rate).toFixed(2)}%</Text>
@@ -64,16 +62,16 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: "Bold",
-    fontSize: 16
+    fontSize: 16,
   },
   percentage: {
     fontSize: 12,
     fontFamily: "Bold",
     color: "gray",
-    marginTop:5
+    marginTop: 5,
   },
-  price:{
-    fontFamily:"Bold",
-    fontSize: 16
-  }
+  price: {
+    fontFamily: "Bold",
+    fontSize: 16,
+  },
 });

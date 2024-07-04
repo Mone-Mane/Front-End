@@ -21,56 +21,83 @@ import { getUsersStatistics } from "../../apis/mainPage";
 import { getUsersMyPage } from "../../apis/mypage";
 
 const MainPage = ({ navigation }) => {
+  const formatDate = (date) => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const[transformedData,setTransformedData] = useState({
+    analysis_cafe: 0,
+    analysis_food: 0,
+    analysis_total: 0,
+    analysis_etc: 0,
+    analysis_pleasure: 0,
+    analysis_transportation: 0
+  })
+  
+  const now = new Date();
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const [date, setDate] = useState(firstDayOfMonth);
+
   const { data: myData, error } = useQuery({
     queryKey: ["getUsersMyPage"],
     queryFn: () => getUsersMyPage(),
   });
+  const { data: statistics, error2 } = useQuery({
+    queryKey: ["getUsersStatistics", formatDate(date)],
+    queryFn: () => getUsersStatistics( formatDate(date)),
+  });
 
-  // const { data: myStatistics, error2 } = useQuery({
-  //   queryKey: ["getUsersStatistics"],
-  //   queryFn: () => getUsersStatistics(),
-  // })
+  // 다음달 소비 
+  const handlePreviousMonth = () => {
+    const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+    setDate(prevMonth);
+  };
+  // 이전달 소비 
+  const handleNextMonth = () => {
+    const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    setDate(nextMonth);
+  };
+  
+  
   useEffect(() => {
     if (myData) {
-      console.log(myData.data);
+      console.log(myData);
     }
   }, [myData]);
 
-  const datas = [
-    {
-      name: "식비",
-      amount: 446000,
-      rate: 15,
-    },
-    {
-      name: "교통",
-      amount: 446000,
-      rate: 15,
-    },
-    {
-      name: "유흥",
-      amount: 446000,
-      rate: 20,
-    },
-    {
-      name: "카페",
-      amount: 132000,
-      rate: 20,
-    },
-    {
-      name: "기타",
-      amount: 112300,
-      rate: 30,
-    },
+  useEffect(() => {
+    if (statistics && statistics.data) {
+      setTransformedData({
+        analysis_cafe: statistics.data.analysisCafe || 0,
+        analysis_food: statistics.data.analysisFood || 0,
+        analysis_total: statistics.data.analysisTotal || 0,
+        analysis_etc: statistics.data.etc || 0,
+        analysis_pleasure: statistics.data.pleasure || 0,
+        analysis_transportation: statistics.data.transportation || 0
+      });
+    }
+  }, [statistics]);
+
+  const categories = [
+    { name: "카페", key: "analysis_cafe" },
+    { name: "식비", key: "analysis_food" },
+    { name: "기타", key: "analysis_etc" },
+    { name: "유흥", key: "analysis_pleasure" },
+    { name: "교통", key: "analysis_transportation" },
   ];
+
+  const total = transformedData.analysis_total;
+
+  const getCategoryPercentage = (amount) => amount!=0?(amount / total) * 100:0;
+  categories.sort((a, b) => transformedData[b.key] - transformedData[a.key]);
 
   const colors = ["#ef476f", "#ffd166", "#06d6a0", "#118ab2", "#073b4c"];
 
-  let paySum = 0;
-
-  datas.forEach((item) => {
-    paySum += item.amount;
-  });
+  let paySum = transformedData.analysis_total;
 
   const currentMonth = new Date().getMonth() + 1;
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
@@ -145,11 +172,11 @@ const MainPage = ({ navigation }) => {
           </TouchableOpacity>
           <View style={styles.expenseContainer}>
             <View style={styles.monthContainer}>
-              <TouchableOpacity onPress={goToPrevMonth}>
+              <TouchableOpacity onPress={handlePreviousMonth}>
                 {selectedMonth > currentMonth - 6 ? <Prev></Prev> : null}
               </TouchableOpacity>
               <Text style={styles.expenseTitle}>{selectedMonth}월</Text>
-              <TouchableOpacity onPress={goToNextMonth}>
+              <TouchableOpacity onPress={handleNextMonth}>
                 {selectedMonth < currentMonth ? <Next></Next> : null}
               </TouchableOpacity>
             </View>
@@ -157,27 +184,33 @@ const MainPage = ({ navigation }) => {
               {paySum.toLocaleString()}원
             </Text>
             <View style={styles.expenseBarContainer}>
-              {datas.map((data, index) => (
+              {categories.map((category, index) => (
+                amount = transformedData[category.key],
+                rate = getCategoryPercentage(amount),
                 <View
-                  key={data.name}
+                  key={category.key}
                   style={[
                     styles.expenseBar,
                     {
                       backgroundColor: colors[index % colors.length],
-                      width: `${data.rate}%`,
+                      width: `${rate}%`,
                     },
                   ]}
                 />
               ))}
             </View>
-            {datas.map((item) => (
-              <PayRatio
-                key={item.name}
-                name={item.name}
-                amount={item.amount}
-                rate={item.rate}
-              />
-            ))}
+            {categories.map((category) => {
+              const amount = transformedData[category.key];
+              const rate = getCategoryPercentage(amount);
+              return (
+                <PayRatio
+                  key={category.name}
+                  name={category.name}
+                  amount={amount}
+                  rate={rate}
+                />
+              );
+            })}
           </View>
         </View>
       </ScrollView>

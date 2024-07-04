@@ -38,7 +38,7 @@ const DiaryCompleteScreen = ({ navigation }) => {
 
   // 이미지
   const handleGenerateImage = () => {
-    fetch("http://172.16.21.53:5000/generate-image", {
+    fetch("http://172.30.1.53:5000/generate-image", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
