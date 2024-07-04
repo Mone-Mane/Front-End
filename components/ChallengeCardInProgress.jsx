@@ -5,8 +5,34 @@ import Drink from "../assets/icons/paydrink.svg";
 import Bus from "../assets/icons/paybus.svg";
 import Coffee from "../assets/icons/paycafe.svg";
 import Food from "../assets/icons/payfood.svg";
-const ChallengeCardInProgress = ({ title, dateRange, progress }) => {
+const ChallengeCardInProgress = ({
+  title,
+  createdDate,
+  challengePeriod,
+  targetAmount,
+  spentAmount,
+}) => {
   const screenWidth = Dimensions.get("window").width;
+
+  const startDate = createdDate;
+  const dateRange = challengePeriod;
+  const formattedDate = (() => {
+    let startDateObj = new Date(startDate);
+
+    let startMonth = String(startDateObj.getMonth() + 1).padStart(2, "0");
+    let startDay = String(startDateObj.getDate()).padStart(2, "0");
+    let formattedStartDate = `${startMonth}.${startDay}`;
+
+    let endDateObj = new Date(startDateObj);
+    endDateObj.setDate(endDateObj.getDate() + dateRange - 1);
+
+    let endMonth = String(endDateObj.getMonth() + 1).padStart(2, "0");
+    let endDay = String(endDateObj.getDate()).padStart(2, "0");
+    let formattedEndDate = `${endMonth}.${endDay}`;
+
+    return `${formattedStartDate} ~ ${formattedEndDate}`;
+  })();
+
 
   const renderIcon = () => {
     switch (title) {
@@ -43,14 +69,14 @@ const ChallengeCardInProgress = ({ title, dateRange, progress }) => {
         {renderIcon()}
         {/* <FailIcon width={36} height={43} style={styles.icon} /> */}
       </View>
-      <Text style={styles.dateRange}>{dateRange}</Text>
+      <Text style={styles.dateRange}>{formattedDate}</Text>
       <View
         style={[
           styles.progressBarWrapper,
           { width: (screenWidth - 66) / 2 - 30 },
         ]}
       >
-        <ProgressBar progress={90} sizeFont={16} />
+        <ProgressBar progress={parseInt(spentAmount / targetAmount * 100)} sizeFont={16} />
       </View>
     </View>
   );
@@ -86,7 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 16,
     maxWidth: 100,
-    fontFamily: "Bold"
+    fontFamily: "Bold",
   },
   icon: {
     marginRight: 7,

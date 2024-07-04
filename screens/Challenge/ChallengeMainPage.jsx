@@ -15,8 +15,27 @@ import ChallengeCard from "../../components/ChallengeCard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ChallengeCardInProgress from "../../components/ChallengeCardInProgress";
 import { useState } from "react";
+import { getChallengesOngoing, getChallengesHot } from "../../apis/challenge";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const ChallengeMainPage = ({ navigation }) => {
+  const { data: challengeOngoing, isLoading } = useQuery({
+    queryKey: ["getChallengesOngoing"],
+    queryFn: () => getChallengesOngoing(),
+  });
+
+  const { data: challengeHot, isLoading2 } = useQuery({
+    queryKey: ["getChallengesHot"],
+    queryFn: () => getChallengesHot(),
+  });
+
+  useEffect(() => {
+    if (challengeHot) {
+      console.log(challengeHot.data);
+    }
+  }, [challengeOngoing]);
+
   const DATA = [
     {
       id: "1",
@@ -103,19 +122,24 @@ const ChallengeMainPage = ({ navigation }) => {
 
   const screenWidth = Dimensions.get("window").width;
 
-  const groupedChallenges = [];
-
-  for (let i = 0; i < CHALLENGE_INPROGRESS.length; i += 2) {
-    groupedChallenges.push(CHALLENGE_INPROGRESS.slice(i, i + 2));
-  }
+  const groupedChallenges = challengeOngoing
+    ? challengeOngoing.data.reduce((acc, _, index, array) => {
+        if (index % 2 === 0) acc.push(array.slice(index, index + 2));
+        return acc;
+      }, [])
+    : [];
 
   const [containerWidth, setContainerWidth] = useState(0);
   const margins = 10 * 2; // Padding on each side
   const numColumns = 2; // Number of columns
 
+  const toDoneChallengeScreen = () => {navigation.navigate("DoneChallengeScreen")};
+
+  if (isLoading) return <></>;
+
   return (
     <SafeAreaView style={styles.safe}>
-      <CustomHeader title={"챌린지"} navigation={navigation}/>
+      <CustomHeader title={"챌린지"} navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.container}>
           <View style={styles.buttonContainer}>
@@ -142,10 +166,12 @@ const ChallengeMainPage = ({ navigation }) => {
                   >
                     {item.map((challenge) => (
                       <ChallengeCardInProgress
-                        key={challenge.id}
-                        title={challenge.title}
-                        dateRange={challenge.dateRange}
-                        progress={challenge.progress}
+                        key={challenge.challenge.challengeCode}
+                        title={challenge.challenge.challengeName}
+                        createdDate={challenge.challenge.createdDate}
+                        challengePeriod={challenge.challenge.challengePeriod}
+                        targetAmount={challenge.challenge.challengeTargetAmount}
+                        spentAmount={challenge.me.challengeUserSpentMoney}
                       />
                     ))}
                   </View>
@@ -157,17 +183,22 @@ const ChallengeMainPage = ({ navigation }) => {
           <View style={styles.hotContainer}>
             <Text style={styles.hotText}>주간 HOT! 챌린지</Text>
             <View style={styles.hotList}>
-              {DATA1.map((DATA) => (
+              {challengeHot.data.map((DATA, i) => (
                 <HotRankingCard
-                  key={DATA.id}
-                  medal={DATA.medal}
-                  title={DATA.title}
-                  participants={DATA.participants}
+                  key={i}
+                  medal={i}
+                  title={DATA.challengeCategory}
+                  participants={DATA.challengeCount}
                 />
               ))}
             </View>
           </View>
-          <Text style={styles.hotText}>완료된 챌린지</Text>
+          <View style={styles.doneChallengeText}>
+            <Text style={styles.hotText}>완료된 챌린지</Text>
+            <TouchableOpacity onPress={toDoneChallengeScreen}>
+              <Text>더보기</Text>
+            </TouchableOpacity>
+          </View>
           <View
             style={styles.doneContainer}
             onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
@@ -268,5 +299,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     // paddingHorizontal: 10,
+  },
+  doneChallengeText: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "baseline",
   },
 });

@@ -66,6 +66,8 @@ const DiaryHome = ({ navigation }) => {
     />
   );
 
+  if(!diaryHotList) return <></>
+
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="그림일기" navigation={navigation} />

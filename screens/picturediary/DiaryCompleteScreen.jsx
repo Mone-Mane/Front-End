@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, Image, Pressable, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+  Alert,
+  Platform,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import CheckIcon from "../../assets/icons/check.svg";
 import RestartIcon from "../../assets/icons/restart.svg";
@@ -14,6 +22,8 @@ import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import { Asset } from "expo-asset";
 import * as IntentLauncher from "expo-intent-launcher";
+import * as Sharing from 'expo-sharing';
+
 
 const DiaryCompleteScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -59,21 +69,31 @@ const DiaryCompleteScreen = ({ navigation }) => {
       await asset.downloadAsync();
       const uri = asset.localUri || asset.uri;
 
-      // 파일의 콘텐츠 URI 가져오기
-      const imageUri = await FileSystem.getContentUriAsync(uri);
-      console.log(imageUri);
+      if (Platform.OS === "android") {
+        
+        // 파일의 콘텐츠 URI 가져오기
+        const imageUri = await FileSystem.getContentUriAsync(uri);
+        // console.log(imageUri);
 
-      // 인스타그램 스토리에 이미지 공유
-      await IntentLauncher.startActivityAsync(
-        "com.instagram.share.ADD_TO_STORY",
-        {
-          data: imageUri,
-          flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
-          type: "image/png", // or other based on your file type
-        }
-      );
+        // 인스타그램 스토리에 이미지 공유
+        await IntentLauncher.startActivityAsync(
+          "com.instagram.share.ADD_TO_STORY",
+          {
+            data: imageUri,
+            flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
+            type: "image/png", // or other based on your file type
+          }
+        );
 
-      Alert.alert("이미지가 인스타그램 스토리에 공유되었습니다.");
+        Alert.alert("이미지가 인스타그램 스토리에 공유되었습니다.");
+      } else {
+        // 인스타그램 스토리로 공유
+        await Sharing.shareAsync(uri, {
+          dialogTitle: "Share to Instagram Story",
+          mimeType: "image/jpeg",
+          UTI: "public.jpeg",
+        });
+      }
     } catch (error) {
       console.error("이미지 공유 중 오류가 발생했습니다:", error);
       Alert.alert("이미지 공유 중 오류가 발생했습니다.");

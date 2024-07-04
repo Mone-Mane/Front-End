@@ -88,6 +88,8 @@ const DoneChallengeScreen = ({ navigation }) => {
     }
   }, []);
 
+  if(!doneChallengeList) return <></>
+
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="완료된 챌린지" navigation={navigation} />
