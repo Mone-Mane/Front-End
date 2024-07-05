@@ -49,6 +49,15 @@ export const postDiaryKeywords = async (keywords) =>
       }
     });
 
+    export const putDiaryRetry = async (diarycode)=>
+      await onRequest({
+        method:"PUT",
+        url:`/diary/regenerate`,
+        data:{
+          diaryId: diarycode,
+        }
+      });
+
   export const postDiary = async (diaryInfo) =>{
     return await onRequest({
       method: "POST",

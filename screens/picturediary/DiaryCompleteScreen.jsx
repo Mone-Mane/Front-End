@@ -15,7 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { diaryRequest } from "../../recoil/atoms/diary";
 import { useMutation } from "@tanstack/react-query";
-import { postDiary } from "../../apis/diary";
+import { postDiary, putDiaryRetry } from "../../apis/diary";
 import HomeIcon from "../../assets/icons/home.svg";
 import DownloadIcon from "../../assets/icons/download.svg";
 import SharingIcon from "../../assets/icons/sharing.svg";
@@ -24,16 +24,18 @@ import * as MediaLibrary from "expo-media-library";
 import { Asset } from "expo-asset";
 import * as IntentLauncher from "expo-intent-launcher";
 import * as Sharing from 'expo-sharing';
+import imageCreate from './../etc/imageCreate';
  
 
 
 const DiaryCompleteScreen = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const requestData = useRecoilValue(diaryRequest);
   const [confirm, setConfirm] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const [imageUrl, setImageUrl] = useState("");
+  const [imageCode, setImageCode] = useState("");
   const [error, setError] = useState("");
   const resetDiaryRequest = useResetRecoilState(diaryRequest);
 
@@ -79,14 +81,17 @@ const DiaryCompleteScreen = ({ navigation }) => {
   // 이미지 저장
   const handleDownload = async () => {
     try {
-      // 로컬 이미지 파일 경로
-      const asset = Asset.fromModule(imageUrl);
-      await asset.downloadAsync();
-      const uri = asset.localUri || asset.uri;
+
+      // 파일 다운로드 경로 설정
+      const fileUri = FileSystem.documentDirectory + 'downloaded_image.jpg';
+
+      // 원격 URL에서 파일 다운로드
+      const downloadResult = await FileSystem.downloadAsync(imageUrl, fileUri);
 
       // 파일 다운로드를 위한 권한 요청
       const { status } = await MediaLibrary.requestPermissionsAsync();
-      const savedAsset = await MediaLibrary.createAssetAsync(uri);
+      const savedAsset = await MediaLibrary.createAssetAsync(downloadResult.uri);
+
 
       Alert.alert("파일이 다운로드되었습니다.");
 
@@ -111,6 +116,7 @@ const DiaryCompleteScreen = ({ navigation }) => {
     onSuccess: (response) => {
       console.log("이미지 생성!:", response.data);
       setImageUrl(response.data.diaryImage);
+      setImageCode(response.data.diaryCode)
       setIsLoading(false);
     },
     onError: () => {
@@ -118,14 +124,32 @@ const DiaryCompleteScreen = ({ navigation }) => {
     },
   });
 
+  useState
+
+  const retryDiary = useMutation({
+    mutationFn: ({imageCode}) => putDiaryRetry(imageCode),
+    onSuccess: (response) => {
+      setImageUrl(response.data.diaryImage);
+      setImageCode(response.data.diaryCode)
+      setIsLoading(false);
+    },
+    onError: (error) => {
+      console.error("다시그리기 실패:", error);
+      alert(`Error updating title: ${error.message}`);
+    },
+  });
+
+  const retryPictureDiary = (imageCode) => {
+    setIsLoading(true);
+    retryDiary.mutate(imageCode);
+  };
+
   useEffect(() => {
-    console.log(requestData);
     diaryMutation.mutate(requestData);
   }, [requestData]);
 
   useEffect(()=>{
-    console.log(imageUrl);
-  },[imageUrl])
+  },[imageCode])
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -157,7 +181,7 @@ const DiaryCompleteScreen = ({ navigation }) => {
           <View style={styles.buttonWrapper}>
             {!confirm ? (
               <>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={()=>{retryPictureDiary({imageCode:imageCode})}}>
                   <View style={styles.iconContainer}>
                     <RestartIcon width={15} height={18} style={styles.icon} />
                   </View>
