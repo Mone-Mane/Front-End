@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from "react-native";
 import ProgressBar from "./ProgressBar";
 import Drink from "../assets/icons/paydrink.svg";
 import Bus from "../assets/icons/paybus.svg";
@@ -11,6 +11,7 @@ const ChallengeCardInProgress = ({
   challengePeriod,
   targetAmount,
   spentAmount,
+  navigation
 }) => {
   const screenWidth = Dimensions.get("window").width;
 
@@ -59,6 +60,7 @@ const ChallengeCardInProgress = ({
         return null;
     }
   };
+
 
   return (
     <View style={[styles.card, { width: (screenWidth - 66) / 2 }]}>

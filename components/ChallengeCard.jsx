@@ -1,9 +1,39 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import SuccessIcon from "../assets/icons/success.svg";
 import FailIcon from "../assets/icons/fail.svg";
 
-const ChallengeCard = ({ title, dateRange, status, success }) => {
+// key={item.challenge.challengeCode}
+//                   title={item.challenge.challengeName}
+//                   createdDate={item.challenge.createdDate}
+//                   challengePeriod={item.challenge.challengePeriod}
+//                   targetAmount={item.challenge.challengeTargetAmount}
+//                   spentAmount={item.me.challengeUserSpentMoney}
+
+
+const ChallengeCard = ({ title, createdDate, challengePeriod, targetAmount, spentAmount, navigation }) => {
+  
+  const startDate = createdDate;
+  const dateRange = challengePeriod;
+  const formattedDate = (() => {
+    let startDateObj = new Date(startDate);
+
+    let startMonth = String(startDateObj.getMonth() + 1).padStart(2, "0");
+    let startDay = String(startDateObj.getDate()).padStart(2, "0");
+    let formattedStartDate = `${startMonth}.${startDay}`;
+
+    let endDateObj = new Date(startDateObj);
+    endDateObj.setDate(endDateObj.getDate() + dateRange - 1);
+
+    let endMonth = String(endDateObj.getMonth() + 1).padStart(2, "0");
+    let endDay = String(endDateObj.getDate()).padStart(2, "0");
+    let formattedEndDate = `${endMonth}.${endDay}`;
+
+    return `${formattedStartDate} ~ ${formattedEndDate}`;
+  })();
+
+  const success = targetAmount >= spentAmount;
+  
   return (
     <View
       style={[styles.card, success ? styles.successCard : styles.failureCard]}
@@ -18,14 +48,14 @@ const ChallengeCard = ({ title, dateRange, status, success }) => {
           <FailIcon width={36} height={43} style={styles.icon} />
         )}
       </View>
-      <Text style={styles.dateRange}>{dateRange}</Text>
+      <Text style={styles.dateRange}>{formattedDate}</Text>
       <View
         style={[
           styles.status,
           success ? styles.successStatus : styles.failureStatus,
         ]}
       >
-        <Text style={styles.text}>{status}</Text>
+        <Text style={styles.text}>{success? "성공":"실패"}</Text>
       </View>
     </View>
   );

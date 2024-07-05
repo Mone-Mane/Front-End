@@ -6,6 +6,7 @@ import {
   Pressable,
   Alert,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import CheckIcon from "../../assets/icons/check.svg";
@@ -27,7 +28,7 @@ import * as Sharing from 'expo-sharing';
 
 
 const DiaryCompleteScreen = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const requestData = useRecoilValue(diaryRequest);
   const [confirm, setConfirm] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -156,22 +157,22 @@ const DiaryCompleteScreen = ({ navigation }) => {
           <View style={styles.buttonWrapper}>
             {!confirm ? (
               <>
-                <Pressable style={styles.button}>
+                <TouchableOpacity style={styles.button}>
                   <View style={styles.iconContainer}>
                     <RestartIcon width={15} height={18} style={styles.icon} />
                   </View>
                   <Text style={styles.buttonText}>다시 그리기</Text>
-                </Pressable>
-                <Pressable style={styles.button} onPress={changeAction}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={changeAction}>
                   <View style={styles.iconContainer}>
                     <CheckIcon width={16} height={12} style={styles.icon} />
                   </View>
                   <Text style={styles.buttonText}>확정하기</Text>
-                </Pressable>
+                </TouchableOpacity>
               </>
             ) : (
               <>
-                <Pressable
+                <TouchableOpacity
                   style={[styles.button, styles.subButton]}
                   onPress={resetAtom}
                 >
@@ -179,23 +180,23 @@ const DiaryCompleteScreen = ({ navigation }) => {
                     <HomeIcon width={20} height={20} style={styles.icon} />
                   </View>
                   <Text style={styles.buttonText}>홈으로</Text>
-                </Pressable>
-                <Pressable
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={[styles.button, styles.smallButton, styles.redbtn]}
                   onPress={handleDownload}
                 >
                   <View>
                     <DownloadIcon width={20} height={20} />
                   </View>
-                </Pressable>
-                <Pressable
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={[styles.button, styles.smallButton, styles.yellowbtn]}
                   onPress={InstagramShare}
                 >
                   <View>
                     <SharingIcon width={20} height={20} />
                   </View>
-                </Pressable>
+                </TouchableOpacity>
               </>
             )}
           </View>

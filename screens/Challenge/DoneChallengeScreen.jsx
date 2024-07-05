@@ -4,6 +4,7 @@ import {
   FlatList,
   ScrollView,
   Pressable,
+  TouchableOpacity
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,65 +13,6 @@ import ChallengeCard from "../../components/ChallengeCard";
 import color from "../../assets/colors/colors";
 import { useQuery } from "@tanstack/react-query";
 import { getChallengesDone } from "../../apis/challenge";
-
-const DATA = [
-  {
-    id: "1",
-    title: "커피 줄이기",
-    dateRange: "06.07 - 06.13",
-    status: "성공",
-    success: true,
-  },
-  {
-    id: "2",
-    title: "택시 줄이기",
-    dateRange: "06.07 - 06.13",
-    status: "실패",
-    success: false,
-  },
-  {
-    id: "3",
-    title: "택시 줄이기",
-    dateRange: "06.07 - 06.13",
-    status: "실패",
-    success: false,
-  },
-  {
-    id: "4",
-    title: "커피 줄이기",
-    dateRange: "06.07 - 06.13",
-    status: "성공",
-    success: true,
-  },
-  {
-    id: "5",
-    title: "커피 줄이기냠냠냠냠",
-    dateRange: "06.07 - 06.13",
-    status: "성공",
-    success: true,
-  },
-  {
-    id: "6",
-    title: "커피 줄이기냠냠냠냠",
-    dateRange: "06.07 - 06.13",
-    status: "성공",
-    success: true,
-  },
-  {
-    id: "7",
-    title: "커피 줄이기냠냠냠냠",
-    dateRange: "06.07 - 06.13",
-    status: "성공",
-    success: true,
-  },
-  {
-    id: "8",
-    title: "커피 줄이기냠냠냠냠",
-    dateRange: "06.07 - 06.13",
-    status: "성공",
-    success: true,
-  },
-];
 
 const DoneChallengeScreen = ({ navigation }) => {
   const [containerWidth, setContainerWidth] = useState(0);
@@ -88,7 +30,7 @@ const DoneChallengeScreen = ({ navigation }) => {
     }
   }, []);
 
-  if(!doneChallengeList) return <></>
+  if (!doneChallengeList) return <></>;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -100,20 +42,32 @@ const DoneChallengeScreen = ({ navigation }) => {
         >
           <View style={styles.gridContainer}>
             {doneChallengeList.data.map((item) => (
-              <View
-                key={item.id}
-                style={[
-                  styles.gridItem,
-                  { width: (containerWidth - margins) / numColumns },
-                ]}
+              <TouchableOpacity
+                key={item.challenge.challengeCode}
+                onPress={() =>
+                  navigation.navigate("ChallengeDetailPage", {
+                    challengeCode: item.challenge.challengeCode,
+                  })
+                }
               >
-                <ChallengeCard
-                  title={item.challengeName}
-                  dateRange={"1413424234"}
-                  status={item.status}
-                  success={item.success}
-                />
-              </View>
+                <View
+                  key={item.challenge.challengeCode}
+                  style={[
+                    styles.gridItem,
+                    { width: (containerWidth - margins) / numColumns },
+                  ]}
+                >
+                  <ChallengeCard
+                    key={item.challenge.challengeCode}
+                    title={item.challenge.challengeName}
+                    createdDate={item.challenge.createdDate}
+                    challengePeriod={item.challenge.challengePeriod}
+                    targetAmount={item.challenge.challengeTargetAmount}
+                    spentAmount={item.me.challengeUserSpentMoney}
+                    navigation={navigation}
+                  />
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
