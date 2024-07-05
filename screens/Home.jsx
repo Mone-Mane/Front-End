@@ -71,6 +71,10 @@ const Home = ({ navigation }) => {
         title="Go to ChallengeDetailPage"
         onPress={() => navigation.navigate("ChallengeDetailPage")}
       />
+      <Button
+        title="Go to Socket"
+        onPress={() => navigation.navigate("Socket")}
+      />
     </View>
     </SafeAreaView>
   );

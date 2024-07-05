@@ -21,8 +21,9 @@ import {
   getChallengesDone,
 } from "../../apis/challenge";
 import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useRecoilState } from "recoil";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { postChallengesOpening } from "../../apis/challenge";
+
 import {
   challengeInProgressList,
   challengeDoneList,
@@ -30,6 +31,33 @@ import {
 } from "../../recoil/atoms/challenge";
 
 const ChallengeMainPage = ({ navigation }) => {
+
+  // const [roomCode, setRoomCode] = useState("");
+  // const createRoom = useMutation({
+  //   mutationFn:async () => await postChallengesOpening(),
+  //   onSuccess: (response) => {
+  //     setRoomCode(response.toString());
+  //   },
+  //   onError: (error) => {
+  //     console.error("수정 실패:", error);
+  //     alert(`Error updating title: ${error.message}`);
+  //   },
+  // });
+
+  // useEffect(() => {
+  //   createRoom.mutate();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (createRoom.data) {
+  //     console.log("생성된 방 데이터:", createRoom.data.data.roomId);
+  //     console.log(">>>>>"+roomCode)
+  //   }
+  // }, [createRoom.data]);
+
+
+
+  
   const { data: challengeOngoing, isLoading: isLoadingOngoing } = useQuery({
     queryKey: ["getChallengesOngoing"],
     queryFn: () => getChallengesOngoing(),
@@ -74,7 +102,7 @@ const ChallengeMainPage = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.container}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity >
               <View style={styles.button}>
                 <Flame style={styles.buttonLogo}></Flame>
                 <Text style={styles.buttonText}>챌린지 생성하기</Text>
