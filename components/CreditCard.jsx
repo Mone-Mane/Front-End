@@ -7,8 +7,8 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
 } from "react-native";
-import MasterCard from "../assets/icons/mastercard.svg";
-import CardChip from "../assets/icons/cardchip.svg";
+import MasterCard from "../assets/icons/mastercard4.svg";
+import CardChip from "../assets/icons/cardchip6.svg";
 import Nfc from "../assets/icons/nfc.svg";
 
 const CreditCard = ({ cardInfo, engName }) => {
@@ -66,27 +66,25 @@ const CreditCard = ({ cardInfo, engName }) => {
           style={[styles.flipCard, styles.flipCardFront, frontAnimatedStyle]}
         >
           <ImageBackground
-            source={require("../assets/cardframe4.png")}
+            source={require("../assets/cardframea.png")}
             style={styles.image}
           >
-            <Text style={styles.heading}>Sync Credit</Text>
-            <MasterCard width={60} height={60} style={styles.logo} />
+            <Text style={styles.heading}>Hana X Sync</Text>
             <CardChip width={40} height={40} style={styles.chip} />
-            <Text style={styles.name}>{engName}</Text>
           </ImageBackground>
         </Animated.View>
         <Animated.View
           style={[styles.flipCard, styles.flipCardBack, backAnimatedStyle]}
         >
           <ImageBackground
-            source={require("../assets/cardframe4.png")}
+            source={require("../assets/cardframea.png")}
             style={styles.image}
           >
-            <View style={styles.strip}></View>
-            <Nfc width={20} height={20} style={styles.contactless} />
             <Text style={styles.number}>{cardInfo.cardNum}</Text>
             <Text style={styles.date}>{formattedDate}</Text>
             <Text style={styles.exp}>EXP</Text>
+            <Text style={styles.name}>{engName}</Text>
+            <MasterCard width={60} height={60} style={styles.logo} />
             <Text style={styles.cvc_number}>{cardInfo.cardCvc}</Text>
             <Text style={styles.cvc}>CVC</Text>
           </ImageBackground>
@@ -98,8 +96,8 @@ const CreditCard = ({ cardInfo, engName }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 300,
-    height: 190,
+    width: 310,
+    height: 195,
     perspective: 1000,
   },
   image: {
@@ -134,13 +132,14 @@ const styles = StyleSheet.create({
   heading: {
     position: "absolute",
     fontSize: 20,
-    top: 20,
-    left: 24,
+    top: 100,
+    left: 220,
     fontFamily: "ExtraBold",
     textShadowColor: "#fff",
-    textShadowOffset: { width: -0.2, height: -0.2 },
+    textShadowOffset: { width: -0.1, height: -0.1 },
     textShadowRadius: 0.2,
-    color: "white",
+    color: "#DFEAFF",
+    transform: [{rotate: "270deg"}]
   },
   logo: {
     position: "absolute",
@@ -163,14 +162,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     top: 150,
     left: 24,
-    color: "#ffffff",
-  },
-  strip: {
-    position: "absolute",
-    backgroundColor: "#ffffff",
-    width: 300,
-    height: 36,
-    top: 30,
+    color: "#DFEAFF",
   },
   number: {
     position: "absolute",
@@ -179,7 +171,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     top: 91,
     left: 24,
-    color: "white",
+    color: "#DFEAFF",
   },
   date: {
     position: "absolute",
@@ -188,7 +180,7 @@ const styles = StyleSheet.create({
     top: 140,
     left: 24,
     letterSpacing: 2,
-    color: "white",
+    color: "#DFEAFF",
   },
   cvc_number: {
     position: "absolute",
@@ -197,7 +189,7 @@ const styles = StyleSheet.create({
     top: 140,
     left: 106,
     letterSpacing: 2,
-    color: "white",
+    color: "#DFEAFF",
   },
   cvc: {
     position: "absolute",
@@ -205,7 +197,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     top: 140,
     left: 135,
-    color: "white",
+    color: "#DFEAFF",
   },
   exp: {
     position: "absolute",
@@ -213,7 +205,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     top: 140,
     left: 70,
-    color: "white",
+    color: "#DFEAFF",
   },
 });
 
