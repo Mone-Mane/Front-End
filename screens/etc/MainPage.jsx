@@ -167,7 +167,7 @@ const MainPage = ({ navigation }) => {
           >
             <CreditCard
               cardInfo={myData.data.account.card}
-              engName={myData.data.userName}
+              engName={myData.data.userEngName}
             ></CreditCard>
           </TouchableOpacity>
           <View style={styles.expenseContainer}>

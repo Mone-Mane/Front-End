@@ -15,112 +15,35 @@ import ChallengeCard from "../../components/ChallengeCard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ChallengeCardInProgress from "../../components/ChallengeCardInProgress";
 import { useState } from "react";
-import { getChallengesOngoing, getChallengesHot } from "../../apis/challenge";
+import {
+  getChallengesOngoing,
+  getChallengesHot,
+  getChallengesDone,
+} from "../../apis/challenge";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useRecoilState } from "recoil";
+import {
+  challengeInProgressList,
+  challengeDoneList,
+  selectedChallengeCode,
+} from "../../recoil/atoms/challenge";
 
 const ChallengeMainPage = ({ navigation }) => {
-  const { data: challengeOngoing, isLoading } = useQuery({
+  const { data: challengeOngoing, isLoading: isLoadingOngoing } = useQuery({
     queryKey: ["getChallengesOngoing"],
     queryFn: () => getChallengesOngoing(),
   });
 
-  const { data: challengeHot, isLoading2 } = useQuery({
+  const { data: challengeHot, isLoading: isLoadingHot } = useQuery({
     queryKey: ["getChallengesHot"],
     queryFn: () => getChallengesHot(),
   });
 
-  useEffect(() => {
-    if (challengeHot) {
-      console.log(challengeHot.data);
-    }
-  }, [challengeOngoing]);
-
-  const DATA = [
-    {
-      id: "1",
-      title: "커피 줄이기",
-      dateRange: "06.07 - 06.13",
-      status: "성공",
-      success: true,
-    },
-    {
-      id: "2",
-      title: "택시 줄이기",
-      dateRange: "06.07 - 06.13",
-      status: "실패",
-      success: false,
-    },
-  ];
-
-  const DATA1 = [
-    { id: "1", medal: "🥇", title: "커피 줄이기", participants: "2,337명" },
-    {
-      id: "2",
-      medal: "🥈",
-      title: "택시 줄이기",
-      participants: "2,337명",
-    },
-    {
-      id: "3",
-      medal: "🥉",
-      title: "PC방 줄이기",
-      participants: "2,337명",
-    },
-  ];
-
-  const CHALLENGE_INPROGRESS = [
-    {
-      id: "1",
-      title: "카페 덜 가기",
-      dateRange: "06.07 - 06.13",
-      progress: "80",
-    },
-    {
-      id: "2",
-      title: "유흥 안하기",
-      dateRange: "06.07 - 06.13",
-      progress: "80",
-    },
-    {
-      id: "3",
-      title: "택시 덜 타기",
-      dateRange: "06.07 - 06.13",
-      progress: "80",
-    },
-    {
-      id: "4",
-      title: "쇼핑 줄이기",
-      dateRange: "06.07 - 06.13",
-      progress: "80",
-    },
-    {
-      id: "5",
-      title: "술 덜 마시기",
-      dateRange: "06.07 - 06.13",
-      progress: "80",
-    },
-    {
-      id: "6",
-      title: "야식 덜 먹기",
-      dateRange: "06.07 - 06.13",
-      progress: "80",
-    },
-    {
-      id: "7",
-      title: "배달 덜 먹기",
-      dateRange: "06.07 - 06.13",
-      progress: "80",
-    },
-    {
-      id: "8",
-      title: "구독 좀 끊기",
-      dateRange: "06.07 - 06.13",
-      progress: "80",
-    },
-  ];
-
-  const screenWidth = Dimensions.get("window").width;
+  const { data: challengeDone, isLoading: isLoadingDone } = useQuery({
+    queryKey: ["getChallengesDone"],
+    queryFn: () => getChallengesDone(),
+  });
 
   const groupedChallenges = challengeOngoing
     ? challengeOngoing.data.reduce((acc, _, index, array) => {
@@ -129,13 +52,21 @@ const ChallengeMainPage = ({ navigation }) => {
       }, [])
     : [];
 
+  const twoChallengeDone =
+    challengeDone && challengeDone.data.length >= 2
+      ? challengeDone.data.slice(0, 2)
+      : challengeDone && challengeDone.data;
+
+  const screenWidth = Dimensions.get("window").width;
   const [containerWidth, setContainerWidth] = useState(0);
   const margins = 10 * 2; // Padding on each side
   const numColumns = 2; // Number of columns
 
-  const toDoneChallengeScreen = () => {navigation.navigate("DoneChallengeScreen")};
+  const toDoneChallengeScreen = () => {
+    navigation.navigate("DoneChallengeScreen");
+  };
 
-  if (isLoading) return <></>;
+  if (isLoadingOngoing || isLoadingHot || isLoadingDone) return <></>;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -165,14 +96,25 @@ const ChallengeMainPage = ({ navigation }) => {
                     style={[styles.page, { width: screenWidth - 40 }]} // Subtracting padding
                   >
                     {item.map((challenge) => (
-                      <ChallengeCardInProgress
+                      <TouchableOpacity
                         key={challenge.challenge.challengeCode}
-                        title={challenge.challenge.challengeName}
-                        createdDate={challenge.challenge.createdDate}
-                        challengePeriod={challenge.challenge.challengePeriod}
-                        targetAmount={challenge.challenge.challengeTargetAmount}
-                        spentAmount={challenge.me.challengeUserSpentMoney}
-                      />
+                        onPress={() =>
+                          navigation.navigate("ChallengeDetailPage", {
+                            challengeCode: challenge.challenge.challengeCode,
+                          })
+                        }
+                      >
+                        <ChallengeCardInProgress
+                          key={challenge.challenge.challengeCode}
+                          title={challenge.challenge.challengeName}
+                          createdDate={challenge.challenge.createdDate}
+                          challengePeriod={challenge.challenge.challengePeriod}
+                          targetAmount={
+                            challenge.challenge.challengeTargetAmount
+                          }
+                          spentAmount={challenge.me.challengeUserSpentMoney}
+                        />
+                      </TouchableOpacity>
                     ))}
                   </View>
                 )}
@@ -203,22 +145,32 @@ const ChallengeMainPage = ({ navigation }) => {
             style={styles.doneContainer}
             onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
           >
-            {DATA.map((item) => (
-              <View
-                key={item.id}
-                style={[
-                  styles.gridItem,
-                  { width: (containerWidth - margins) / numColumns },
-                ]}
+            {twoChallengeDone.map((item) => (
+              <TouchableOpacity
+                key={item.challenge.challengeCode}
+                onPress={() =>
+                  navigation.navigate("ChallengeDetailPage", {
+                    challengeCode: item.challenge.challengeCode,
+                  })
+                }
               >
-                <ChallengeCard
-                  key={item.id}
-                  title={item.title}
-                  dateRange={item.dateRange}
-                  status={item.status}
-                  success={item.success}
-                />
-              </View>
+                <View
+                  key={item.challenge.challengeCode}
+                  style={[
+                    styles.gridItem,
+                    { width: (containerWidth - margins) / numColumns },
+                  ]}
+                >
+                  <ChallengeCard
+                    key={item.challenge.challengeCode}
+                    title={item.challenge.challengeName}
+                    createdDate={item.challenge.createdDate}
+                    challengePeriod={item.challenge.challengePeriod}
+                    targetAmount={item.challenge.challengeTargetAmount}
+                    spentAmount={item.me.challengeUserSpentMoney}
+                  />
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>

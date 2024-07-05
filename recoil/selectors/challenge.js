@@ -1,3 +1,4 @@
+import { selector } from "recoil";
 import { myPageInfoAtom } from "../atoms/challenge";
 
 //예시 - 사용 X
