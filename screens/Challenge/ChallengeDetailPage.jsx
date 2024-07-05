@@ -1,13 +1,74 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CustomHeader from "../../components/CustomHeader";
 import ProgressBar from "../../components/ProgressBar.jsx";
 import Participant from "../../components/Participant.jsx";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRoute } from "@react-navigation/native";
+import { getChallengesDetail } from "../../apis/challenge.js";
+import { useQuery } from "@tanstack/react-query";
 
 const ChallengeDetailPage = () => {
+  const route = useRoute();
+  const { challengeCode } = route.params;
 
-  const status = "success";
+  const {
+    data: challengeInfo,
+    error,
+    isLoading: isLoading,
+  } = useQuery({
+    queryKey: ["getChallengesDetail"],
+    queryFn: () => getChallengesDetail(challengeCode),
+  });
+
+  const [formattedDate, setFormattedDate] = useState("");
+  const [participants, setParticipants] = useState([]);
+  const [status, setStatus] = useState();
+
+  useEffect(() => {
+    if (challengeInfo) {
+      const { challenge, me } = challengeInfo.data;
+
+      // Calculate the challenge period
+      const startDate = challenge.createdDate;
+      const dateRange = challenge.challengePeriod;
+      const formattedDate = (() => {
+        let startDateObj = new Date(startDate);
+
+        let startMonth = String(startDateObj.getMonth() + 1).padStart(2, "0");
+        let startDay = String(startDateObj.getDate()).padStart(2, "0");
+        let formattedStartDate = `${startMonth}.${startDay}`;
+
+        let endDateObj = new Date(startDateObj);
+        endDateObj.setDate(endDateObj.getDate() + dateRange - 1);
+
+        let endMonth = String(endDateObj.getMonth() + 1).padStart(2, "0");
+        let endDay = String(endDateObj.getDate()).padStart(2, "0");
+        let formattedEndDate = `${endMonth}.${endDay}`;
+
+        return `${formattedStartDate} - ${formattedEndDate}`;
+      })();
+
+      setFormattedDate(formattedDate);
+
+      // Extract user information
+      const participants = challenge.challengeUsers.map((user) => ({
+        imageUrl: user.user.userProfile,
+        name: user.user.userName,
+        spentMoney: user.challengeUserSpentMoney,
+      }));
+
+      setParticipants(participants);
+
+      if (challenge.challengeTargetAmount < me.challengeUserSpentMoney) {
+        setStatus("fail");
+      } else if (challenge.state === "Active") {
+        setStatus("ing");
+      } else {
+        setStatus("success");
+      }
+    }
+  }, [challengeInfo]);
 
   const btnColor = () => {
     switch (status) {
@@ -35,6 +96,13 @@ const ChallengeDetailPage = () => {
     }
   };
 
+  if (isLoading) {
+    return <></>;
+  }
+
+  console.log(formattedDate);
+  console.log(participants);
+
   return (
     <SafeAreaView style={styles.safe}>
       <CustomHeader title={"챌린지 상세보기"}></CustomHeader>
@@ -42,9 +110,13 @@ const ChallengeDetailPage = () => {
         <View style={styles.detailContainer}>
           <View style={styles.nameContainer}>
             <View style={styles.nameTxtContainer}>
-              <Text style={styles.topFont}>커피줄이기</Text>
+              <Text style={styles.topFont}>
+                {challengeInfo.data.challenge.challengeCategory}
+              </Text>
             </View>
-            <View style={[styles.nameBtnContainer, { backgroundColor: btnColor() }]}>
+            <View
+              style={[styles.nameBtnContainer, { backgroundColor: btnColor() }]}
+            >
               <Text style={styles.whiteFont}>{btnText()}</Text>
             </View>
           </View>
@@ -53,50 +125,55 @@ const ChallengeDetailPage = () => {
               <Text style={[styles.titleFont, styles.marginSmall]}>
                 사용 금액
               </Text>
-              <Text style={styles.contentFont}>10,000</Text>
+              <Text style={styles.contentFont}>
+                {challengeInfo.data.me.challengeUserSpentMoney.toLocaleString()}
+              </Text>
             </View>
             <View style={styles.rightContainer}>
               <Text style={[styles.titleFont, styles.marginSmall]}>
                 목표 금액
               </Text>
-              <Text style={styles.contentFont}>50,000</Text>
+              <Text style={styles.contentFont}>
+                {challengeInfo.data.challenge.challengeTargetAmount.toLocaleString()}
+              </Text>
             </View>
           </View>
           <View style={styles.barContainer}>
-            <ProgressBar progress={30} sizeFont={20}></ProgressBar>
+            <ProgressBar
+              progress={parseInt(
+                (challengeInfo.data.me.challengeUserSpentMoney /
+                  challengeInfo.data.challenge.challengeTargetAmount) *
+                  100
+              )}
+              sizeFont={20}
+            ></ProgressBar>
           </View>
           <View style={styles.normContainer}>
             <Text style={[styles.titleFont, styles.marginSmall]}>기간</Text>
-            <Text style={styles.contentFont}>06.12 - 06.18</Text>
+            <Text style={styles.contentFont}>{formattedDate}</Text>
           </View>
           <View style={styles.normContainer}>
             <Text style={[styles.titleFont, styles.marginSmall]}>참가비</Text>
-            <Text style={styles.contentFont}>10,000</Text>
+            <Text style={styles.contentFont}>
+              {challengeInfo.data.challenge.challengeCost.toLocaleString()}원
+            </Text>
           </View>
           <View style={styles.friendContainer}>
             <Text style={[styles.titleFont, styles.marginSmall]}>
-              참여 인원 수: 4
+              참여 인원 수: {participants.length}
             </Text>
-            <Participant
-              name="Robert Fox"
-              percentage={20}
-              imageSource={require('../../assets/ferren.png')}
-            />
-            <Participant
-              name="Robert Fox"
-              percentage={20}
-              imageSource={require('../../assets/kawaii.png')}
-            />
-            <Participant
-              name="Robert Fox"
-              percentage={20}
-              imageSource={require('../../assets/pastel.png')}
-            />
-            <Participant
-              name="Robert Fox"
-              percentage={20}
-              imageSource={require('../../assets/caricature.png')}
-            />
+            {participants.map((participant, i) => (
+              <Participant
+                key={i}
+                name={participant.name}
+                percentage={parseInt(
+                  (participant.spentMoney /
+                    challengeInfo.data.challenge.challengeTargetAmount) *
+                    100
+                )}
+                imageSource={participant.imageUrl}
+              />
+            ))}
           </View>
         </View>
       </View>
