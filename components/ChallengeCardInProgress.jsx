@@ -2,9 +2,17 @@ import React from "react";
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from "react-native";
 import ProgressBar from "./ProgressBar";
 import Drink from "../assets/icons/paydrink.svg";
-import Bus from "../assets/icons/paybus.svg";
-import Coffee from "../assets/icons/paycafe.svg";
-import Food from "../assets/icons/payfood.svg";
+import Taxi from "../assets/icons/taxi.svg";
+import Coffee from "../assets/icons/cafe.svg";
+import Subscribe from "../assets/icons/sub.svg"
+import Game from "../assets/icons/game.svg"
+import MidnightFood from "../assets/icons/midnightfood.svg"
+import Delivery from "../assets/icons/delivery.svg"
+import Shopping from "../assets/icons/payshopping.svg"
+
+
+
+
 const ChallengeCardInProgress = ({
   title,
   createdDate,
@@ -40,21 +48,21 @@ const ChallengeCardInProgress = ({
       case "카페 덜 가기":
         return <Coffee width={50} height={50} />;
       case "유흥 안하기":
-        return <Drink width={50} height={50} />;
+        return <Game width={50} height={50} />;
       case "택시 덜 타기":
-        return <Bus width={50} height={50} />;
+        return <Taxi width={50} height={50} />;
       case "쇼핑 줄이기":
-        return <Food width={50} height={50} />;
+        return <Shopping width={50} height={50} />;
       // return <Shopping width={50} height={50} />;
       case "술 덜 마시기":
         return <Drink width={50} height={50} />;
       case "야식 덜 먹기":
-        return <Food width={50} height={50} />;
+        return <MidnightFood width={50} height={50} />;
       case "배달 덜 먹기":
-        return <Food width={50} height={50} />;
+        return <Delivery width={50} height={50} />;
       // return <Delivery width={50} height={50} />;
       case "구독 좀 끊기":
-        return <Food width={50} height={50} />;
+        return <Subscribe width={50} height={50} />;
       // return <Subscription width={50} height={50} />;
       default:
         return null;

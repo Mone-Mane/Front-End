@@ -122,6 +122,7 @@ const ChallengeCreatePage = ({ navigation }) => {
               <FlatList
                 data={challengecategorys}
                 horizontal
+                showsHorizontalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderCategoryItem}
               />
@@ -133,6 +134,7 @@ const ChallengeCreatePage = ({ navigation }) => {
               <FlatList
                 data={challengecost}
                 horizontal
+                showsHorizontalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderCostItem}
               />
