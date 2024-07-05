@@ -46,6 +46,13 @@ const MainPage = ({ navigation }) => {
     queryKey: ["getUsersMyPage"],
     queryFn: () => getUsersMyPage(),
   });
+
+  useEffect(() => {
+    if (myData) {
+      console.log(myData);
+    }
+  }, [myData]);
+  
   const { data: statistics, error2 } = useQuery({
     queryKey: ["getUsersStatistics", formatDate(date)],
     queryFn: () => getUsersStatistics( formatDate(date)),
@@ -63,11 +70,7 @@ const MainPage = ({ navigation }) => {
   };
   
   
-  useEffect(() => {
-    if (myData) {
-      console.log(myData);
-    }
-  }, [myData]);
+  
 
   useEffect(() => {
     if (statistics && statistics.data) {

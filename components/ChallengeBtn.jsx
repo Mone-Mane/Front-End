@@ -1,12 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React, { useState } from "react";
 
-const ChallengeBtn = ({ Keyword, users }) => {
-  const [clicked, setClicked] = useState(false);
-
-  const handleClicked = () => {
-    setClicked(!clicked);
-  };
+const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex}) => {
+  // const [clicked, setClicked] = useState(false);
+  const clicked = clickedIndex === index;
 
   return (
     <View style={styles.wrapper}>
@@ -15,8 +12,7 @@ const ChallengeBtn = ({ Keyword, users }) => {
           styles.button,
           clicked ? styles.clickedBtn : styles.notClickedBtn,
         ]}
-        onPress={handleClicked}
-        disabled={clicked}
+        onPress={() => setClickedIndex(clicked ? null : index)}
       >
         <Text
           style={[

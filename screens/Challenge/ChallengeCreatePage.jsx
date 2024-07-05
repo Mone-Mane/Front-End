@@ -10,18 +10,42 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomHeader from "../../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserComponents from "./../../components/UserComponents";
 import ChallengeBtn from "../../components/ChallengeBtn"; // Import the updated component
-import { Button } from "react-native-elements";
-import color from "../../assets/colors/colors";
-import ChallengeImage from "../../assets/icons/challengeImage.svg";
+import { postChallengesOpening } from "../../apis/challenge";
+import { useMutation } from "@tanstack/react-query";
 
 const ChallengeCreatePage = ({ navigation }) => {
   const screenWidth = Dimensions.get("window").width;
   const itemSpacing = screenWidth * 0.02; // 화면 너비의 2%를 간격으로 설정
+
+  // const createRoom = useMutation({
+  //   mutationFn: () => postChallengesOpening(),
+  //   onSuccess: (data) => {
+  //     console.log("수정 성공!:", data);
+  //   },
+  //   onError: (error) => {
+  //     console.error("수정 실패:", error);
+  //     alert(`Error updating title: ${error.message}`);
+  //   },
+  // });
+
+  // useEffect(() => {
+  //   createRoom.mutate();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (createRoom.data) {
+  //     console.log("생성된 방 데이터:", createRoom);
+  //   }
+  // }, [createRoom.data]);
+
+  const [categoryClickedIndex, setCategoryClickedIndex] = useState(null);
+  const [costClickedIndex, setCostClickedIndex] = useState(null);
+  const [dateClickedIndex, setDateClickedIndex] = useState(null);
 
   const images = [
     { img: require("../../assets/cave_painting.png"), name: "슈타르크" },
@@ -34,15 +58,15 @@ const ChallengeCreatePage = ({ navigation }) => {
     {
       name: "커피 줄이기",
       users: [
-        { img: require("../../assets/cave_painting.png") },
-        { img: require("../../assets/pixel_art.png") },
+        { usercode: "", img: require("../../assets/cave_painting.png") },
+        { usercode: "", img: require("../../assets/pixel_art.png") },
       ],
     },
     {
       name: "택시 줄이기",
       users: [
-        { img: require("../../assets/East_Asian_painting.png") },
-        { img: require("../../assets/Japanese_anime.png") },
+        { usercode: "", img: require("../../assets/East_Asian_painting.png") },
+        { usercode: "", img: require("../../assets/Japanese_anime.png") },
       ],
     },
     {
@@ -52,10 +76,25 @@ const ChallengeCreatePage = ({ navigation }) => {
     {
       name: "야식 줄이기",
       users: [
-        { img: require("../../assets/cave_painting.png") },
+        { usercode: "", img: require("../../assets/cave_painting.png") },
       ],
     },
   ];
+
+  const handleCategoryClick = (index) => {
+    setCategoryClickedIndex(index);
+    // socket.emit("categoryClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+  };
+
+  const handleCostClick = (index) => {
+    setCostClickedIndex(index);
+    // socket.emit("costClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+  };
+
+  const handleDateClick = (index) => {
+    setDateClickedIndex(index);
+    // socket.emit("dateClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+  };
 
   const challengecost = ["3,000원", "5,000원", "10,000원", "12,000원"];
   const challengedate = ["1주", "2주", "3주", "4주"];
@@ -63,17 +102,25 @@ const ChallengeCreatePage = ({ navigation }) => {
   const renderImageItem = ({ item, index }) => <UserComponents props={item} />;
   const renderCategoryItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item.name} users={item.users} />
+      <ChallengeBtn Keyword={item.name} users={item.users} index={index}
+      clickedIndex={categoryClickedIndex}
+      setClickedIndex={setCategoryClickedIndex} />
     </View>
   );
   const renderCostItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item} />
+      <ChallengeBtn Keyword={item} 
+      users={item.users} index={index}
+      clickedIndex={costClickedIndex}
+        setClickedIndex={setCostClickedIndex}/>
     </View>
   );
-  const renderDateItem = ({ item }) => (
+  const renderDateItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item} />
+      <ChallengeBtn Keyword={item} 
+      users={item.users} index={index}
+      clickedIndex={dateClickedIndex}
+      setClickedIndex={setDateClickedIndex}/>
     </View>
   );
 

@@ -66,3 +66,10 @@ export const postUsersInvitationList = async (userPhoneNumber) =>
       userPhoneNumber: userPhoneNumber,
     },
   });
+
+  export const postChallengesOpening = async () =>
+    await onRequest({
+      method: "POST",
+      url: `/challenges/opening`,
+      data:{}
+    });
