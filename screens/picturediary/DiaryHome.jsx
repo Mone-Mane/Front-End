@@ -137,8 +137,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    borderRadius: 5,
+    borderRadius: 16,
     backgroundColor: "#fff",
+    overflow: "hidden"
   },
   header: {
     alignItems: "center",
@@ -203,8 +204,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   hotList: {
-    borderRadius: 5,
+    borderRadius: 16,
     marginBottom: 20,
+    overflow: "hidden"
   },
   hotItem: {
     fontSize: 16,
@@ -212,7 +214,7 @@ const styles = StyleSheet.create({
   },
   chart: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 10,
+    borderRadius: 16,
     alignItems: "center",
     marginBottom: 20,
     marginTop: 30,

@@ -126,7 +126,7 @@ const MainPage = ({ navigation }) => {
         <View style={styles.container}>
           <Image
             style={styles.logo}
-            source={require("../../assets/mainLogo.png")}
+            source={require("../../assets/mainLogo4.png")}
           />
           <TouchableOpacity onPress={toMyPage}>
             <View style={styles.profileContainer}>
@@ -148,16 +148,16 @@ const MainPage = ({ navigation }) => {
             </View>
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={challengehome}>
+            <TouchableOpacity style={styles.button1} onPress={challengehome}>
               <View style={styles.buttonTxtContainer}>
                 <Flame></Flame>
-                <Text style={styles.buttonText}>챌린지</Text>
+                <Text style={styles.buttonTextChallenge}>챌린지</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={picturehome}>
+            <TouchableOpacity style={styles.button2} onPress={picturehome}>
               <View style={styles.buttonTxtContainer}>
                 <Palette></Palette>
-                <Text style={styles.buttonText}>그림일기</Text>
+                <Text style={styles.buttonTextDiary}>그림일기</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -229,13 +229,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f9f9f9",
-    alignItems: "center",
     paddingHorizontal: 20,
   },
   logo: {
-    width: 100,
+    width: 200,
     height: 75,
     resizeMode: "contain",
+    alignSelf: "center"
   },
   profileContainer: {
     flexDirection: "row",
@@ -270,22 +270,37 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     marginTop: 20,
+    justifyContent: "space-between",
+    marginHorizontal: 5
   },
   buttonTxtContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-  button: {
+  button1: {
     backgroundColor: "#5A73F5",
     paddingVertical: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingHorizontal: 20,
     borderRadius: 10,
-    marginHorizontal: 5,
+    flex: 1,
+    marginRight: 10
   },
-  buttonText: {
+  button2: {
+    backgroundColor: "#5A73F5",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    flex: 1
+  },
+  buttonTextChallenge: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 20,
+    fontFamily: "Heavy",
+    paddingLeft: 10,
+  },
+  buttonTextDiary: {
+    color: "#fff",
+    fontSize: 20,
     fontFamily: "Heavy",
     paddingLeft: 10,
   },
