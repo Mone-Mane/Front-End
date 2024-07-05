@@ -5,7 +5,7 @@ const Participant = ({ name, percentage, imageSource }) => {
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        <Image source={imageSource} style={styles.image} />
+        <Image source={{ uri: imageSource }} style={styles.image} />
         <Text style={styles.name}>{name}</Text>
       </View>
       <View>

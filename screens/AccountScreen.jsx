@@ -53,7 +53,7 @@ const AccountScreen = ({ navigation }) => {
     <SafeAreaView style={styles.safe}>
       <CustomHeader title="계좌내역조회" navigation={navigation} />
       <View style={styles.cardBox}>
-        <CreditCard cardInfo={myData.data.account.card} engName={myData.data.userName}></CreditCard>
+        <CreditCard cardInfo={myData.data.account.card} engName={myData.data.userEngName}></CreditCard>
       </View>
       <View style={styles.searchMonth}>
         <DropDownPicker

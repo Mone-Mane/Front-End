@@ -24,6 +24,12 @@ export const getChallengesRecentList = async () =>
     url: `/challenges/recent-list`,
   });
 
+export const getChallengesDetail = async (code) =>
+  await onRequest({
+    method: "GET",
+    url: `/challenges/detail?challengeCode=${code}`,
+  });
+
 export const postChallengesInvitation = async () =>
   await onRequest({
     method: "POST",
