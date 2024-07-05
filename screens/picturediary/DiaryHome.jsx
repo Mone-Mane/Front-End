@@ -15,20 +15,11 @@ import CustomHeader from "../../components/CustomHeader";
 import color from "../../assets/colors/colors";
 import HotRankingCard from "../../components/HotRankingCard";
 import DrawIcon from "../../assets/icons/draw.svg";
-import PrecautionsIcon from "../../assets/icons/diary-precautions"
+import PrecautionsIcon from "../../assets/icons/diary-precautions";
 import { useQuery } from "@tanstack/react-query";
-import { getDiaryHot } from "../../apis/diary";
+import { getDiaryHot, getDiaryHomeList } from "../../apis/diary";
 
-const images = [
-  require("../../assets/cave_painting.png"),
-  require("../../assets/pixel_art.png"),
-  require("../../assets/East_Asian_painting.png"),
-  require("../../assets/Japanese_anime.png"),
-  require("../../assets/kawaii.png"),
-  require("../../assets/oil_painting.png"),
-  require("../../assets/pastel.png"),
-  require("../../assets/caricature.png"),
-];
+
 
 const getPairedImages = (images) => {
   const pairedImages = [];
@@ -39,25 +30,41 @@ const getPairedImages = (images) => {
 };
 
 const DiaryHome = ({ navigation }) => {
-  
   const picturecreate = () => navigation.navigate("ConsumptionSelect");
-  
+  const diarycheck = () => navigation.navigate("DiaryCheck");
+
+  [diarylist, setDiaryList] = useState([]);
+
+
   const { data: diaryHotList, error } = useQuery({
     queryKey: ["getDiaryHot"],
     queryFn: () => getDiaryHot(),
   });
 
+  // 홈에서 내가 만든 일기보기 6개
+  const { data: diaryHomeList } = useQuery({
+    queryKey: ["getDiaryHomeList"],
+    queryFn: () => getDiaryHomeList(),
+  });
+
   useEffect(() => {
-    if(diaryHotList){
-      console.log(diaryHotList.data)
+    if (diaryHotList) {
+      console.log(diaryHotList.data);
     }
-  }, [diaryHotList])
+  }, [diaryHotList]);
+
+  useEffect(() => {
+    if (diaryHomeList) {
+      console.log(diaryHomeList.data);
+      setDiaryList(diaryHomeList.data)
+    }
+  }, [diaryHomeList]);
 
   const windowWidth = Dimensions.get("window").width;
 
   const renderImageItem = ({ item, index }) => (
     <Image
-      source={item}
+      source={{uri:item}}
       style={[
         styles.image,
         { width: (windowWidth - 90) / 2 },
@@ -66,7 +73,9 @@ const DiaryHome = ({ navigation }) => {
     />
   );
 
-  if(!diaryHotList) return <></>
+
+
+  if (!diaryHotList && !diaryHomeList) return <></>;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -76,10 +85,15 @@ const DiaryHome = ({ navigation }) => {
           <DrawIcon marginleft={-50} />
           <Text style={styles.createButtonText}>그림일기 생성하기</Text>
         </TouchableOpacity>
-        <Text style={styles.subHeader}>Sync가 그려준 일기</Text>
+        <View style={styles.diaryMore}>
+          <Text style={styles.subHeader}>Sync가 그려준 일기</Text>
+          <TouchableOpacity onPress={diarycheck}>
+            <Text style={styles.subHeaderight}>더보기</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.container}>
           <FlatList
-            data={images}
+            data={diarylist}
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}
@@ -102,7 +116,7 @@ const DiaryHome = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.chart}>
-          <PrecautionsIcon/>
+          <PrecautionsIcon />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -149,10 +163,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
   },
+  diaryMore:{
+    flexDirection:"row",
+    justifyContent:"space-between"
+  },
   subHeader: {
     fontSize: 18,
     fontFamily: "ExtraBold",
     marginBottom: 10,
+  },
+  subHeaderight: {
+    fontSize: 14,
+    fontFamily: "Bold",
+    marginBottom: 10,
+    marginRight:4
   },
   hotText: {
     fontSize: 18,
@@ -191,7 +215,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginBottom: 20,
-    marginTop:30
+    marginTop: 30,
   },
   chartImage: {
     borderRadius: 10,
