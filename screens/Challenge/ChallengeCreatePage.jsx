@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CustomHeader from "../../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserComponents from "./../../components/UserComponents";
@@ -18,9 +18,35 @@ import ChallengeBtn from "../../components/ChallengeBtn"; // Import the updated 
 import { postChallengesOpening } from "../../apis/challenge";
 import { useMutation } from "@tanstack/react-query";
 
-const ChallengeCreatePage = ({ navigation }) => {
+const ChallengeCreatePage = ({ navigation, route }) => {
   const screenWidth = Dimensions.get("window").width;
   const itemSpacing = screenWidth * 0.02; // 화면 너비의 2%를 간격으로 설정
+  const roomId = route.params?.roomId;
+  const master = route.params?.master;
+  console.log("roomId:", roomId);
+  const ws = useRef(null);
+  useEffect(() => {
+    ws.current = new WebSocket("ws://localhost/channel");
+    ws.current.onopen = () => {
+      ws.current.send(JSON.stringify({ roomId:roomId,messageType:"ENTER" }));
+    };
+    ws.current.onclose = () => {
+      console.log("WebSocket Closed");
+    };
+    ws.current.onerror = (error) => {
+      console.log("WebSocket Error:", error);
+    };
+    ws.current.onmessage = (e) => {
+      if(e.data){
+      console.log(e.data);
+      const message = JSON.parse(e.data);
+      console.log("WebSocket Message:", message);
+      }
+    };
+    return () => {
+      ws.current.close();
+    };
+  }, []);
 
   // const createRoom = useMutation({
   //   mutationFn: () => postChallengesOpening(),
@@ -47,12 +73,13 @@ const ChallengeCreatePage = ({ navigation }) => {
   const [costClickedIndex, setCostClickedIndex] = useState(null);
   const [dateClickedIndex, setDateClickedIndex] = useState(null);
 
-  const images = [
+  const [users,setUsers] = useState([
     { img: require("../../assets/cave_painting.png"), name: "슈타르크" },
     { img: require("../../assets/pixel_art.png"), name: "페른" },
     { img: require("../../assets/East_Asian_painting.png"), name: "아키네" },
     { img: require("../../assets/Japanese_anime.png"), name: "힘멜" },
-  ];
+    { img: require("../../assets/cave_painting.png"), name: "추가하기"}
+  ]); 
 
   const challengecategorys = [
     {
@@ -152,7 +179,7 @@ const ChallengeCreatePage = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.userSpot}>
             <FlatList
-              data={images}
+              data={users}
               horizontal
               keyExtractor={(item, index) => index.toString()}
               marginVertical={-20}
@@ -257,11 +284,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   userSpot: {
-    flex: 0.2,
+    flex: 1,
     borderRadius: 10,
     backgroundColor: "#FFFFFF",
     marginVertical: 16,
     justifyContent: "center",
+    height: 200,
   },
   flatListContent: {
     flexDirection: "row",

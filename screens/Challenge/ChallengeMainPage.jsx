@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  TextInput,
   FlatList,
 } from "react-native";
 import React from "react";
@@ -32,32 +33,45 @@ import {
 
 const ChallengeMainPage = ({ navigation }) => {
 
-  // const [roomCode, setRoomCode] = useState("");
-  // const createRoom = useMutation({
-  //   mutationFn:async () => await postChallengesOpening(),
-  //   onSuccess: (response) => {
-  //     setRoomCode(response.toString());
-  //   },
-  //   onError: (error) => {
-  //     console.error("수정 실패:", error);
-  //     alert(`Error updating title: ${error.message}`);
-  //   },
-  // });
+  const createRoom = useMutation({
+    mutationFn: async () => await postChallengesOpening(),
+    onError: (error) => {
+      console.error("수정 실패:", error);
+      alert(`Error updating title: ${error.message}`);
+    },
+  });
 
-  // useEffect(() => {
-  //   createRoom.mutate();
-  // }, []);
+  const [tempRoomId, setTempRoomId] = useState("");
 
-  // useEffect(() => {
-  //   if (createRoom.data) {
-  //     console.log("생성된 방 데이터:", createRoom.data.data.roomId);
-  //     console.log(">>>>>"+roomCode)
-  //   }
-  // }, [createRoom.data]);
+  const onCreateRoom = async () => {
+    createRoom.mutate();
+  };
+
+  const onInviteRoom = async () => {
+    navigation.navigate("ChallengeCreatePage", {
+      roomId: tempRoomId,
+      master:false
+    });
+  };
+
+  const handleChangeText = (text) => {
+    setTempRoomId(text);
+  };
+
+  useEffect(() => {
+    if (createRoom.data) {
+      console.log("createRoom");
+      console.log(createRoom.data);
+      navigation.navigate("ChallengeCreatePage", {
+        roomId: createRoom.data.data.roomId,
+        master:true
+      });
+    }
+  }, [createRoom.data]);
 
 
 
-  
+
   const { data: challengeOngoing, isLoading: isLoadingOngoing } = useQuery({
     queryKey: ["getChallengesOngoing"],
     queryFn: () => getChallengesOngoing(),
@@ -75,9 +89,9 @@ const ChallengeMainPage = ({ navigation }) => {
 
   const groupedChallenges = challengeOngoing
     ? challengeOngoing.data.reduce((acc, _, index, array) => {
-        if (index % 2 === 0) acc.push(array.slice(index, index + 2));
-        return acc;
-      }, [])
+      if (index % 2 === 0) acc.push(array.slice(index, index + 2));
+      return acc;
+    }, [])
     : [];
 
   const twoChallengeDone =
@@ -101,11 +115,24 @@ const ChallengeMainPage = ({ navigation }) => {
       <CustomHeader title={"챌린지"} navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.container}>
+          <View style={styles.inputSpot}>
+            <Text>챌린지 코드</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={handleChangeText}
+            />
+          </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity >
+            <TouchableOpacity onPress={onCreateRoom}>
               <View style={styles.button}>
                 <Flame style={styles.buttonLogo}></Flame>
                 <Text style={styles.buttonText}>챌린지 생성하기</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onInviteRoom}>
+              <View style={styles.button}>
+                <Flame style={styles.buttonLogo}></Flame>
+                <Text style={styles.buttonText}>챌린지 참가하기</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -284,5 +311,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "baseline",
+  },
+  textInput: {
+    height: 40,
+    width: 150,
+    backgroundColor: "#DFEAFF",
+    borderRadius: 8,
+    fontSize: 16,
+    fontFamily: "Bold",
+    justifyContent: "center",
+  },
+  inputSpot: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
   },
 });
