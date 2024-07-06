@@ -23,7 +23,7 @@ import DiaryCompleteScreen from "./screens/picturediary/DiaryCompleteScreen.jsx"
 import ChallengeMainPage from "./screens/Challenge/ChallengeMainPage.jsx";
 import ChallengeDetailPage from "./screens/Challenge/ChallengeDetailPage.jsx";
 import ChallengeCreatePage from "./screens/Challenge/ChallengeCreatePage.jsx";
-import Socket from "./screens/Challenge/Socket.jsx";
+// import Socket from "./screens/Challenge/Socket.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
 import ConsumptionSelect from "./screens/picturediary/ConsumptionSelect.jsx";
@@ -70,7 +70,7 @@ export default function App() {
             <Stack.Screen name="MainPage" component={MainPage} />
             <Stack.Screen name="SYTest" component={SYTest} />
             <Stack.Screen name="SYTest2" component={SYTest2} />
-            <Stack.Screen name="Socket" component={Socket} />
+            {/* <Stack.Screen name="Socket" component={Socket} /> */}
             <Stack.Screen name="AccountHistory" component={AccountHistory} />
             <Stack.Screen name="DiaryDetail" component={DiaryDetail} />
             <Stack.Screen name="DiaryCheck" component={DiaryCheck} />

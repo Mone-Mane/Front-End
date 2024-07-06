@@ -15,9 +15,9 @@ import { login } from "../../apis/login";
 
 const IndexPage = ({ navigation }) => {
   const dismissKeyboard = () => {
-    if (Platform.OS !== "web") {
+    // if (Platform.OS !== "web") {
       Keyboard.dismiss();
-    }
+    // }
   };
 
   const userIdRef = useRef("");

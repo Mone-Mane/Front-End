@@ -27,7 +27,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   console.log("roomId:", roomId);
   const ws = useRef(null);
   useEffect(() => {
-    ws.current = new WebSocket("ws://localhost/channel");
+    ws.current = new WebSocket("ws://54.180.140.196:8080/channel");
     ws.current.onopen = () => {
       ws.current.send(JSON.stringify({ roomId:roomId,messageType:"ENTER" }));
     };
@@ -116,26 +116,26 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
   // socket 관련 코드
 
-  useEffect(() => {
-    socket.on("categoryClickedIndex", (index) => {
-      console.log(index)
-      setCategoryClickedIndex(index);
-    });
+  // useEffect(() => {
+  //   socket.on("categoryClickedIndex", (index) => {
+  //     console.log(index)
+  //     setCategoryClickedIndex(index);
+  //   });
 
-    socket.on("costClickedIndex", (index) => {
-      setCostClickedIndex(index);
-    });
+  //   socket.on("costClickedIndex", (index) => {
+  //     setCostClickedIndex(index);
+  //   });
 
-    socket.on("dateClickedIndex", (index) => {
-      setDateClickedIndex(index);
-    });
+  //   socket.on("dateClickedIndex", (index) => {
+  //     setDateClickedIndex(index);
+  //   });
 
-    return () => {
-      socket.off("categoryClickedIndex");
-      socket.off("costClickedIndex");
-      socket.off("dateClickedIndex");
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("categoryClickedIndex");
+  //     socket.off("costClickedIndex");
+  //     socket.off("dateClickedIndex");
+  //   };
+  // }, []);
 
   // 카테고리 클릭 함수
   const handleCategoryClick = (index) => {
@@ -158,17 +158,17 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
     setCategoryClickedIndex(index);
     setChallengeCategories(updatedCategories);
-    socket.emit("categoryClickedIndex", index);
+    // socket.emit("categoryClickedIndex", index);
   };
 
   const handleCostClick = (index) => {
     setCostClickedIndex(index);
-    socket.emit("costClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+    // socket.emit("costClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
   };
 
   const handleDateClick = (index) => {
     setDateClickedIndex(index);
-    socket.emit("dateClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+    // socket.emit("dateClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
   };
 
   const challengecost = ["3,000원", "5,000원", "10,000원", "12,000원"];
