@@ -17,6 +17,7 @@ import UserComponents from "./../../components/UserComponents";
 import ChallengeBtn from "../../components/ChallengeBtn"; // Import the updated component
 import { postChallengesOpening } from "../../apis/challenge";
 import { useMutation } from "@tanstack/react-query";
+import socket from "../../socketConfig"
 
 const ChallengeCreatePage = ({ navigation }) => {
   const screenWidth = Dimensions.get("window").width;
@@ -46,6 +47,11 @@ const ChallengeCreatePage = ({ navigation }) => {
   const [categoryClickedIndex, setCategoryClickedIndex] = useState(null);
   const [costClickedIndex, setCostClickedIndex] = useState(null);
   const [dateClickedIndex, setDateClickedIndex] = useState(null);
+  const [selectedUser, setSelectedUser] = useState({
+    img: require("../../assets/cave_painting.png"),
+    name: "슈타르크",
+  }); // 예시 유저 정보 // 유저 정보를 위한 상태 추가
+
 
   const images = [
     { img: require("../../assets/cave_painting.png"), name: "슈타르크" },
@@ -54,7 +60,7 @@ const ChallengeCreatePage = ({ navigation }) => {
     { img: require("../../assets/Japanese_anime.png"), name: "힘멜" },
   ];
 
-  const challengecategorys = [
+  const [challengeCategories, setChallengeCategories] = useState([
     {
       name: "커피 줄이기",
       users: [
@@ -79,21 +85,63 @@ const ChallengeCreatePage = ({ navigation }) => {
         { usercode: "", img: require("../../assets/cave_painting.png") },
       ],
     },
-  ];
+  ]);
 
+  // socket 관련 코드
+
+  useEffect(() => {
+    socket.on("categoryClickedIndex", (index) => {
+      console.log(index)
+      setCategoryClickedIndex(index);
+    });
+
+    socket.on("costClickedIndex", (index) => {
+      setCostClickedIndex(index);
+    });
+
+    socket.on("dateClickedIndex", (index) => {
+      setDateClickedIndex(index);
+    });
+
+    return () => {
+      socket.off("categoryClickedIndex");
+      socket.off("costClickedIndex");
+      socket.off("dateClickedIndex");
+    };
+  }, []);
+
+  // 카테고리 클릭 함수
   const handleCategoryClick = (index) => {
+    const updatedCategories = challengeCategories.map((category, i) => {
+      if (i === categoryClickedIndex) {
+        // 이전에 클릭된 버튼에서 사용자 제거
+        return {
+          ...category,
+          users: category.users.filter(user => user.name !== selectedUser.name),
+        };
+      } else if (i === index) {
+        // 새로 클릭된 버튼에 사용자 추가
+        return {
+          ...category,
+          users: [...category.users, selectedUser],
+        };
+      }
+      return category;
+    });
+
     setCategoryClickedIndex(index);
-    // socket.emit("categoryClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+    setChallengeCategories(updatedCategories);
+    socket.emit("categoryClickedIndex", index);
   };
 
   const handleCostClick = (index) => {
     setCostClickedIndex(index);
-    // socket.emit("costClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+    socket.emit("costClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
   };
 
   const handleDateClick = (index) => {
     setDateClickedIndex(index);
-    // socket.emit("dateClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+    socket.emit("dateClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
   };
 
   const challengecost = ["3,000원", "5,000원", "10,000원", "12,000원"];
@@ -104,7 +152,8 @@ const ChallengeCreatePage = ({ navigation }) => {
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
       <ChallengeBtn Keyword={item.name} users={item.users} index={index}
       clickedIndex={categoryClickedIndex}
-      setClickedIndex={setCategoryClickedIndex} />
+      setClickedIndex={handleCategoryClick}
+      userInfo={selectedUser} />
     </View>
   );
   const renderCostItem = ({ item, index }) => (
@@ -112,7 +161,7 @@ const ChallengeCreatePage = ({ navigation }) => {
       <ChallengeBtn Keyword={item} 
       users={item.users} index={index}
       clickedIndex={costClickedIndex}
-        setClickedIndex={setCostClickedIndex}/>
+      setClickedIndex={handleCostClick}/>
     </View>
   );
   const renderDateItem = ({ item, index }) => (
@@ -120,7 +169,7 @@ const ChallengeCreatePage = ({ navigation }) => {
       <ChallengeBtn Keyword={item} 
       users={item.users} index={index}
       clickedIndex={dateClickedIndex}
-      setClickedIndex={setDateClickedIndex}/>
+        setClickedIndex={handleDateClick}/>
     </View>
   );
 
@@ -167,10 +216,10 @@ const ChallengeCreatePage = ({ navigation }) => {
                 카테고리
               </Text>
               <FlatList
-                data={challengecategorys}
+                data={challengeCategories}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={(item, index) => `category-${index}`}
                 renderItem={renderCategoryItem}
               />
             </View>
@@ -182,7 +231,7 @@ const ChallengeCreatePage = ({ navigation }) => {
                 data={challengecost}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={(item, index) => `cost-${index}`}
                 renderItem={renderCostItem}
               />
             </View>
@@ -193,7 +242,7 @@ const ChallengeCreatePage = ({ navigation }) => {
               <FlatList
                 data={challengedate}
                 horizontal
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={(item, index) => `date-${index}`}
                 renderItem={renderDateItem}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ alignItems: "center" }}

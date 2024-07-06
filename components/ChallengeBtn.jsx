@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React, { useState } from "react";
 
-const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex}) => {
+const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex }) => {
   // const [clicked, setClicked] = useState(false);
   const clicked = clickedIndex === index;
 
