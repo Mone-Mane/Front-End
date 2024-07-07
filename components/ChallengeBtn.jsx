@@ -27,7 +27,7 @@ const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex }) 
         {users && users.map((user, index) => (
           <Image
             key={index}
-            source={user.img}
+            source={user.userProfile}
             style={[styles.userImage, { left: index * 12 }]}
           />
         ))}

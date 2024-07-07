@@ -9,12 +9,12 @@ const UserComponents_small = ({props}) => {
       <View style={styles.container}>
       <View style={styles.imageContainer}>
         <ImageBackground 
-          source={props.img}// 이곳에 이미지를 제공하는 URL을 넣으세요.
+          source={props.userProfile}// 이곳에 이미지를 제공하는 URL을 넣으세요.
           style={styles.image}
           imageStyle={{ borderRadius: 50 }}
         />
       </View>
-      <Text style={styles.text}>{props.name}</Text>
+      <Text style={styles.text}>{props.userName}</Text>
     </View>
     </SafeAreaView>
   );

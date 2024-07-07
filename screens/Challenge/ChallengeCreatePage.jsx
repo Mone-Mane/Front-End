@@ -15,39 +15,111 @@ import CustomHeader from "../../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserComponents from "./../../components/UserComponents";
 import ChallengeBtn from "../../components/ChallengeBtn"; // Import the updated component
-import { postChallengesOpening } from "../../apis/challenge";
+import { getMyUser, postChallengesOpening } from "../../apis/challenge";
 import { useMutation } from "@tanstack/react-query";
 import socket from "../../socketConfig"
+import { useQuery } from "@tanstack/react-query";
 
 const ChallengeCreatePage = ({ navigation, route }) => {
   const screenWidth = Dimensions.get("window").width;
   const itemSpacing = screenWidth * 0.02; // 화면 너비의 2%를 간격으로 설정
   const roomId = route.params?.roomId;
   const master = route.params?.master;
-  console.log("roomId:", roomId);
   const ws = useRef(null);
+  const [users, setUsers] = useState([]);
+  const [setted, setSetted] = useState(false);
+  const [enteredMessage, setEnteredMessage] = useState(null);
+  const [changeMessage, setChangeMessage] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+
+  const { data: me } = useQuery({
+    queryKey: ["getMyUser"],
+    queryFn: () => getMyUser(master) || {},
+  });
+
   useEffect(() => {
-    ws.current = new WebSocket("ws://54.180.140.196:8080/channel");
-    ws.current.onopen = () => {
-      ws.current.send(JSON.stringify({ roomId:roomId,messageType:"ENTER" }));
-    };
-    ws.current.onclose = () => {
-      console.log("WebSocket Closed");
-    };
-    ws.current.onerror = (error) => {
-      console.log("WebSocket Error:", error);
-    };
-    ws.current.onmessage = (e) => {
-      if(e.data){
-      console.log(e.data);
-      const message = JSON.parse(e.data);
-      console.log("WebSocket Message:", message);
+    if (me) {
+      setSetted(true);
+      setSelectedUser(me);
+    }
+  }, [me]);
+
+  useEffect(() => {
+    if (setted) {
+      if (master) {
+        setUsers([me])
       }
-    };
-    return () => {
-      ws.current.close();
-    };
-  }, []);
+    }
+  }, [me, setted]);
+
+  useEffect(() => {
+    if (me) {
+      ws.current = new WebSocket("ws://172.30.1.62/channel");
+      ws.current.onopen = () => {
+        ws.current.send(JSON.stringify({ roomId: roomId, messageType: "ENTER", user: me }));
+      };
+      ws.current.onclose = () => {
+        console.log("WebSocket Closed");
+      };
+      ws.current.onerror = (error) => {
+        console.log("WebSocket Error:", error);
+      };
+      ws.current.onmessage = (e) => {
+        if (e.data) {
+          console.log(e.data);
+          const message = JSON.parse(e.data);
+          console.log("WebSocket Message:", message);
+          if (message.messageType === "ENTER") {
+            setEnteredMessage(message);
+          } else if (message.messageType === "WELCOME") {
+            setUsers(message.challengeCreateStatus.users)
+            setCategoryPicks(message.challengeCreateStatus.categoryPicks)
+          } else if (message.messageType === "CHANGE") {
+            setChangeMessage(message);
+          }
+        }
+      };
+      return () => {
+        ws.current.close();
+        console.log("WebSocket Closed");
+      };
+    }
+  }, [me]);
+
+  useEffect(() => {
+    if (enteredMessage && enteredMessage.user.userCode !== me.userCode) {
+      const newUsers = [...users, enteredMessage.user]
+      setUsers(newUsers);
+      if (master) {
+        ws.current.send(JSON.stringify({ roomId: roomId, messageType: "WELCOME", to: enteredMessage.sender, challengeCreateStatus: { users: newUsers, categoryPicks: categoryPicks } }))
+      }
+    }
+  }, [enteredMessage]);
+
+  useEffect(()=>{
+    console.log("changeMessage:",changeMessage)
+    if(changeMessage && changeMessage.user.userCode !== me.userCode){
+      if (changeMessage.challengeChangeStatus.statusClass === "category") {
+        console.log(categoryPicks);
+        const updatedCategories = categoryPicks.map((category, i) => {
+          if (category.name === changeMessage.challengeChangeStatus.statusBefore) {
+            return {
+              ...category,
+              users: category.users.filter(user => user.userName !== changeMessage.user.userName),
+            };
+          } else if (category.name === changeMessage.challengeChangeStatus.statusAfter) {
+            return {
+              ...category,
+              users: [...category.users, changeMessage.user],
+            };
+          }
+          return category;
+        });
+        setCategoryPicks(updatedCategories);
+      }
+    }
+  },[changeMessage])
 
   // const createRoom = useMutation({
   //   mutationFn: () => postChallengesOpening(),
@@ -73,33 +145,19 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [categoryClickedIndex, setCategoryClickedIndex] = useState(null);
   const [costClickedIndex, setCostClickedIndex] = useState(null);
   const [dateClickedIndex, setDateClickedIndex] = useState(null);
-  const [selectedUser, setSelectedUser] = useState({
-    img: require("../../assets/cave_painting.png"),
-    name: "슈타르크",
-  }); // 예시 유저 정보 // 유저 정보를 위한 상태 추가
 
 
-  const [users,setUsers] = useState([
-    { img: require("../../assets/cave_painting.png"), name: "슈타르크" },
-    { img: require("../../assets/pixel_art.png"), name: "페른" },
-    { img: require("../../assets/East_Asian_painting.png"), name: "아키네" },
-    { img: require("../../assets/Japanese_anime.png"), name: "힘멜" },
-    { img: require("../../assets/cave_painting.png"), name: "추가하기"}
-  ]); 
 
-  const [challengeCategories, setChallengeCategories] = useState([
+
+  const [categoryPicks, setCategoryPicks] = useState([
     {
       name: "커피 줄이기",
       users: [
-        { usercode: "", img: require("../../assets/cave_painting.png") },
-        { usercode: "", img: require("../../assets/pixel_art.png") },
       ],
     },
     {
       name: "택시 줄이기",
       users: [
-        { usercode: "", img: require("../../assets/East_Asian_painting.png") },
-        { usercode: "", img: require("../../assets/Japanese_anime.png") },
       ],
     },
     {
@@ -109,7 +167,6 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     {
       name: "야식 줄이기",
       users: [
-        { usercode: "", img: require("../../assets/cave_painting.png") },
       ],
     },
   ]);
@@ -139,25 +196,30 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
   // 카테고리 클릭 함수
   const handleCategoryClick = (index) => {
-    const updatedCategories = challengeCategories.map((category, i) => {
+    console.log("clicked");
+    var beforeCategory = "";
+    var afterCategory = "";
+    const updatedCategories = categoryPicks.map((category, i) => {
       if (i === categoryClickedIndex) {
         // 이전에 클릭된 버튼에서 사용자 제거
+        beforeCategory = category.name;
         return {
           ...category,
-          users: category.users.filter(user => user.name !== selectedUser.name),
+          users: category.users.filter(user => user.userCode !== me.userCode),
         };
       } else if (i === index) {
+        afterCategory = category.name;
         // 새로 클릭된 버튼에 사용자 추가
         return {
           ...category,
-          users: [...category.users, selectedUser],
+          users: [...category.users, me],
         };
       }
       return category;
     });
-
+    ws.current.send(JSON.stringify({ roomId: roomId, messageType: "CHANGE", challengeChangeStatus: { statusClass: "category", statusBefore: beforeCategory, statusAfter: afterCategory }, user: me }))
     setCategoryClickedIndex(index);
-    setChallengeCategories(updatedCategories);
+    setCategoryPicks(updatedCategories);
     // socket.emit("categoryClickedIndex", index);
   };
 
@@ -174,29 +236,31 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const challengecost = ["3,000원", "5,000원", "10,000원", "12,000원"];
   const challengedate = ["1주", "2주", "3주", "4주"];
 
-  const renderImageItem = ({ item, index }) => <UserComponents props={item} />;
-  const renderCategoryItem = ({ item, index }) => (
-    <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item.name} users={item.users} index={index}
-      clickedIndex={categoryClickedIndex}
-      setClickedIndex={handleCategoryClick}
-      userInfo={selectedUser} />
-    </View>
-  );
+  const renderUser = ({ item, index }) => <UserComponents props={item} />;
+  const renderCategoryItem = ({ item, index }) => {
+    return (
+      <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
+        <ChallengeBtn Keyword={item.name} users={item.users} index={index}
+          clickedIndex={categoryClickedIndex}
+          setClickedIndex={handleCategoryClick}
+          userInfo={selectedUser} />
+      </View>
+    )
+  };
   const renderCostItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item} 
-      users={item.users} index={index}
-      clickedIndex={costClickedIndex}
-      setClickedIndex={handleCostClick}/>
+      <ChallengeBtn Keyword={item}
+        users={item.users} index={index}
+        clickedIndex={costClickedIndex}
+        setClickedIndex={handleCostClick} />
     </View>
   );
   const renderDateItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item} 
-      users={item.users} index={index}
-      clickedIndex={dateClickedIndex}
-        setClickedIndex={handleDateClick}/>
+      <ChallengeBtn Keyword={item}
+        users={item.users} index={index}
+        clickedIndex={dateClickedIndex}
+        setClickedIndex={handleDateClick} />
     </View>
   );
 
@@ -234,7 +298,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
               marginVertical={-20}
               marginLeft={8}
               contentContainerStyle={styles.flatListContent}
-              renderItem={renderImageItem}
+              renderItem={renderUser}
             />
           </View>
           <View style={styles.categorySpot}>
@@ -243,7 +307,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
                 카테고리
               </Text>
               <FlatList
-                data={challengeCategories}
+                data={categoryPicks}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item, index) => `category-${index}`}
@@ -344,8 +408,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 20, // 필요에 따라 상하 패딩 추가
   },
-  itemContainer:{
-    marginTop:5
+  itemContainer: {
+    marginTop: 5
   },
   categorySpot: {
     paddingHorizontal: 10,
