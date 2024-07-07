@@ -306,10 +306,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   userSpot: {
-    flex: 0.2,
+    flex: 1,
     borderRadius: 10,
     backgroundColor: "#FFFFFF",
-    marginVertical: 16,
+    marginVertical: 32,
     justifyContent: "center",
   },
   flatListContent: {
