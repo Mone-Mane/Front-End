@@ -233,7 +233,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     // socket.emit("dateClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
   };
 
-  const challengecost = ["3,000원", "5,000원", "10,000원", "12,000원"];
+  const challengecost = [{name:"3,000원",users:[]}, {name:"5,000원",users:[]}, {name:"10,000원",users:[]}, {name:"12,000원",users:[]}];
   const challengedate = ["1주", "2주", "3주", "4주"];
 
   const renderUser = ({ item, index }) => <UserComponents props={item} />;
