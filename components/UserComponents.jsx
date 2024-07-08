@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
     },
     container: {
         alignItems: 'center',
-        margin: 10,
+        marginHorizontal: 10,
       },
       imageContainer: {
-        width: 50,  // 이미지의 크기
-        height: 50, // 이미지의 크기
+        width: 60,  // 이미지의 크기
+        height: 60, // 이미지의 크기
         borderRadius: 25, // 이미지를 둥글게 만들기 위해 반으로 나눔
         overflow: 'hidden',
         backgroundColor: '#fff',

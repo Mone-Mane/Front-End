@@ -20,7 +20,7 @@ import {
   getMyUser,
   postChallengesInvitation,
   postChallengesOpening,
-  getChallengesRecentList
+  getChallengesRecentList,
 } from "../../apis/challenge";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ChallengeRequestModal from "../../components/ChallengeRequestModal";
@@ -40,7 +40,6 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [changeMessage, setChangeMessage] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 
-
   const me = useRecoilValue(myInfo);
   useEffect(() => {
     if (me) {
@@ -52,7 +51,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   useEffect(() => {
     if (setted) {
       if (master) {
-        setUsers([me])
+        setUsers([me]);
       }
     }
   }, [me, setted]);
@@ -61,7 +60,9 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     if (me) {
       ws.current = new WebSocket("ws://172.16.21.86/channel");
       ws.current.onopen = () => {
-        ws.current.send(JSON.stringify({ roomId: roomId, messageType: "ENTER", user: me }));
+        ws.current.send(
+          JSON.stringify({ roomId: roomId, messageType: "ENTER", user: me })
+        );
       };
       ws.current.onclose = () => {
         console.log("WebSocket Closed");
@@ -77,8 +78,8 @@ const ChallengeCreatePage = ({ navigation, route }) => {
           if (message.messageType === "ENTER") {
             setEnteredMessage(message);
           } else if (message.messageType === "WELCOME") {
-            setUsers(message.challengeCreateStatus.users)
-            setCategoryPicks(message.challengeCreateStatus.categoryPicks)
+            setUsers(message.challengeCreateStatus.users);
+            setCategoryPicks(message.challengeCreateStatus.categoryPicks);
           } else if (message.messageType === "CHANGE") {
             setChangeMessage(message);
           }
@@ -93,26 +94,42 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
   useEffect(() => {
     if (enteredMessage && enteredMessage.user.userCode !== me.userCode) {
-      const newUsers = [...users, enteredMessage.user]
+      const newUsers = [...users, enteredMessage.user];
       setUsers(newUsers);
       if (master) {
-        ws.current.send(JSON.stringify({ roomId: roomId, messageType: "WELCOME", to: enteredMessage.sender, challengeCreateStatus: { users: newUsers, categoryPicks: categoryPicks } }))
+        ws.current.send(
+          JSON.stringify({
+            roomId: roomId,
+            messageType: "WELCOME",
+            to: enteredMessage.sender,
+            challengeCreateStatus: {
+              users: newUsers,
+              categoryPicks: categoryPicks,
+            },
+          })
+        );
       }
     }
   }, [enteredMessage]);
 
-  useEffect(()=>{
-    console.log("changeMessage:",changeMessage)
-    if(changeMessage!==null && changeMessage.user.userCode !== me.userCode){
+  useEffect(() => {
+    console.log("changeMessage:", changeMessage);
+    if (changeMessage !== null && changeMessage.user.userCode !== me.userCode) {
       if (changeMessage.challengeChangeStatus.statusClass === "category") {
         console.log(categoryPicks);
         const updatedCategories = categoryPicks.map((category, i) => {
-          if (category.name === changeMessage.challengeChangeStatus.statusBefore) {
+          if (
+            category.name === changeMessage.challengeChangeStatus.statusBefore
+          ) {
             return {
               ...category,
-              users: category.users.filter(user => user.userName !== changeMessage.user.userName),
+              users: category.users.filter(
+                (user) => user.userName !== changeMessage.user.userName
+              ),
             };
-          } else if (category.name === changeMessage.challengeChangeStatus.statusAfter) {
+          } else if (
+            category.name === changeMessage.challengeChangeStatus.statusAfter
+          ) {
             return {
               ...category,
               users: [...category.users, changeMessage.user],
@@ -123,7 +140,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
         setCategoryPicks(updatedCategories);
       }
     }
-  },[changeMessage])
+  }, [changeMessage]);
 
   const inviteMutation = useMutation({
     mutationFn: ({ invitationList }) =>
@@ -139,7 +156,11 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     },
   });
 
-  const { data: recentPlayers, error, isLoading: isLoadingRecent } = useQuery({
+  const {
+    data: recentPlayers,
+    error,
+    isLoading: isLoadingRecent,
+  } = useQuery({
     queryKey: ["getChallengesRecentList"],
     queryFn: () => getChallengesRecentList(),
   });
@@ -168,18 +189,14 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [costClickedIndex, setCostClickedIndex] = useState(null);
   const [dateClickedIndex, setDateClickedIndex] = useState(null);
 
-
-
   const [categoryPicks, setCategoryPicks] = useState([
     {
       name: "커피 줄이기",
-      users: [
-      ],
+      users: [],
     },
     {
       name: "택시 줄이기",
-      users: [
-      ],
+      users: [],
     },
     {
       name: "술 줄이기",
@@ -187,8 +204,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     },
     {
       name: "야식 줄이기",
-      users: [
-      ],
+      users: [],
     },
   ]);
 
@@ -227,7 +243,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
         beforeCategory = category.name;
         return {
           ...category,
-          users: category.users.filter(user => user.userCode !== me.userCode),
+          users: category.users.filter((user) => user.userCode !== me.userCode),
         };
       } else if (i === index) {
         afterCategory = category.name;
@@ -239,7 +255,18 @@ const ChallengeCreatePage = ({ navigation, route }) => {
       }
       return category;
     });
-    ws.current.send(JSON.stringify({ roomId: roomId, messageType: "CHANGE", challengeChangeStatus: { statusClass: "category", statusBefore: beforeCategory, statusAfter: afterCategory }, user: me }))
+    ws.current.send(
+      JSON.stringify({
+        roomId: roomId,
+        messageType: "CHANGE",
+        challengeChangeStatus: {
+          statusClass: "category",
+          statusBefore: beforeCategory,
+          statusAfter: afterCategory,
+        },
+        user: me,
+      })
+    );
     setCategoryClickedIndex(index);
     setCategoryPicks(updatedCategories);
     // socket.emit("categoryClickedIndex", index);
@@ -261,20 +288,29 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const renderUser = ({ item, index }) => <UserComponents props={item} />;
   const renderCategoryItem = ({ item, index }) => {
     return (
-      <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-        <ChallengeBtn Keyword={item.name} users={item.users} index={index}
+      <View
+        style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}
+      >
+        <ChallengeBtn
+          Keyword={item.name}
+          users={item.users}
+          index={index}
           clickedIndex={categoryClickedIndex}
           setClickedIndex={handleCategoryClick}
-          userInfo={selectedUser} />
+          userInfo={selectedUser}
+        />
       </View>
-    )
+    );
   };
   const renderCostItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item}
-        users={item.users} index={index}
+      <ChallengeBtn
+        Keyword={item}
+        users={item.users}
+        index={index}
         clickedIndex={costClickedIndex}
-        setClickedIndex={handleCostClick} />
+        setClickedIndex={handleCostClick}
+      />
     </View>
   );
   const renderDateItem = ({ item, index }) => (
@@ -386,7 +422,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     return <Text>Permission to access contacts was denied.</Text>;
   }
 
-  if(isLoadingRecent) return <></>
+  if (isLoadingRecent) return <></>;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -403,7 +439,9 @@ const ChallengeCreatePage = ({ navigation, route }) => {
               contentContainerStyle={styles.flatListContent}
               renderItem={renderUser}
             />
-            <Text onPress={fetchContacts}>버튼</Text>
+            <TouchableOpacity style={styles.inviteBtn} onPress={fetchContacts}>
+              <Text style={styles.inviteText}>+</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.categorySpot}>
             <View flex={1}>
@@ -513,14 +551,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     marginVertical: 16,
     justifyContent: "center",
-    height: 200,
   },
   flatListContent: {
     flexDirection: "row",
-    marginBottom: 20, // 필요에 따라 상하 패딩 추가
+    // marginBottom: 20,
   },
   itemContainer: {
-    marginTop: 5
+    marginTop: 5,
   },
   categorySpot: {
     paddingHorizontal: 10,
@@ -576,5 +613,21 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
     fontFamily: "Bold",
+  },
+  inviteBtn: {
+    marginRight: 18,
+    borderWidth: 1,
+    borderColor: "#C5D9FF",
+    borderRadius: 50,
+    justifyContent: "center",
+    alignSelf: "center",
+    alignItems: "center",
+    width: 60,
+    height: 60,
+  },
+  inviteText: {
+    fontFamily: "Regular",
+    fontSize: 40,
+    color: "#7D9BFC",
   },
 });
