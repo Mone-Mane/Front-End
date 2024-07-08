@@ -67,13 +67,4 @@ export const postChallengesOpening = async () =>
     data: {},
   });
 
-  export const getMyUser = async(master)=>{
-    const res= await onRequest({
-      method:"GET",
-      url:`/users/me`
-    })
-    if(res.data){
-      res.data.master=master;
-    }
-    return res.data;
-  }
+  

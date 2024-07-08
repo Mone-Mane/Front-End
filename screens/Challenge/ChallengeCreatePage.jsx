@@ -25,6 +25,8 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ChallengeRequestModal from "../../components/ChallengeRequestModal";
 import * as Contacts from "expo-contacts";
+import { useRecoilSnapshot, useRecoilValue } from "recoil";
+import { myInfo } from "../../recoil/atoms/user";
 
 const ChallengeCreatePage = ({ navigation, route }) => {
   const screenWidth = Dimensions.get("window").width;
@@ -39,11 +41,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [selectedUser, setSelectedUser] = useState(null);
 
 
-  const { data: me } = useQuery({
-    queryKey: ["getMyUser"],
-    queryFn: () => getMyUser(master) || {},
-  });
-
+  const me = useRecoilValue(myInfo);
   useEffect(() => {
     if (me) {
       setSetted(true);

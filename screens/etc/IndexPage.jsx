@@ -9,16 +9,23 @@ import {
   Keyboard,
   Alert
 } from "react-native";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../apis/login";
+import { useRecoilState } from "recoil";
+import { myInfo } from "../../recoil/atoms/user";
 
 const IndexPage = ({ navigation }) => {
   const dismissKeyboard = () => {
     // if (Platform.OS !== "web") {
-      Keyboard.dismiss();
+    Keyboard.dismiss();
     // }
   };
+
+  const [me, setMe] = useRecoilState(myInfo);
+  useEffect(() => {
+    setMe(null)
+  }, []);
 
   const userIdRef = useRef("");
   const userPwdRef = useRef("");

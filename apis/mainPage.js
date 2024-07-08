@@ -21,3 +21,12 @@ export const getUsersAccount = async () => {
     url: `/users/accounts`,
   });
 };
+
+export const getMyUser = async()=>{
+  const res= await onRequest({
+    method:"GET",
+    url:`/users/me`
+  })
+  console.log("MY USER GET~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  return res.data;
+}

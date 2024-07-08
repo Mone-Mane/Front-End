@@ -17,8 +17,10 @@ import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getUsersStatistics } from "../../apis/mainPage";
+import { getUsersStatistics, getMyUser } from "../../apis/mainPage";
 import { getUsersMyPage } from "../../apis/mypage";
+import { myInfo } from "../../recoil/atoms/user";
+import { useRecoilState } from "recoil";
 
 const MainPage = ({ navigation }) => {
   const formatDate = (date) => {
@@ -27,6 +29,23 @@ const MainPage = ({ navigation }) => {
     const dd = String(date.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   };
+
+  const [me, setMe] = useRecoilState(myInfo);
+  const { data: user } = useQuery({
+    queryKey: ["getMyUser"],
+    queryFn: () => getMyUser() || {},
+    enabled: !me, // Only enable the query if 'me' is not set
+  });
+  
+  useEffect(() => {
+    if (!me || me.userCode !== user.userCode) {
+      setMe(user);
+    }
+    if(me){
+      console.log("me change",me);
+    }
+  }, [me, setMe, user]);
+
 
   const[transformedData,setTransformedData] = useState({
     analysis_cafe: 0,
