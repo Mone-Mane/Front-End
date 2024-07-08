@@ -14,7 +14,6 @@ const ChallengeDetailPage = () => {
 
   const {
     data: challengeInfo,
-    error,
     isLoading: isLoading,
   } = useQuery({
     queryKey: ["getChallengesDetail"],

@@ -5,7 +5,6 @@ import GoodIcon from "../assets/icons/good.svg";
 import React from "react";
 
 const ChallengeAcceptModal = ({ isOpen, setIsOpen, masterdata }) => {
-  masterdata={date:"3주",cost:"12,000원",category:"커피줄이기"}
   const onPressModalClose = () => {
     setIsOpen(false);
   };

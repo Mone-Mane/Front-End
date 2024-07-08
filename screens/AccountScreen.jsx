@@ -3,13 +3,10 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Text,
-  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AccountHistory from "../components/AccountHistory";
 import CustomHeader from "../components/CustomHeader";
-import DownIcon from "../assets/icons/down.svg";
 import CreditCard from "../components/CreditCard";
 import { getUsersAccountsLogsPeriod } from "../apis/history";
 import { useQuery } from "@tanstack/react-query";
@@ -23,7 +20,6 @@ const AccountScreen = ({ navigation }) => {
     queryFn: () => getUsersMyPage(),
   });
   
-  const [search, setSearch] = useState("");
   const [period, setPeriod] = useState(1); // 초기값을 적절히 설정하세요
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([

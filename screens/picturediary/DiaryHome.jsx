@@ -9,7 +9,7 @@ import {
   FlatList,
 } from "react-native";
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
 import color from "../../assets/colors/colors";
@@ -20,14 +20,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getDiaryHot, getDiaryHomeList } from "../../apis/diary";
 
 
-
-const getPairedImages = (images) => {
-  const pairedImages = [];
-  for (let i = 0; i < images.length; i += 2) {
-    pairedImages.push(images.slice(i, i + 2));
-  }
-  return pairedImages;
-};
 
 const DiaryHome = ({ navigation }) => {
   const picturecreate = () => navigation.navigate("ConsumptionSelect");

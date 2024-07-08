@@ -24,7 +24,6 @@ import * as MediaLibrary from "expo-media-library";
 import { Asset } from "expo-asset";
 import * as IntentLauncher from "expo-intent-launcher";
 import * as Sharing from 'expo-sharing';
-import imageCreate from './../etc/imageCreate';
  
 
 

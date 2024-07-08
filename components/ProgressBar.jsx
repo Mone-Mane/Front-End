@@ -1,8 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-import Arrow from "../assets/icons/newarrow.svg";
-import Flame from "../assets/icons/flame.svg";
-import Palette from "../assets/icons/palette.svg";
+import { View, Text, StyleSheet } from "react-native";
+
 
 
 const ProgressBar = ({ progress, sizeFont }) => {

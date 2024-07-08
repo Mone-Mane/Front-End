@@ -1,14 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import SuccessIcon from "../assets/icons/success.svg";
 import FailIcon from "../assets/icons/fail.svg";
 
-// key={item.challenge.challengeCode}
-//                   title={item.challenge.challengeName}
-//                   createdDate={item.challenge.createdDate}
-//                   challengePeriod={item.challenge.challengePeriod}
-//                   targetAmount={item.challenge.challengeTargetAmount}
-//                   spentAmount={item.me.challengeUserSpentMoney}
 
 
 const ChallengeCard = ({ title, createdDate, challengePeriod, targetAmount, spentAmount, navigation }) => {

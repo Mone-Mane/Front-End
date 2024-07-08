@@ -27,7 +27,6 @@ const ConsumptionSelect = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [selectedItems, setSelectedItmes] = useState([]);
-  const [idsCategory, setIdsCategory] = useState([]);
 
   const { data: myAccountHistory, error,isLoading  } = useQuery({
     queryKey: ["getUsersAccountsLogsPeriod"],

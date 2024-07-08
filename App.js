@@ -156,9 +156,7 @@ export default function App() {
         </NavigationContainer>
       </QueryClientProvider>
     </RecoilRoot>
-    // <View className="flex-1 items-center justify-center bg-green-500">
-    //   <Text>Open up App.js to start working on your app!</Text>
-    // </View>
+
   );
 }
 

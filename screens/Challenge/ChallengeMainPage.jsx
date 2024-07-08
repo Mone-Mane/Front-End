@@ -25,11 +25,7 @@ import { useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { postChallengesOpening } from "../../apis/challenge";
 
-import {
-  challengeInProgressList,
-  challengeDoneList,
-  selectedChallengeCode,
-} from "../../recoil/atoms/challenge";
+
 
 const ChallengeMainPage = ({ navigation }) => {
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import ProgressBar from "./ProgressBar";
 import Drink from "../assets/icons/paydrink.svg";
 import Taxi from "../assets/icons/taxi.svg";

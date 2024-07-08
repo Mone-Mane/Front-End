@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Ionicons 라이브러리 임포트
 import CustomHeader from "../../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EX from "../../assets/icons/ex.svg"

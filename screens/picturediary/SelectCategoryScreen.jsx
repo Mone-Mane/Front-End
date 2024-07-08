@@ -6,7 +6,7 @@ import {
   Image,
   Text,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomHeader from "../../components/CustomHeader";
 import color from "../../assets/colors/colors";

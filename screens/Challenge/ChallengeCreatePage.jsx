@@ -17,15 +17,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import UserComponents from "./../../components/UserComponents";
 import ChallengeBtn from "../../components/ChallengeBtn"; // Import the updated component
 import {
-  getMyUser,
   postChallengesInvitation,
-  postChallengesOpening,
   getChallengesRecentList,
 } from "../../apis/challenge";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ChallengeRequestModal from "../../components/ChallengeRequestModal";
 import * as Contacts from "expo-contacts";
-import { useRecoilSnapshot, useRecoilValue } from "recoil";
+import {  useRecoilValue } from "recoil";
 import { myInfo } from "../../recoil/atoms/user";
 import ChallengeAcceptModal from "../../components/ChallengeAcceptModal";
 
@@ -292,7 +290,6 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     console.log("clicked");
     var beforeCategory = "";
     var afterCategory = "";
-    var beforeCategoryIndex = -1
     const updatedCategories = categoryPicks.map((category, i) => {
       if (i === categoryClickedIndex) {
         // 이전에 클릭된 버튼에서 사용자 제거

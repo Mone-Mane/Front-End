@@ -6,7 +6,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Pressable,
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,8 +17,6 @@ import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { uploadUserProfileImage } from "../../apis/mypage";
 
 const MyPage = ({ navigation }) => {
   const [image, setImage] = useState(null);

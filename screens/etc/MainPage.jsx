@@ -5,7 +5,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TouchableWithoutFeedback,
 } from "react-native";
 import Flame from "../../assets/icons/flame.svg";
 import Palette from "../../assets/icons/palette.svg";
