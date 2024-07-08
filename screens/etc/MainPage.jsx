@@ -115,7 +115,7 @@ const MainPage = ({ navigation }) => {
         analysis_transportation: statistics.data.transportation || 0
       });
     }
-    if(statistics.data == null){
+    if(statistics?.data == null){
       setTransformedData({
         analysis_cafe: 0,
         analysis_food: 0,
