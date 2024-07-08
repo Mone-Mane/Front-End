@@ -9,20 +9,52 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import CustomHeader from "../../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserComponents from "./../../components/UserComponents";
 import ChallengeBtn from "../../components/ChallengeBtn"; // Import the updated component
-import { postChallengesOpening } from "../../apis/challenge";
-import { useMutation } from "@tanstack/react-query";
-import socket from "../../socketConfig"
+import {
+  postChallengesInvitation,
+  postChallengesOpening,
+  getChallengesRecentList
+} from "../../apis/challenge";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import socket from "../../socketConfig";
+import ChallengeRequestModal from "../../components/ChallengeRequestModal";
+import * as Contacts from "expo-contacts";
 
 const ChallengeCreatePage = ({ navigation }) => {
   const screenWidth = Dimensions.get("window").width;
   const itemSpacing = screenWidth * 0.02; // 화면 너비의 2%를 간격으로 설정
+  const [ recentUsers, setRecentUsers ] = useState();
 
+  const inviteMutation = useMutation({
+    mutationFn: ({ invitationList }) =>
+      postChallengesInvitation(invitationList),
+    onSuccess: (data) => {
+      console.log("연락처!:", data.data);
+      setChallengerList(data.data);
+      setIsModalVisible(true);
+    },
+    onError: (error) => {
+      Alert.alert("초대 실패", "오류가 발생했습니다.");
+      console.log(error);
+    },
+  });
+
+  const { data: recentPlayers, error, isLoading: isLoadingRecent } = useQuery({
+    queryKey: ["getChallengesRecentList"],
+    queryFn: () => getChallengesRecentList(),
+  });
+
+  useEffect(() => {
+    if(recentPlayers){
+      setRecentUsers(recentPlayers.data);
+    }
+  },[recentPlayers])
   // const createRoom = useMutation({
   //   mutationFn: () => postChallengesOpening(),
   //   onSuccess: (data) => {
@@ -52,7 +84,6 @@ const ChallengeCreatePage = ({ navigation }) => {
     name: "슈타르크",
   }); // 예시 유저 정보 // 유저 정보를 위한 상태 추가
 
-
   const images = [
     { img: require("../../assets/cave_painting.png"), name: "슈타르크" },
     { img: require("../../assets/pixel_art.png"), name: "페른" },
@@ -81,9 +112,7 @@ const ChallengeCreatePage = ({ navigation }) => {
     },
     {
       name: "야식 줄이기",
-      users: [
-        { usercode: "", img: require("../../assets/cave_painting.png") },
-      ],
+      users: [{ usercode: "", img: require("../../assets/cave_painting.png") }],
     },
   ]);
 
@@ -91,7 +120,7 @@ const ChallengeCreatePage = ({ navigation }) => {
 
   useEffect(() => {
     socket.on("categoryClickedIndex", (index) => {
-      console.log(index)
+      console.log(index);
       setCategoryClickedIndex(index);
     });
 
@@ -117,7 +146,9 @@ const ChallengeCreatePage = ({ navigation }) => {
         // 이전에 클릭된 버튼에서 사용자 제거
         return {
           ...category,
-          users: category.users.filter(user => user.name !== selectedUser.name),
+          users: category.users.filter(
+            (user) => user.name !== selectedUser.name
+          ),
         };
       } else if (i === index) {
         // 새로 클릭된 버튼에 사용자 추가
@@ -150,26 +181,36 @@ const ChallengeCreatePage = ({ navigation }) => {
   const renderImageItem = ({ item, index }) => <UserComponents props={item} />;
   const renderCategoryItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item.name} users={item.users} index={index}
-      clickedIndex={categoryClickedIndex}
-      setClickedIndex={handleCategoryClick}
-      userInfo={selectedUser} />
+      <ChallengeBtn
+        Keyword={item.name}
+        users={item.users}
+        index={index}
+        clickedIndex={categoryClickedIndex}
+        setClickedIndex={handleCategoryClick}
+        userInfo={selectedUser}
+      />
     </View>
   );
   const renderCostItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item} 
-      users={item.users} index={index}
-      clickedIndex={costClickedIndex}
-      setClickedIndex={handleCostClick}/>
+      <ChallengeBtn
+        Keyword={item}
+        users={item.users}
+        index={index}
+        clickedIndex={costClickedIndex}
+        setClickedIndex={handleCostClick}
+      />
     </View>
   );
   const renderDateItem = ({ item, index }) => (
     <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn Keyword={item} 
-      users={item.users} index={index}
-      clickedIndex={dateClickedIndex}
-        setClickedIndex={handleDateClick}/>
+      <ChallengeBtn
+        Keyword={item}
+        users={item.users}
+        index={index}
+        clickedIndex={dateClickedIndex}
+        setClickedIndex={handleDateClick}
+      />
     </View>
   );
 
@@ -185,7 +226,10 @@ const ChallengeCreatePage = ({ navigation }) => {
     }
     const maxAmount = 1000000;
     if (parseInt(cleanedText, 10) > maxAmount) {
-      Alert.alert("입력 오류", `최대 금액은 ${formatNumber(maxAmount.toString())} 원 입니다.`);
+      Alert.alert(
+        "입력 오류",
+        `최대 금액은 ${formatNumber(maxAmount.toString())} 원 입니다.`
+      );
       return;
     }
     const formattedText = formatNumber(cleanedText);
@@ -193,6 +237,81 @@ const ChallengeCreatePage = ({ navigation }) => {
   };
 
   const [searchQuery, setSearchQuery] = useState("");
+
+  // 여가서부턴 참가자 초대하는 코드 들어가 있어용
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [contacts, setContacts] = useState([]);
+  const [permission, setPermission] = useState(null);
+  const [challengerList, setChallengerList] = useState([]);
+
+  const openModal = () => {
+    setIsModalVisible(true);
+  };
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      setPermission(status === "granted");
+    })();
+  }, []);
+
+  const fetchContacts = async () => {
+    if (permission) {
+      const { data } = await Contacts.getContactsAsync({
+        fields: [Contacts.Fields.PhoneNumbers, Contacts.Fields.Emails],
+      });
+      if (data.length > 0) {
+        if (Platform.OS === "android") {
+          setContacts(data);
+          const invitationList = data
+            .map((contact) => {
+              return {
+                name: contact.name,
+                phoneNum:
+                  contact.phoneNumbers && contact.phoneNumbers.length > 0
+                    ? contact.phoneNumbers[0].number
+                    : null,
+              };
+            })
+            .filter((contact) => contact.phoneNum);
+          inviteMutation.mutate({ invitationList: invitationList });
+        }
+        if (Platform.OS === "ios") {
+          setContacts(data);
+          const formattedContacts = data
+            .map((contact) => {
+              let formattedNumber = null;
+              if (contact.phoneNumbers && contact.phoneNumbers.length > 0) {
+                const originalNumber = contact.phoneNumbers[0].digits;
+                formattedNumber = originalNumber
+                  .replace(/\D/g, "")
+                  .replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+              }
+              return {
+                name: contact.name,
+                phoneNum: formattedNumber || originalNumber,
+              };
+            })
+            .filter((contact) => contact.phoneNum);
+
+          inviteMutation.mutate({ invitationList: formattedContacts });
+        }
+      }
+    }
+  };
+
+  if (permission === null) {
+    return <Text>Requesting permission...</Text>;
+  }
+
+  if (permission === false) {
+    return <Text>Permission to access contacts was denied.</Text>;
+  }
+
+  if(isLoadingRecent) return <></>
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -209,6 +328,7 @@ const ChallengeCreatePage = ({ navigation }) => {
               contentContainerStyle={styles.flatListContent}
               renderItem={renderImageItem}
             />
+            <Text onPress={fetchContacts}>버튼</Text>
           </View>
           <View style={styles.categorySpot}>
             <View flex={1}>
@@ -284,6 +404,12 @@ const ChallengeCreatePage = ({ navigation }) => {
               height={300}
             />
           </View>
+          <ChallengeRequestModal
+            isOpen={isModalVisible}
+            setIsOpen={setIsModalVisible}
+            contacts={challengerList}
+            recentUsers={recentPlayers.data}
+          ></ChallengeRequestModal>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -306,6 +432,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   userSpot: {
+    flexDirection: "row",
     flex: 0.2,
     borderRadius: 10,
     backgroundColor: "#FFFFFF",
@@ -316,8 +443,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 20, // 필요에 따라 상하 패딩 추가
   },
-  itemContainer:{
-    marginTop:5
+  itemContainer: {
+    marginTop: 5,
   },
   categorySpot: {
     paddingHorizontal: 10,
