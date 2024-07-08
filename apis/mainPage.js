@@ -1,6 +1,4 @@
-import axios from "axios";
 import onRequest from "../utils/axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const getUsersMyInfo = async () => {
   return await onRequest({
@@ -29,4 +27,14 @@ export const getMyUser = async()=>{
   })
   console.log("MY USER GET~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   return res.data;
+}
+
+export const putMyEasId = async(easId)=>{
+  return await onRequest({
+    method:"PUT",
+    url:`/users/eas`,
+    data:{
+      easId:easId
+    }
+  })
 }

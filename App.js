@@ -32,20 +32,22 @@ import DiaryCheck from "./screens/picturediary/DiaryCheck.jsx";
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import ExpoTokenSetter from "./utils/expoTokenSetter.js";
 
 const Stack = createNativeStackNavigator();
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
+  handleNotification: async () => {
+    console.log("handleNotification");
+    return({
     shouldShowAlert: true,
     shouldPlaySound: false,
     shouldSetBadge: false,
-  }),
+  })}
 });
 export default function App() {
   const queryClient = new QueryClient();
   const [fontLoaded, setFontLoaded] = useState(false);
-
   const [expoPushToken, setExpoPushToken] = useState('');
   const [channels, setChannels] = useState([]);
   const [notification, setNotification] = useState();
@@ -74,17 +76,15 @@ export default function App() {
     loadFonts();
 
     registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
-
-    if (Platform.OS === 'android') {
-      Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
-    }
+    Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
+    
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log(response);
-    });
+    });  
 
     return () => {
       notificationListener.current &&
@@ -100,6 +100,7 @@ export default function App() {
 
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
+        <ExpoTokenSetter expoPushToken={expoPushToken}/>
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName="Home"
@@ -205,6 +206,7 @@ async function registerForPushNotificationsAsync() {
     alert('Must use physical device for Push Notifications');
   }
   console.log("token"+token);
+
   return token;
 }
 
