@@ -125,7 +125,7 @@ const ChallengeDetailPage = () => {
                 사용 금액
               </Text>
               <Text style={styles.contentFont}>
-                {challengeInfo.data.me.challengeUserSpentMoney.toLocaleString()}
+                {challengeInfo.data.me.challengeUserSpentMoney?.toLocaleString()}
               </Text>
             </View>
             <View style={styles.rightContainer}>

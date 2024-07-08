@@ -12,7 +12,7 @@ import CustomHeader from "../components/CustomHeader";
 import ChallengeCard from "../components/ChallengeCard";
 import color from "../assets/colors/colors";
 import HotRankingCard from "../components/HotRankingCard";
-import ChallengeAcceptModal from "../components/ChallengeAcceptModal";
+import ChallengeAcceptModal from "../components/UserAcceptModal";
 import ChallengeCardInProgress from "../components/ChallengeCardInProgress";
 import ChallengeRequestModal from "../components/ChallengeRequestModal";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";

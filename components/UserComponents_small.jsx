@@ -3,7 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "../assets/kawaii.png"
 
-const UserComponents = ({props}) => {
+const UserComponents_small = ({props}) => {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
@@ -19,7 +19,7 @@ const UserComponents = ({props}) => {
   );
 };
 
-export default UserComponents;
+export default UserComponents_small;
 
 const styles = StyleSheet.create({
     safe:{

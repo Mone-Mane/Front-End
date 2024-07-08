@@ -1,10 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 
-const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex }) => {
+const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex,userInfo,minimumBalanceUser }) => {
   // const [clicked, setClicked] = useState(false);
   const [isMasterin,setIsMasterIn] = useState(null);
+  const [isDisabled,setIsDisabled] = useState(false);
   const clicked =  clickedIndex === index;
+  
+  useEffect(()=>{
+    if(minimumBalanceUser && Keyword.includes("원")){
+      setIsDisabled(minimumBalanceUser.accountBalance<Number(Keyword.replace("원","").replace(",","")))
+    }
+  },[minimumBalanceUser])
 
 
   useEffect(()=>{
@@ -15,6 +22,8 @@ const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex }) 
     }
   },[users])
 
+  
+
 
   return (
     <View style={styles.wrapper}>
@@ -22,8 +31,15 @@ const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex }) 
         style={[
           styles.button,
           isMasterin ? styles.clickedBtn : styles.notClickedBtn,
+          !userInfo.master &&clicked ? styles.mySelect : null,
         ]}
-        onPress={() => setClickedIndex(clicked ? null : index)}
+        onPress={() => {
+          if(isDisabled){
+            Alert.alert(`${minimumBalanceUser.userName}님의 잔액이 부족합니다`)
+          }else{
+            setClickedIndex(clicked ? null : index)
+          }
+        }}
       >
         <Text
           style={[
@@ -61,7 +77,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 16,
     margin: 4,
-    minWidth: 70, // 최소 너비 설정
+    minWidth: 50, // 최소 너비 설정
   },
   textInput: {
     fontFamily: "Regular",
@@ -97,5 +113,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "white",
     position: "absolute",
+  },
+  mySelect: {
+    borderColor: "#5A73F5",
+    borderWidth: 2,
   },
 });

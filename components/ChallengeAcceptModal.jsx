@@ -1,13 +1,27 @@
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import FireIcon from "../assets/icons/fire.svg";
 import BadIcon from "../assets/icons/bad.svg";
 import GoodIcon from "../assets/icons/good.svg";
-import React from "react";
+import React, { useState } from "react";
 
-const ChallengeAcceptModal = ({ isOpen, setIsOpen, masterdata }) => {
+const ChallengeAcceptModal = ({
+  isOpen,
+  setIsOpen,
+  masterdata,
+  acceptChallenge,
+  rejectChallenge,
+}) => {
   const onPressModalClose = () => {
-    setIsOpen(false);
+    setIsOpen();
   };
+  const [isAccepted, setIsAccepted] = useState(false);
   return (
     <Modal animationType="fade" visible={isOpen} transparent={true}>
       <View style={styles.centeredView}>
@@ -15,26 +29,45 @@ const ChallengeAcceptModal = ({ isOpen, setIsOpen, masterdata }) => {
           <View style={styles.modalContent}>
             <View style={styles.textWrapper}>
               <FireIcon width={23} height={25} style={styles.icon} />
-              <Text style={styles.modalTextStyle}>{masterdata.date}동안</Text>
+              <Text style={styles.modalTextStyle}>{masterdata?.date}동안</Text>
             </View>
             <View style={styles.textWrapper}>
               <FireIcon width={23} height={25} style={styles.icon} />
-              <Text style={styles.modalTextStyle}>{masterdata.cost}원 이하로</Text>
+              <Text style={styles.modalTextStyle}>
+                {masterdata?.goalAmount}원 이하로
+              </Text>
             </View>
             <View style={styles.textWrapper}>
               <FireIcon width={23} height={25} style={styles.icon} />
-              <Text style={styles.modalTextStyle}>{masterdata.category}</Text>
+              <Text style={styles.modalTextStyle}>{masterdata?.category}</Text>
             </View>
           </View>
           <View style={styles.buttonWrapper}>
-            <Pressable onPress={onPressModalClose} style={styles.confirmButton}>
-              <GoodIcon width={34} height={34} style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>수락</Text>
-            </Pressable>
-            <Pressable onPress={onPressModalClose} style={styles.cancelButton}>
-              <BadIcon width={34} height={34} style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>거절</Text>
-            </Pressable>
+            {isAccepted ? (
+              <>
+                <Text style={styles.modalTextStyle}>다른 사람들의 수락을 기다리고 있어요!</Text>
+              </>
+            ) : (
+              <>
+                <Pressable
+                  onPress={() => {
+                    acceptChallenge();
+                    setIsAccepted(true);
+                  }}
+                  style={styles.confirmButton}
+                >
+                  <GoodIcon width={34} height={34} style={styles.buttonIcon} />
+                  <Text style={styles.buttonText}>수락</Text>
+                </Pressable>
+                <Pressable
+                  onPress={()=>{onPressModalClose(); rejectChallenge();}}
+                  style={styles.cancelButton}
+                >
+                  <BadIcon width={34} height={34} style={styles.buttonIcon} />
+                  <Text style={styles.buttonText}>거절</Text>
+                </Pressable>
+              </>
+            )}
           </View>
         </View>
       </View>
@@ -100,7 +133,7 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     textAlign: "center",
     alignSelf: "center",
-    fontSize: 16
+    fontSize: 16,
   },
 
   centeredView: {

@@ -1,13 +1,22 @@
-import { StyleSheet, Text, View,ImageBackground } from "react-native";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import React from "react";
 
-
-const UserComponents_small = ({props}) => {
+const UserComponents = ({ props }) => {
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <ImageBackground 
-          source={{uri:props.userProfile}}// 이곳에 이미지를 제공하는 URL을 넣으세요.
+        {props.accepted && (
+          <View style={styles.overlay}>
+            <Text style={styles.check}>✓</Text>
+          </View>
+        )}
+        {props.accepted === false && (
+          <View style={styles.overlay}>
+            <Text style={styles.scissor}>✕</Text>
+          </View>
+        )}
+        <ImageBackground
+          source={{ uri: props.userProfile }}
           style={styles.image}
           imageStyle={{ borderRadius: 50 }}
         />
@@ -17,32 +26,45 @@ const UserComponents_small = ({props}) => {
   );
 };
 
-export default UserComponents_small;
+export default UserComponents;
 
 const styles = StyleSheet.create({
-    safe:{
-        flex:1
-    },
-    container: {
-        alignItems: 'center',
-        marginHorizontal: 10,
-      },
-      imageContainer: {
-        width: 60,  // 이미지의 크기
-        height: 60, // 이미지의 크기
-        borderRadius: 25, // 이미지를 둥글게 만들기 위해 반으로 나눔
-        overflow: 'hidden',
-        backgroundColor: '#fff',
-      },
-      image: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      text: {
-        marginTop: 5,
-        fontSize: 14,
-        color: '#000',
-      },
+  container: {
+    alignItems: "center",
+    marginHorizontal: 10,
+  },
+  imageContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 25,
+    overflow: "hidden",
+    backgroundColor: "#fff",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
+  },
+  check: {
+    fontSize: 26,
+    color: "#00FF00",
+  },
+  scissor: {
+    fontSize: 26,
+    color: "#FF0000",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    marginTop: 5,
+    fontSize: 14,
+    color: "#000",
+  },
 });

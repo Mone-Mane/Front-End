@@ -46,19 +46,21 @@ export const postChallengesInviteCode = async () =>
     data: {},
   });
 
-export const postChallenges = async (challenge) =>
-  await onRequest({
+export const postChallenges = async (challenge) =>{
+  console.log("challenge!@#",challenge);
+  return await onRequest({
     method: "POST",
     url: `/challenges`,
     data: {
-      challengeName: challenge.challengeName,
-      challengePeriod: challenge.challengePeriod,
-      challengeCategory: challenge.challengeCategory,
-      challengeCost: challenge.challengeCost,
-      challengeTargetAmount: challenge.challengeTargetAmount,
-      challengers: challenge.challengers,
+      challengeName: challenge.category,
+      challengePeriod: Number(challenge.date.replace("주", ""))*7,
+      challengeCategory: challenge.category,
+      challengeCost: challenge.cost.replace("원", "").replace(",", ""),
+      challengeTargetAmount: challenge.goalAmount,
+      challengers: challenge.users.map((user) => user.userCode),
     },
   });
+}
 
 export const postChallengesOpening = async () =>
   await onRequest({
@@ -66,5 +68,15 @@ export const postChallengesOpening = async () =>
     url: `/challenges/opening`,
     data: {},
   });
+
+export const findMinimumBalanceUser = async (ids)=>{
+  return await onRequest({
+    method:"POST",
+    url:`/challenges/max-amount`,
+    data:{
+      ids
+    }
+  })
+}
 
   

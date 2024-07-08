@@ -19,13 +19,16 @@ import ChallengeBtn from "../../components/ChallengeBtn"; // Import the updated 
 import {
   postChallengesInvitation,
   getChallengesRecentList,
+  findMinimumBalanceUser,
+  postChallenges
 } from "../../apis/challenge";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import ChallengeRequestModal from "../../components/ChallengeRequestModal";
 import * as Contacts from "expo-contacts";
-import {  useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { myInfo } from "../../recoil/atoms/user";
 import ChallengeAcceptModal from "../../components/ChallengeAcceptModal";
+import UserAcceptModal from "../../components/UserAcceptModal";
 
 const ChallengeCreatePage = ({ navigation, route }) => {
   const screenWidth = Dimensions.get("window").width;
@@ -37,33 +40,133 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [setted, setSetted] = useState(false);
   const [enteredMessage, setEnteredMessage] = useState(null);
   const [changeMessage, setChangeMessage] = useState(null);
+  const [acceptMessage, setAcceptMessage] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [categoryClickedIndex, setCategoryClickedIndex] = useState(null);
+  const [costClickedIndex, setCostClickedIndex] = useState(null);
+  const [dateClickedIndex, setDateClickedIndex] = useState(null);
+  const [goalAmount, setGoalAmount] = useState(""); 
+  const [goalAmountAgreement, setGoalAmountAgreement] = useState([[], [], []]); 
+  const [goalClickedIndex, setGoalClickedIndex] = useState(null); 
+  const [minimumBalanceUser, setMinimumBalanceUser] = useState(0);
+  const [challengeStartData, setChallengeStartData] = useState(null);
+  const [challengeCreateStatus, setChallengeCreateStatus] = useState(null);
+  const [categoryPicks, setCategoryPicks] = useState([
+    {
+      name: "커피 줄이기",
+      users: [],
+    },
+    {
+      name: "택시 줄이기",
+      users: [],
+    },
+    {
+      name: "술 줄이기",
+      users: [],
+    },
+    {
+      name: "야식 줄이기",
+      users: [],
+    },
+  ]);
+
+  const [costPicks, setCostPicks] = useState([
+    {
+      name: "3,000원",
+      users: [],
+    },
+    {
+      name: "5,000원",
+      users: [],
+    },
+    {
+      name: "10,000원",
+      users: [],
+    },
+    {
+      name: "12,000원",
+      users: [],
+    },
+  ]);
+
+  const [datePicks, setDatePicks] = useState([
+    {
+      name: "1주",
+      users: [],
+    },
+    {
+      name: "2주",
+      users: [],
+    },
+    {
+      name: "3주",
+      users: [],
+    },
+    {
+      name: "4주",
+      users: [],
+    },
+  ]);
 
   // 여기서부턴 수락 거절 모달 띄우는 코드에용
   const [isAcceptOpen, setIsAcceptOpen] = useState(false);
+  const [isStartOpen, setIsStartOpen] = useState(false);
+
+  const openStart = () => {
+    const masterdata = findMasterSelection();
+    if (
+      masterdata === null ||
+      masterdata?.category === null ||
+      masterdata?.cost === null ||
+      masterdata?.date === null ||
+      masterdata?.goalAmount === null||
+      masterdata?.goalAmount === 0
+    ) {
+      Alert.alert("챌린지 시작 실패", "모든 항목을 선택해주세요.");
+      return;
+    }
+    ws.current.send(
+      JSON.stringify({
+        roomId: roomId,
+        messageType: "START",
+        challengeStartStatus:masterdata
+      })
+    );
+    ws.current.send(
+      JSON.stringify({
+        roomId: roomId,
+        messageType: "ACCEPT",
+        user: myUser,
+      })
+    );
+    setChallengeCreateStatus(masterdata);
+    setIsStartOpen(true);
+  };
+  const closeStart = () => {
+    setIsStartOpen(false);
+  };
+
   const openAccept = () => {
     setIsAcceptOpen(true);
   };
   const closeAccept = () => {
     setIsAcceptOpen(false);
   };
-  const mockupData = { date: "3주", cost: "12,000원", category: "커피줄이기" };
-
   const me = useRecoilValue(myInfo);
-  const [myUser,setMyUser] = useState(null);
+  const [myUser, setMyUser] = useState(null);
 
   useEffect(() => {
     if (me) {
-      setMyUser({...me,master:master})
+      setMyUser({ ...me, master: master });
     }
   }, [me]);
 
-  useEffect(()=>{
-    if(myUser){
+  useEffect(() => {
+    if (myUser) {
       setSetted(true);
       setSelectedUser(myUser);
     }
-  },[myUser])
+  }, [myUser]);
 
   useEffect(() => {
     if (setted) {
@@ -75,7 +178,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
   useEffect(() => {
     if (myUser) {
-      ws.current = new WebSocket("ws://172.16.21.86/channel");
+      ws.current = new WebSocket("ws://172.30.1.4/channel");
       ws.current.onopen = () => {
         ws.current.send(
           JSON.stringify({ roomId: roomId, messageType: "ENTER", user: myUser })
@@ -97,8 +200,33 @@ const ChallengeCreatePage = ({ navigation, route }) => {
           } else if (message.messageType === "WELCOME") {
             setUsers(message.challengeCreateStatus.users);
             setCategoryPicks(message.challengeCreateStatus.categoryPicks);
+            setCostPicks(message.challengeCreateStatus.costPicks);
+            setDatePicks(message.challengeCreateStatus.datePicks);
+            setGoalAmount(message.challengeCreateStatus.goalAmount);
+            setGoalAmountAgreement(
+              message.challengeCreateStatus.goalAmountAgreement
+            );
           } else if (message.messageType === "CHANGE") {
             setChangeMessage(message);
+          } else if (message.messageType === "START") {
+            setChallengeStartData(message.challengeStartStatus);
+            if(!master)openAccept();
+          }else if(message.messageType === "ACCEPT"){
+            setAcceptMessage(message);
+          }else if(message.messageType === "REJECT"){
+            if(message.user.userCode !== myUser.userCode){
+              setIsAcceptOpen(false);
+              setIsStartOpen(false);
+              Alert.alert("알림", `${message.user.userName} 님이 챌린지 참여를 수락하지 않았어요!😥`);
+            }
+          }else if(message.messageType === "CREATED"){
+              ws.current.close();
+              navigation.navigate("ChallengeMainPage",{challengeId:message.message});
+          }else if (message.messageType === "NOTICE"){
+            Alert.alert("알림", message.message);
+            if(message.message === "존재하지 않는 방입니다."){
+              navigation.goBack();
+            }
           }
         }
       };
@@ -122,6 +250,10 @@ const ChallengeCreatePage = ({ navigation, route }) => {
             challengeCreateStatus: {
               users: newUsers,
               categoryPicks: categoryPicks,
+              costPicks: costPicks,
+              datePicks: datePicks,
+              goalAmount: goalAmount,
+              goalAmountAgreement: goalAmountAgreement,
             },
           })
         );
@@ -130,14 +262,51 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   }, [enteredMessage]);
 
   useEffect(() => {
+    if(master && acceptMessage){
+      var newUsers = users.filter((user) => user.userCode !== acceptMessage.user.userCode);
+      newUsers.push({...acceptMessage.user,accepted:true});
+      if(newUsers.filter((user) => user.accepted).length === newUsers.length){
+        if(master){
+          var masterdata = findMasterSelection();
+          masterdata.users = newUsers;
+          postChallenges(masterdata).then((res)=>{
+            ws.current.send(
+              JSON.stringify({
+                roomId: roomId,
+                messageType: "CREATED",
+                message:res.data
+              })
+            );
+            ws.current.close();
+            navigation.navigate("ChallengeMainPage",{challengeId:res.data});
+          });
+        }
+      }
+      setUsers(newUsers);
+    }
+  }, [acceptMessage]);
+
+  useEffect(() => {
+    if(users.length > 0){
+      findMinimumBalanceUser(users.map((user) => user.userCode)).then(
+        (res) => {
+          setMinimumBalanceUser(res.data);
+        }
+      );
+    }
+  }, [users]);
+
+  useEffect(() => {
     console.log("changeMessage:", changeMessage);
-    if (changeMessage !== null && changeMessage.user.userCode !== myUser.userCode) {
+    if (
+      changeMessage !== null &&
+      changeMessage.user.userCode !== myUser.userCode
+    ) {
       const { statusClass, statusBefore, statusAfter } =
         changeMessage.challengeChangeStatus;
 
       // Handle category changes
       if (statusClass === "category") {
-        console.log(categoryPicks);
         const updatedCategories = categoryPicks.map((category) => {
           if (category.name === statusBefore) {
             return {
@@ -198,8 +367,47 @@ const ChallengeCreatePage = ({ navigation, route }) => {
         });
         setDatePicks(updatedDates);
       }
+
+      // Handle goalAmount changes
+      if (statusClass === "goalAmount") {
+        setGoalAmount(statusAfter);
+      }
+
+      // Handle goalAmountAgreement changes
+      if (statusClass === "goalAmountAgreement") {
+        const updatedGoalAmountAgreement = [...goalAmountAgreement];
+        if (statusBefore !== null) {
+          updatedGoalAmountAgreement[statusBefore] = updatedGoalAmountAgreement[
+            statusBefore
+          ].filter((user) => user.userName !== changeMessage.user.userName);
+        }
+        updatedGoalAmountAgreement[statusAfter].push(changeMessage.user);
+        setGoalAmountAgreement(updatedGoalAmountAgreement);
+      }
     }
   }, [changeMessage]);
+
+  //goalAmount  변경 시 메시지 전달 단,값이 바뀌고 1초동안 추가 변경이 없을 때 전달
+  useEffect(() => {
+    setGoalAmountAgreement([[], [], []]);
+    let timer = setTimeout(() => {
+      if (master && goalAmount !== "" && goalAmount !== null) {
+        ws.current.send(
+          JSON.stringify({
+            roomId: roomId,
+            messageType: "CHANGE",
+            challengeChangeStatus: {
+              statusClass: "goalAmount",
+              statusBefore: null,
+              statusAfter: goalAmount,
+            },
+            user: myUser,
+          })
+        );
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [goalAmount]);
 
   const inviteMutation = useMutation({
     mutationFn: ({ invitationList }) =>
@@ -215,6 +423,32 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     },
   });
 
+  const findMasterSelection = () => {
+    let masterData = {
+      category: null,
+      cost: null,
+      date: null,
+      goalAmount: null,
+    };
+    categoryPicks.map((category) => {
+      if (category.users.includes(myUser)) {
+        masterData.category = category.name;
+      }
+    });
+    costPicks.map((cost) => {
+      if (cost.users.includes(myUser)) {
+        masterData.cost = cost.name;
+      }
+    });
+    datePicks.map((date) => {
+      if (date.users.includes(myUser)) {
+        masterData.date = date.name;
+      }
+    });
+    masterData.goalAmount = Number(goalAmount.replace(",", ""));
+    return masterData;
+  };
+
   const {
     data: recentPlayers,
     error,
@@ -222,68 +456,8 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   } = useQuery({
     queryKey: ["getChallengesRecentList"],
     queryFn: () => getChallengesRecentList(),
-  });
+  }); 
 
-  const [categoryClickedIndex, setCategoryClickedIndex] = useState(null);
-  const [costClickedIndex, setCostClickedIndex] = useState(null);
-  const [dateClickedIndex, setDateClickedIndex] = useState(null);
-
-  const [categoryPicks, setCategoryPicks] = useState([
-    {
-      name: "커피 줄이기",
-      users: [],
-    },
-    {
-      name: "택시 줄이기",
-      users: [],
-    },
-    {
-      name: "술 줄이기",
-      users: [],
-    },
-    {
-      name: "야식 줄이기",
-      users: [],
-    },
-  ]);
-
-  const [costPicks, setCostPicks] = useState([
-    {
-      name: "3,000원",
-      users: [],
-    },
-    {
-      name: "5,000원",
-      users: [],
-    },
-    {
-      name: "10,000원",
-      users: [],
-    },
-    {
-      name: "12,000원",
-      users: [],
-    },
-  ]);
-
-  const [datePicks, setDatePicks] = useState([
-    {
-      name: "1주",
-      users: [],
-    },
-    {
-      name: "2주",
-      users: [],
-    },
-    {
-      name: "3주",
-      users: [],
-    },
-    {
-      name: "4주",
-      users: [],
-    },
-  ]);
 
   // 카테고리 클릭 함수
   const handleCategoryClick = (index) => {
@@ -296,7 +470,9 @@ const ChallengeCreatePage = ({ navigation, route }) => {
         beforeCategory = category.name;
         return {
           ...category,
-          users: category.users.filter((user) => user.userCode !== myUser.userCode),
+          users: category.users.filter(
+            (user) => user.userCode !== myUser.userCode
+          ),
         };
       } else if (i === index) {
         afterCategory = category.name;
@@ -431,6 +607,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
           clickedIndex={costClickedIndex}
           setClickedIndex={handleCostClick}
           userInfo={selectedUser}
+          minimumBalanceUser={minimumBalanceUser}
         />
       </View>
     );
@@ -463,19 +640,68 @@ const ChallengeCreatePage = ({ navigation, route }) => {
       setSearchQuery(""); // 입력된 값 지우기
       return;
     }
-    const maxAmount = 1000000;
-    if (parseInt(cleanedText, 10) > maxAmount) {
+    var maxVal = 10000000;
+    if (parseInt(cleanedText, 10) > maxVal) {
       Alert.alert(
         "입력 오류",
-        `최대 금액은 ${formatNumber(maxAmount.toString())} 원 입니다.`
+        `최대 금액은 ${formatNumber(maxVal.toString())} 원 입니다.`
       );
       return;
     }
     const formattedText = formatNumber(cleanedText);
+    setGoalAmount(formattedText);
     setSearchQuery(formattedText);
   };
 
+  const handleGoalClick = (index) => {
+    if (!master) {
+      var beforeGoal = null;
+      var gaa = [...goalAmountAgreement];
+      gaa.map((item, i) => {
+        if (item.includes(selectedUser)) {
+          beforeGoal = i;
+          gaa[i] = gaa[i].filter((user) => user !== selectedUser);
+        }
+      });
+      gaa[index].push(selectedUser);
+      setGoalClickedIndex(index);
+      setGoalAmountAgreement(gaa);
+      ws.current.send(
+        JSON.stringify({
+          roomId: roomId,
+          messageType: "CHANGE",
+          challengeChangeStatus: {
+            statusClass: "goalAmountAgreement",
+            statusBefore: beforeGoal,
+            statusAfter: index,
+          },
+          user: myUser,
+        })
+      );
+    }
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
+
+  const acceptChallenge = ()=>{
+    ws.current.send(
+      JSON.stringify({
+        roomId: roomId,
+        messageType: "ACCEPT",
+        user: myUser,
+      })
+    );
+  }
+  const rejectChallenge = ()=>{
+    ws.current.send(
+      JSON.stringify({
+        roomId: roomId,
+        messageType: "REJECT",
+        user: myUser,
+      })
+    );
+  }
+
 
   // 여가서부턴 참가자 초대하는 코드 들어가 있어용
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -566,9 +792,14 @@ const ChallengeCreatePage = ({ navigation, route }) => {
               contentContainerStyle={styles.flatListContent}
               renderItem={renderUser}
             />
-            <TouchableOpacity style={styles.inviteBtn} onPress={fetchContacts}>
-              <Text style={styles.inviteText}>+</Text>
-            </TouchableOpacity>
+            {master && (
+              <TouchableOpacity
+                style={styles.inviteBtn}
+                onPress={fetchContacts}
+              >
+                <Text style={styles.inviteText}>+</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.categorySpot}>
             <View flex={1}>
@@ -613,15 +844,50 @@ const ChallengeCreatePage = ({ navigation, route }) => {
                 목표 금액
               </Text>
               <View style={styles.inputSpot}>
-                <TextInput
-                  style={styles.textInput}
-                  value={searchQuery}
-                  maxLength={20}
-                  onChangeText={handleChangeText}
-                  textAlign="center" // 텍스트 가운데 정렬
-                  keyboardType="numeric" // 숫자 키보드 사용 (필요에 따라)
-                />
+                {master ? (
+                  <TextInput
+                    style={styles.textInput}
+                    value={searchQuery}
+                    maxLength={20}
+                    onChangeText={handleChangeText}
+                    textAlign="center" // 텍스트 가운데 정렬
+                    keyboardType="numeric" // 숫자 키보드 사용 (필요에 따라)
+                  />
+                ) : (
+                  <TextInput
+                    style={styles.textInput}
+                    value={goalAmount}
+                    maxLength={20}
+                    textAlign="center" // 텍스트 가운데 정렬
+                    keyboardType="numeric" // 숫자 키보드 사용 (필요에 따라)
+                    editable={false}
+                  />
+                )}
                 <Text style={styles.amountText}>원</Text>
+                <ChallengeBtn
+                  Keyword={"⬇"}
+                  index={0}
+                  users={goalAmountAgreement[0]}
+                  clickedIndex={goalClickedIndex}
+                  setClickedIndex={handleGoalClick}
+                  userInfo={selectedUser}
+                />
+                <ChallengeBtn
+                  Keyword={"Good👍"}
+                  index={1}
+                  users={goalAmountAgreement[1]}
+                  clickedIndex={goalClickedIndex}
+                  setClickedIndex={handleGoalClick}
+                  userInfo={selectedUser}
+                />
+                <ChallengeBtn
+                  Keyword={"⬆"}
+                  index={2}
+                  users={goalAmountAgreement[2]}
+                  clickedIndex={goalClickedIndex}
+                  setClickedIndex={handleGoalClick}
+                  userInfo={selectedUser}
+                />
               </View>
             </View>
           </View>
@@ -629,7 +895,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: "#5A73F5" }]}
-                onPress={openAccept}
+                onPress={openStart}
               >
                 <Text style={styles.buttonText}>시작하기</Text>
               </TouchableOpacity>
@@ -645,22 +911,44 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
           <View style={styles.useImage}>
             <Text style={styles.policyTitle}>챌린지 환급 안내</Text>
-            <Text style={styles.policyContent}>100% 성공            예치금 전액 환급 + 상금</Text>
-            <Text style={styles.policyContent}>85% 이상  성공      예치금 전액 환급</Text>
-            <Text style={styles.policyContent}>85% 미만 성공       예치금 일부 환급(성공률 만큼)</Text>
-            <Image style={styles.graph} source={require("../../assets/refundPolicy3.png")}></Image>
+            <Text style={styles.policyContent}>
+              100% 성공 예치금 전액 환급 + 상금
+            </Text>
+            <Text style={styles.policyContent}>
+              85% 이상 성공 예치금 전액 환급
+            </Text>
+            <Text style={styles.policyContent}>
+              85% 미만 성공 예치금 일부 환급(성공률 만큼)
+            </Text>
+            <Image
+              style={styles.graph}
+              source={require("../../assets/refundPolicy3.png")}
+            ></Image>
           </View>
-          <ChallengeRequestModal
-            isOpen={isModalVisible}
-            setIsOpen={setIsModalVisible}
-            contacts={challengerList}
-            recentUsers={recentPlayers.data}
-          ></ChallengeRequestModal>
-          <ChallengeAcceptModal
-            isOpen={isAcceptOpen}
-            setIsOpen={closeAccept}
-            masterdata={mockupData}
-          ></ChallengeAcceptModal>
+
+          {master ? (
+            <>
+              <ChallengeRequestModal
+                isOpen={isModalVisible}
+                setIsOpen={setIsModalVisible}
+                contacts={challengerList}
+                recentUsers={recentPlayers.data}
+              ></ChallengeRequestModal>
+              <UserAcceptModal
+                isOpen={isStartOpen}
+                setIsOpen={closeStart}
+                users={users}
+              />
+            </>
+          ) : (
+            <ChallengeAcceptModal
+              isOpen={isAcceptOpen}
+              setIsOpen={closeAccept}
+              masterdata={challengeStartData}
+              acceptChallenge={acceptChallenge}
+              rejectChallenge={rejectChallenge}
+            />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -731,7 +1019,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingVertical: 30,
     paddingHorizontal: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   categortText: {
     fontSize: 20,
@@ -772,18 +1060,18 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: "#7D9BFC",
   },
-  policyTitle:{
+  policyTitle: {
     fontSize: 18,
     fontFamily: "ExtraBold",
-    marginBottom: 20
+    marginBottom: 20,
   },
   policyContent: {
     fontSize: 16,
     fontFamily: "ExtraBold",
     marginBottom: 10,
-    color: "gray"
+    color: "gray",
   },
   graph: {
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
 });
