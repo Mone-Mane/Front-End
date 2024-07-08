@@ -644,11 +644,11 @@ const ChallengeCreatePage = ({ navigation, route }) => {
           )}
 
           <View style={styles.useImage}>
-            <Image
-              source={require("../../assets/challengeImage_sub.png")}
-              width={300}
-              height={300}
-            />
+            <Text style={styles.policyTitle}>챌린지 환급 안내</Text>
+            <Text style={styles.policyContent}>100% 성공            예치금 전액 환급 + 상금</Text>
+            <Text style={styles.policyContent}>85% 이상  성공      예치금 전액 환급</Text>
+            <Text style={styles.policyContent}>85% 미만 성공       예치금 일부 환급(성공률 만큼)</Text>
+            <Image style={styles.graph} source={require("../../assets/refundPolicy3.png")}></Image>
           </View>
           <ChallengeRequestModal
             isOpen={isModalVisible}
@@ -728,7 +728,10 @@ const styles = StyleSheet.create({
   },
   useImage: {
     flex: 1,
-    alignItems: "center",
+    backgroundColor: "white",
+    paddingVertical: 30,
+    paddingHorizontal: 10,
+    borderRadius: 10
   },
   categortText: {
     fontSize: 20,
@@ -769,4 +772,18 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: "#7D9BFC",
   },
+  policyTitle:{
+    fontSize: 18,
+    fontFamily: "ExtraBold",
+    marginBottom: 20
+  },
+  policyContent: {
+    fontSize: 16,
+    fontFamily: "ExtraBold",
+    marginBottom: 10,
+    color: "gray"
+  },
+  graph: {
+    marginTop: 10
+  }
 });
