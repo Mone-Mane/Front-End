@@ -3,6 +3,7 @@ import {
   Image,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -14,52 +15,49 @@ import FireIcon from "../assets/icons/fire.svg";
 import BadIcon from "../assets/icons/bad.svg";
 import GoodIcon from "../assets/icons/good.svg";
 import CloseIcon from "../assets/icons/close.svg";
+import RecentPlayer from "./RecentPlayer";
+import Ex from "../assets/icons/ex.svg";
 
-const initialPlayerList = [
-  {
-    image: require("../assets/kawaii.png"),
-    name: "아카네",
-    phoneNumber: "010-2222-2222",
-    userId: 1,
-  },
-  {
-    image: require("../assets/kawaii.png"),
-    name: "아카네1",
-    phoneNumber: "010-2222-2222",
-    userId: 12,
-  },
-  {
-    image: require("../assets/kawaii.png"),
-    name: "아카네",
-    phoneNumber: "010-2222-2222",
-    userId: 13,
-  },
-];
-
-const ChallengeRequestModal = ({ isOpen, setIsOpen }) => {
+const ChallengeRequestModal = ({
+  isOpen,
+  setIsOpen,
+  contacts,
+  recentUsers,
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [addedPlayerList, setAddedPlayerList] = useState([]);
-  const [currentPlayerList] = useState(initialPlayerList);
-  const [searchedPlayerList] = useState(initialPlayerList);
+  const [searchedPlayerList, setSearchedPlayerList] = useState([]);
+  const [currentPlayerList] = useState(recentUsers);
+
 
   const onPressModalClose = () => {
+    console.log(addedPlayerList)
+    setAddedPlayerList([])
     setIsOpen(false);
   };
 
   const handleSearch = (text) => {
     setSearchQuery(text);
     // 검색 기능 추가 (필요시)
+    if (text) {
+      const filteredPlayers = contacts.filter((player) =>
+        player.phoneNum.replace(/-/g, "").includes(text.replace(/-/g, ""))
+      );
+      setSearchedPlayerList(filteredPlayers);
+    } else {
+      setSearchedPlayerList([]);
+    }
   };
 
   const addPlayer = (player) => {
-    if (!addedPlayerList.some((item) => item.userId === player.userId)) {
+    if (!addedPlayerList.some((item) => item.userCode === player.userCode)) {
       setAddedPlayerList([...addedPlayerList, player]);
     }
   };
 
   const removePlayer = (playerId) => {
     setAddedPlayerList(
-      addedPlayerList.filter((item) => item.userId !== playerId)
+      addedPlayerList.filter((item) => item.userCode !== playerId)
     );
   };
 
@@ -68,6 +66,9 @@ const ChallengeRequestModal = ({ isOpen, setIsOpen }) => {
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={styles.modalContent}>
+            <Text style={styles.closeText} onPress={onPressModalClose}>
+              ×
+            </Text>
             <View style={styles.searchBar}>
               <TextInput
                 style={styles.textInput}
@@ -90,14 +91,14 @@ const ChallengeRequestModal = ({ isOpen, setIsOpen }) => {
                 <TouchableOpacity
                   key={index}
                   style={[styles.profileWrapper, { position: "relative" }]}
-                  onPress={() => removePlayer(item.userId)}
+                  onPress={() => removePlayer(item.userCode)}
                 >
                   <View
                     style={{
                       position: "absolute",
                       right: 0,
                       top: 0,
-                      borderRadius: "50%",
+                      borderRadius: 50,
                       zIndex: 99,
                       backgroundColor: "white",
                       opacity: 0.9,
@@ -113,7 +114,7 @@ const ChallengeRequestModal = ({ isOpen, setIsOpen }) => {
                     {/* <Text style={{ color: "white" }}>X</Text> */}
                     <CloseIcon width={15} height={15} />
                   </View>
-                  <Image style={styles.profile} source={item.image} />
+                  <Image style={styles.profile} source={{uri: item.imgUrl}} />
                   <Text style={{ fontSize: 8, fontFamily: "Regular" }}>
                     {item.name}
                   </Text>
@@ -124,47 +125,66 @@ const ChallengeRequestModal = ({ isOpen, setIsOpen }) => {
             {searchedPlayerList.length > 0 ? (
               <>
                 <Text style={styles.title}>검색된 플레이어</Text>
-                {searchedPlayerList.map((item, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={styles.playerWrapper}
-                    onPress={() => addPlayer(item)}
-                  >
-                    <Image style={styles.profile} source={item.image} />
-                    <View style={styles.playerInfoWrapper}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontFamily: "Regular",
-                          marginBottom: 4,
-                        }}
-                      >
-                        {item.name}
-                      </Text>
-                      <Text style={{ fontSize: 12, fontFamily: "Regular" }}>
-                        {item.phoneNumber}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                <ScrollView style={styles.scrollContainer}>
+                  {searchedPlayerList.map((item, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.playerWrapper}
+                      onPress={() => addPlayer(item)}
+                    >
+                      <Image
+                        style={styles.profile}
+                        source={{ uri: item.imgUrl }}
+                      />
+                      <View style={styles.playerInfoWrapper}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            fontFamily: "Regular",
+                            marginBottom: 4,
+                          }}
+                        >
+                          {item.name === item.realName? item.name : item.name + " (" + item.realName + ")"}
+                        </Text>
+                        <Text style={{ fontSize: 12, fontFamily: "Regular" }}>
+                          {item.phoneNum}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
               </>
             ) : (
               <>
                 <Text style={styles.title}>최근 플레이어</Text>
-                {currentPlayerList.map((item, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={styles.playerWrapper}
-                    onPress={() => addPlayer(item)}
-                  >
-                    <View key={index} style={styles.profileWrapper}>
-                      <Image style={styles.profile} source={item.image} />
-                      <Text style={{ fontSize: 8, fontFamily: "Regular" }}>
-                        {item.name}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                <ScrollView style={styles.scrollContainer}>
+                  {currentPlayerList.map((item, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.playerWrapper}
+                      onPress={() => addPlayer(item)}
+                    >
+                      <Image
+                        style={styles.profile}
+                        source={{ uri: item.imgUrl }}
+                      />
+                      <View style={styles.playerInfoWrapper}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            fontFamily: "Regular",
+                            marginBottom: 4,
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text style={{ fontSize: 12, fontFamily: "Regular" }}>
+                          {item.phoneNum}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
               </>
             )}
           </View>
@@ -178,7 +198,7 @@ const ChallengeRequestModal = ({ isOpen, setIsOpen }) => {
                 pressed && styles.confirmButtonPressed,
               ]}
             >
-              <Text style={styles.buttonText}>추가하기</Text>
+              <Text style={styles.buttonText} onPro>추가하기</Text>
             </Pressable>
           </View>
         </View>
@@ -229,6 +249,12 @@ const styles = StyleSheet.create({
   modalContent: {
     alignItems: "flex-start",
   },
+  closeText: {
+    alignSelf: "flex-end",
+    marginRight: 15,
+    fontFamily: "Bold",
+    fontSize: 24,
+  },
   icon: { alignSelf: "center" },
   searchBar: {
     flexDirection: "row",
@@ -265,6 +291,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     borderWidth: 1,
     borderColor: "#D9D9D9",
+    
   },
   playerWrapper: {
     flexDirection: "row",
@@ -333,5 +360,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#ffffff",
     fontFamily: "Bold",
+  },
+  scrollContainer: {
+    maxHeight: 300, // Adjust the height as needed
+    width: "100%",
   },
 });

@@ -30,11 +30,13 @@ export const getChallengesDetail = async (code) =>
     url: `/challenges/detail?challengeCode=${code}`,
   });
 
-export const postChallengesInvitation = async () =>
+export const postChallengesInvitation = async (invitationList) =>
   await onRequest({
     method: "POST",
-    url: `/challenges/invitation`,
-    data: {},
+    url: `/challenges/invitation-list`,
+    data: {
+      invitationList,
+    },
   });
 
 export const postChallengesInviteCode = async () =>
@@ -58,21 +60,12 @@ export const postChallenges = async (challenge) =>
     },
   });
 
-export const postUsersInvitationList = async (userPhoneNumber) =>
+export const postChallengesOpening = async () =>
   await onRequest({
     method: "POST",
-    url: `/users/invitation-list`,
-    data: {
-      userPhoneNumber: userPhoneNumber,
-    },
+    url: `/challenges/opening`,
+    data: {},
   });
-
-  export const postChallengesOpening = async () =>
-    await onRequest({
-      method: "POST",
-      url: `/challenges/opening`,
-      data:{}
-    });
 
   export const getMyUser = async(master)=>{
     const res= await onRequest({
