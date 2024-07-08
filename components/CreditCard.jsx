@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import MasterCard from "../assets/icons/mastercard4.svg";
 import CardChip from "../assets/icons/cardchip6.svg";
-import Nfc from "../assets/icons/nfc.svg";
 
 const CreditCard = ({ cardInfo, engName }) => {
   const [flipped, setFlipped] = useState(false);

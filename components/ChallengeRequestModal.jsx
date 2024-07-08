@@ -11,12 +11,7 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import FireIcon from "../assets/icons/fire.svg";
-import BadIcon from "../assets/icons/bad.svg";
-import GoodIcon from "../assets/icons/good.svg";
 import CloseIcon from "../assets/icons/close.svg";
-import RecentPlayer from "./RecentPlayer";
-import Ex from "../assets/icons/ex.svg";
 
 const ChallengeRequestModal = ({
   isOpen,
@@ -31,7 +26,6 @@ const ChallengeRequestModal = ({
 
 
   const onPressModalClose = () => {
-    console.log(addedPlayerList)
     setAddedPlayerList([])
     setIsOpen(false);
   };

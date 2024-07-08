@@ -15,7 +15,7 @@ import PayRatio from "../../components/PayRatio";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery  } from "@tanstack/react-query";
 import { getUsersStatistics, getMyUser } from "../../apis/mainPage";
 import { getUsersMyPage } from "../../apis/mypage";
 import { myInfo } from "../../recoil/atoms/user";
@@ -30,6 +30,8 @@ const MainPage = ({ navigation }) => {
   };
 
   const [me, setMe] = useRecoilState(myInfo);
+
+
   const { data: user } = useQuery({
     queryKey: ["getMyUser"],
     queryFn: () => getMyUser() || {},
@@ -58,7 +60,7 @@ const MainPage = ({ navigation }) => {
   const now = new Date();
   const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  const [date, setDate] = useState(firstDayOfMonth);
+  
 
   const { data: myData, error } = useQuery({
     queryKey: ["getUsersMyPage"],
@@ -71,26 +73,33 @@ const MainPage = ({ navigation }) => {
     }
   }, [myData]);
   
+  const [date, setDate] = useState(firstDayOfMonth);
+
   const { data: statistics, error2 } = useQuery({
     queryKey: ["getUsersStatistics", formatDate(date)],
-    queryFn: () => getUsersStatistics( formatDate(date)),
+    queryFn: () => getUsersStatistics(formatDate(date)),    
   });
 
   // 다음달 소비 
   const handlePreviousMonth = () => {
+    console.log(">>>>>>>>>>>>>");
     const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
     setDate(prevMonth);
+    goToPrevMonth();
   };
   // 이전달 소비 
   const handleNextMonth = () => {
     const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
     setDate(nextMonth);
+    goToNextMonth()
   };
   
   
   
 
   useEffect(() => {
+    console.log(">>>>>>>");
+    console.log(statistics);
     if (statistics && statistics.data) {
       setTransformedData({
         analysis_cafe: statistics.data.analysisCafe || 0,
@@ -99,6 +108,16 @@ const MainPage = ({ navigation }) => {
         analysis_etc: statistics.data.etc || 0,
         analysis_pleasure: statistics.data.pleasure || 0,
         analysis_transportation: statistics.data.transportation || 0
+      });
+    }
+    if(statistics.data == null){
+      setTransformedData({
+        analysis_cafe: 0,
+        analysis_food: 0,
+        analysis_total: 0,
+        analysis_etc: 0,
+        analysis_pleasure:  0,
+        analysis_transportation:0
       });
     }
   }, [statistics]);
