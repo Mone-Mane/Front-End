@@ -5,7 +5,6 @@ import Icon from "../assets/kawaii.png"
 
 const UserComponents_small = ({props}) => {
   return (
-    <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
       <View style={styles.imageContainer}>
         <ImageBackground 
@@ -16,7 +15,6 @@ const UserComponents_small = ({props}) => {
       </View>
       <Text style={styles.text}>{props.userName}</Text>
     </View>
-    </SafeAreaView>
   );
 };
 

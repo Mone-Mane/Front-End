@@ -4,7 +4,8 @@ import BadIcon from "../assets/icons/bad.svg";
 import GoodIcon from "../assets/icons/good.svg";
 import React from "react";
 
-const ChallengeAcceptModal = ({ isOpen, setIsOpen }) => {
+const ChallengeAcceptModal = ({ isOpen, setIsOpen, masterdata }) => {
+  masterdata={date:"3주",cost:"12,000원",category:"커피줄이기"}
   const onPressModalClose = () => {
     setIsOpen(false);
   };
@@ -15,15 +16,15 @@ const ChallengeAcceptModal = ({ isOpen, setIsOpen }) => {
           <View style={styles.modalContent}>
             <View style={styles.textWrapper}>
               <FireIcon width={23} height={25} style={styles.icon} />
-              <Text style={styles.modalTextStyle}>일주일동안</Text>
+              <Text style={styles.modalTextStyle}>{masterdata.date}동안</Text>
             </View>
             <View style={styles.textWrapper}>
               <FireIcon width={23} height={25} style={styles.icon} />
-              <Text style={styles.modalTextStyle}>18,000원 이하로</Text>
+              <Text style={styles.modalTextStyle}>{masterdata.cost}원 이하로</Text>
             </View>
             <View style={styles.textWrapper}>
               <FireIcon width={23} height={25} style={styles.icon} />
-              <Text style={styles.modalTextStyle}>커피 마시기</Text>
+              <Text style={styles.modalTextStyle}>{masterdata.category}</Text>
             </View>
           </View>
           <View style={styles.buttonWrapper}>

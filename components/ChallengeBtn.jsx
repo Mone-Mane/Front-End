@@ -1,23 +1,34 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex }) => {
   // const [clicked, setClicked] = useState(false);
-  const clicked = clickedIndex === index;
+  const [isMasterin,setIsMasterIn] = useState(null);
+  const clicked =  clickedIndex === index;
+
+
+  useEffect(()=>{
+    if(users.length>0){
+      setIsMasterIn( users.filter(user => user.master).length!==0)
+    }else{
+      setIsMasterIn(false)
+    }
+  },[users])
+
 
   return (
     <View style={styles.wrapper}>
       <TouchableOpacity
         style={[
           styles.button,
-          clicked ? styles.clickedBtn : styles.notClickedBtn,
+          isMasterin ? styles.clickedBtn : styles.notClickedBtn,
         ]}
         onPress={() => setClickedIndex(clicked ? null : index)}
       >
         <Text
           style={[
             styles.textInput,
-            clicked ? styles.clickedText : styles.notClickedText,
+            isMasterin ? styles.clickedText : styles.notClickedText,
           ]}
         >
           {Keyword}

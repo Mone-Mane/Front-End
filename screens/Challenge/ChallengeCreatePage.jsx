@@ -27,10 +27,11 @@ import ChallengeRequestModal from "../../components/ChallengeRequestModal";
 import * as Contacts from "expo-contacts";
 import { useRecoilSnapshot, useRecoilValue } from "recoil";
 import { myInfo } from "../../recoil/atoms/user";
+import ChallengeAcceptModal from "../../components/ChallengeAcceptModal";
 
 const ChallengeCreatePage = ({ navigation, route }) => {
   const screenWidth = Dimensions.get("window").width;
-  const itemSpacing = screenWidth * 0.02; // 화면 너비의 2%를 간격으로 설정
+  const itemSpacing = screenWidth * 0.02; // 화면 너비의 2%를 간격으로 설정`
   const roomId = route.params?.roomId;
   const master = route.params?.master;
   const ws = useRef(null);
@@ -40,28 +41,46 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [changeMessage, setChangeMessage] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 
+  // 여기서부턴 수락 거절 모달 띄우는 코드에용
+  const [isAcceptOpen, setIsAcceptOpen] = useState(false);
+  const openAccept = () => {
+    setIsAcceptOpen(true);
+  };
+  const closeAccept = () => {
+    setIsAcceptOpen(false);
+  };
+  const mockupData = { date: "3주", cost: "12,000원", category: "커피줄이기" };
+
   const me = useRecoilValue(myInfo);
+  const [myUser,setMyUser] = useState(null);
+
   useEffect(() => {
     if (me) {
-      setSetted(true);
-      setSelectedUser(me);
+      setMyUser({...me,master:master})
     }
   }, [me]);
+
+  useEffect(()=>{
+    if(myUser){
+      setSetted(true);
+      setSelectedUser(myUser);
+    }
+  },[myUser])
 
   useEffect(() => {
     if (setted) {
       if (master) {
-        setUsers([me]);
+        setUsers([myUser]);
       }
     }
-  }, [me, setted]);
+  }, [myUser, setted]);
 
   useEffect(() => {
-    if (me) {
+    if (myUser) {
       ws.current = new WebSocket("ws://172.16.21.86/channel");
       ws.current.onopen = () => {
         ws.current.send(
-          JSON.stringify({ roomId: roomId, messageType: "ENTER", user: me })
+          JSON.stringify({ roomId: roomId, messageType: "ENTER", user: myUser })
         );
       };
       ws.current.onclose = () => {
@@ -90,10 +109,10 @@ const ChallengeCreatePage = ({ navigation, route }) => {
         console.log("WebSocket Closed");
       };
     }
-  }, [me]);
+  }, [myUser]);
 
   useEffect(() => {
-    if (enteredMessage && enteredMessage.user.userCode !== me.userCode) {
+    if (enteredMessage && enteredMessage.user.userCode !== myUser.userCode) {
       const newUsers = [...users, enteredMessage.user];
       setUsers(newUsers);
       if (master) {
@@ -114,22 +133,22 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
   useEffect(() => {
     console.log("changeMessage:", changeMessage);
-    if (changeMessage !== null && changeMessage.user.userCode !== me.userCode) {
-      if (changeMessage.challengeChangeStatus.statusClass === "category") {
+    if (changeMessage !== null && changeMessage.user.userCode !== myUser.userCode) {
+      const { statusClass, statusBefore, statusAfter } =
+        changeMessage.challengeChangeStatus;
+
+      // Handle category changes
+      if (statusClass === "category") {
         console.log(categoryPicks);
-        const updatedCategories = categoryPicks.map((category, i) => {
-          if (
-            category.name === changeMessage.challengeChangeStatus.statusBefore
-          ) {
+        const updatedCategories = categoryPicks.map((category) => {
+          if (category.name === statusBefore) {
             return {
               ...category,
               users: category.users.filter(
                 (user) => user.userName !== changeMessage.user.userName
               ),
             };
-          } else if (
-            category.name === changeMessage.challengeChangeStatus.statusAfter
-          ) {
+          } else if (category.name === statusAfter) {
             return {
               ...category,
               users: [...category.users, changeMessage.user],
@@ -138,6 +157,48 @@ const ChallengeCreatePage = ({ navigation, route }) => {
           return category;
         });
         setCategoryPicks(updatedCategories);
+      }
+
+      // Handle cost changes
+      if (statusClass === "cost") {
+        const updatedCosts = costPicks.map((cost) => {
+          if (cost.name === statusBefore) {
+            return {
+              ...cost,
+              users: cost.users.filter(
+                (user) => user.userName !== changeMessage.user.userName
+              ),
+            };
+          } else if (cost.name === statusAfter) {
+            return {
+              ...cost,
+              users: [...cost.users, changeMessage.user],
+            };
+          }
+          return cost;
+        });
+        setCostPicks(updatedCosts);
+      }
+
+      // Handle date changes
+      if (statusClass === "date") {
+        const updatedDates = datePicks.map((date) => {
+          if (date.name === statusBefore) {
+            return {
+              ...date,
+              users: date.users.filter(
+                (user) => user.userName !== changeMessage.user.userName
+              ),
+            };
+          } else if (date.name === statusAfter) {
+            return {
+              ...date,
+              users: [...date.users, changeMessage.user],
+            };
+          }
+          return date;
+        });
+        setDatePicks(updatedDates);
       }
     }
   }, [changeMessage]);
@@ -164,26 +225,6 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     queryKey: ["getChallengesRecentList"],
     queryFn: () => getChallengesRecentList(),
   });
-  // const createRoom = useMutation({
-  //   mutationFn: () => postChallengesOpening(),
-  //   onSuccess: (data) => {
-  //     console.log("수정 성공!:", data);
-  //   },
-  //   onError: (error) => {
-  //     console.error("수정 실패:", error);
-  //     alert(`Error updating title: ${error.message}`);
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   createRoom.mutate();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (createRoom.data) {
-  //     console.log("생성된 방 데이터:", createRoom);
-  //   }
-  // }, [createRoom.data]);
 
   const [categoryClickedIndex, setCategoryClickedIndex] = useState(null);
   const [costClickedIndex, setCostClickedIndex] = useState(null);
@@ -208,49 +249,64 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     },
   ]);
 
-  // socket 관련 코드
+  const [costPicks, setCostPicks] = useState([
+    {
+      name: "3,000원",
+      users: [],
+    },
+    {
+      name: "5,000원",
+      users: [],
+    },
+    {
+      name: "10,000원",
+      users: [],
+    },
+    {
+      name: "12,000원",
+      users: [],
+    },
+  ]);
 
-  // useEffect(() => {
-  //   socket.on("categoryClickedIndex", (index) => {
-  //     console.log(index)
-  //     setCategoryClickedIndex(index);
-  //   });
-  //   });
-
-  //   socket.on("costClickedIndex", (index) => {
-  //     setCostClickedIndex(index);
-  //   });
-
-  //   socket.on("dateClickedIndex", (index) => {
-  //     setDateClickedIndex(index);
-  //   });
-
-  //   return () => {
-  //     socket.off("categoryClickedIndex");
-  //     socket.off("costClickedIndex");
-  //     socket.off("dateClickedIndex");
-  //   };
-  // }, []);
+  const [datePicks, setDatePicks] = useState([
+    {
+      name: "1주",
+      users: [],
+    },
+    {
+      name: "2주",
+      users: [],
+    },
+    {
+      name: "3주",
+      users: [],
+    },
+    {
+      name: "4주",
+      users: [],
+    },
+  ]);
 
   // 카테고리 클릭 함수
   const handleCategoryClick = (index) => {
     console.log("clicked");
     var beforeCategory = "";
     var afterCategory = "";
+    var beforeCategoryIndex = -1
     const updatedCategories = categoryPicks.map((category, i) => {
       if (i === categoryClickedIndex) {
         // 이전에 클릭된 버튼에서 사용자 제거
         beforeCategory = category.name;
         return {
           ...category,
-          users: category.users.filter((user) => user.userCode !== me.userCode),
+          users: category.users.filter((user) => user.userCode !== myUser.userCode),
         };
       } else if (i === index) {
         afterCategory = category.name;
         // 새로 클릭된 버튼에 사용자 추가
         return {
           ...category,
-          users: [...category.users, me],
+          users: [...category.users, myUser],
         };
       }
       return category;
@@ -264,7 +320,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
           statusBefore: beforeCategory,
           statusAfter: afterCategory,
         },
-        user: me,
+        user: myUser,
       })
     );
     setCategoryClickedIndex(index);
@@ -272,18 +328,81 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     // socket.emit("categoryClickedIndex", index);
   };
 
+  // cost updata
   const handleCostClick = (index) => {
+    var beforeCost = "";
+    var afterCost = "";
+    const updatedCost = costPicks.map((cost, i) => {
+      if (i === costClickedIndex) {
+        // 이전에 클릭된 버튼에서 사용자 제거
+        beforeCost = cost.name;
+        return {
+          ...cost,
+          users: cost.users.filter((user) => user.userCode !== myUser.userCode),
+        };
+      } else if (i === index) {
+        afterCost = cost.name;
+        // 새로 클릭된 버튼에 사용자 추가
+        return {
+          ...cost,
+          users: [...cost.users, myUser],
+        };
+      }
+      return cost;
+    });
+    ws.current.send(
+      JSON.stringify({
+        roomId: roomId,
+        messageType: "CHANGE",
+        challengeChangeStatus: {
+          statusClass: "cost",
+          statusBefore: beforeCost,
+          statusAfter: afterCost,
+        },
+        user: myUser,
+      })
+    );
     setCostClickedIndex(index);
-    // socket.emit("costClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+    setCostPicks(updatedCost);
   };
 
+  // 챌린지 기간 수정
   const handleDateClick = (index) => {
+    var beforeDate = "";
+    var afterDate = "";
+    const updatedDate = datePicks.map((date, i) => {
+      if (i === dateClickedIndex) {
+        // 이전에 클릭된 버튼에서 사용자 제거
+        beforeDate = date.name;
+        return {
+          ...date,
+          users: date.users.filter((user) => user.userCode !== myUser.userCode),
+        };
+      } else if (i === index) {
+        afterDate = date.name;
+        // 새로 클릭된 버튼에 사용자 추가
+        return {
+          ...date,
+          users: [...date.users, myUser],
+        };
+      }
+      return date;
+    });
+    ws.current.send(
+      JSON.stringify({
+        roomId: roomId,
+        messageType: "CHANGE",
+        challengeChangeStatus: {
+          statusClass: "date",
+          statusBefore: beforeDate,
+          statusAfter: afterDate,
+        },
+        user: myUser,
+      })
+    );
     setDateClickedIndex(index);
-    // socket.emit("dateClickedIndex", index); // WebSocket 이벤트를 나중에 추가할 수 있도록 주석 처리
+    setDatePicks(updatedDate);
   };
-
-  const challengecost = ["3,000원", "5,000원", "10,000원", "12,000원"];
-  const challengedate = ["1주", "2주", "3주", "4주"];
 
   const renderUser = ({ item, index }) => <UserComponents props={item} />;
   const renderCategoryItem = ({ item, index }) => {
@@ -302,28 +421,40 @@ const ChallengeCreatePage = ({ navigation, route }) => {
       </View>
     );
   };
-  const renderCostItem = ({ item, index }) => (
-    <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn
-        Keyword={item}
-        users={item.users}
-        index={index}
-        clickedIndex={costClickedIndex}
-        setClickedIndex={handleCostClick}
-      />
-    </View>
-  );
-  const renderDateItem = ({ item, index }) => (
-    <View style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}>
-      <ChallengeBtn
-        Keyword={item}
-        users={item.users}
-        index={index}
-        clickedIndex={dateClickedIndex}
-        setClickedIndex={handleDateClick}
-      />
-    </View>
-  );
+
+  const renderCostItem = ({ item, index }) => {
+    return (
+      <View
+        style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}
+      >
+        <ChallengeBtn
+          Keyword={item.name}
+          users={item.users}
+          index={index}
+          clickedIndex={costClickedIndex}
+          setClickedIndex={handleCostClick}
+          userInfo={selectedUser}
+        />
+      </View>
+    );
+  };
+
+  const renderDateItem = ({ item, index }) => {
+    return (
+      <View
+        style={[styles.itemContainer, { marginHorizontal: itemSpacing / 4 }]}
+      >
+        <ChallengeBtn
+          Keyword={item.name}
+          users={item.users}
+          index={index}
+          clickedIndex={dateClickedIndex}
+          setClickedIndex={handleDateClick}
+          userInfo={selectedUser}
+        />
+      </View>
+    );
+  };
 
   const formatNumber = (num) => {
     return num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -434,7 +565,6 @@ const ChallengeCreatePage = ({ navigation, route }) => {
               data={users}
               horizontal
               keyExtractor={(item, index) => index.toString()}
-              marginVertical={-20}
               marginLeft={8}
               contentContainerStyle={styles.flatListContent}
               renderItem={renderUser}
@@ -461,7 +591,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
                 참가비
               </Text>
               <FlatList
-                data={challengecost}
+                data={costPicks}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item, index) => `cost-${index}`}
@@ -473,7 +603,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
                 챌린지 기간
               </Text>
               <FlatList
-                data={challengedate}
+                data={datePicks}
                 horizontal
                 keyExtractor={(item, index) => `date-${index}`}
                 renderItem={renderDateItem}
@@ -498,18 +628,24 @@ const ChallengeCreatePage = ({ navigation, route }) => {
               </View>
             </View>
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "#5A73F5" }]}
-            >
-              <Text style={styles.buttonText}>시작하기</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "gray" }]}
-            >
-              <Text style={styles.buttonText}>취소하기</Text>
-            </TouchableOpacity>
-          </View>
+          {master ? (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "#5A73F5" }]}
+                onPress={openAccept}
+              >
+                <Text style={styles.buttonText}>시작하기</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "gray" }]}
+              >
+                <Text style={styles.buttonText}>취소하기</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <></>
+          )}
+
           <View style={styles.useImage}>
             <Image
               source={require("../../assets/challengeImage_sub.png")}
@@ -523,6 +659,11 @@ const ChallengeCreatePage = ({ navigation, route }) => {
             contacts={challengerList}
             recentUsers={recentPlayers.data}
           ></ChallengeRequestModal>
+          <ChallengeAcceptModal
+            isOpen={isAcceptOpen}
+            setIsOpen={closeAccept}
+            masterdata={mockupData}
+          ></ChallengeAcceptModal>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -550,6 +691,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#FFFFFF",
     marginVertical: 32,
+    paddingVertical: 15,
     justifyContent: "center",
   },
   flatListContent: {
