@@ -108,7 +108,16 @@ const DiaryHome = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.chart}>
-          <PrecautionsIcon />
+          <Text style={styles.policyTitle}>그림일기 유의사항 안내</Text>
+          <Text style={styles.policySubTitle}>Hana x Sync 통장 필수</Text>
+          <Text style={styles.policyContent}>그림일기 서비스는 Hana x Sync 통장에 가입한 경우에만</Text>
+          <Text style={styles.policyContent}>이용이 가능합니다. 상품 가입 여부를 확인해주세요.</Text>
+          <Text style={styles.policySubTitle}>페인트 통 필요</Text>
+          <Text style={styles.policyContent}>그림일기 생성에는 1개의 물감이 필요합니다.</Text>
+          <Text style={styles.policyContent}>물감이 충분히 있는 지 확인해주세요.</Text>
+          <Text style={styles.policySubTitle}>데이터 보관 기관</Text>
+          <Text style={styles.policyContent}>사진과 계좌 내역에 관련된 정보는 그림일기 생성일로부터</Text>
+          <Text style={styles.policyContent}>3개월 후 자동으로 삭제됩니다.</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    borderRadius: 16,
+    borderRadius: 10,
     backgroundColor: "#fff",
     overflow: "hidden"
   },
@@ -161,7 +170,7 @@ const styles = StyleSheet.create({
     justifyContent:"space-between"
   },
   subHeader: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: "ExtraBold",
     marginBottom: 10,
   },
@@ -172,7 +181,7 @@ const styles = StyleSheet.create({
     marginRight:4
   },
   hotText: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: "ExtraBold",
     marginTop: 30,
     alignSelf: "flex-start",
@@ -196,7 +205,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   hotList: {
-    borderRadius: 16,
+    borderRadius: 10,
     marginBottom: 20,
     overflow: "hidden"
   },
@@ -206,10 +215,10 @@ const styles = StyleSheet.create({
   },
   chart: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    alignItems: "center",
+    borderRadius: 10,
     marginBottom: 20,
-    marginTop: 30,
+    paddingVertical: 15,
+    paddingHorizontal: 20
   },
   chartImage: {
     borderRadius: 10,
@@ -225,6 +234,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  policyTitle: {
+    fontFamily: "Bold",
+    fontSize: 16,
+    marginBottom: 10
+  },
+  policySubTitle: {
+    fontFamily: "Bold",
+    fontSize: 14,
+    marginVertical: 5
+  },
+  policyContent:{
+    fontFamily: "Regular",
+    fontSize: 12
+  }
 });
 
 export default DiaryHome;
