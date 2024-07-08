@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "SYNC_FE",
-    "slug": "SYNC_FE",
+    "slug": "sync",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,7 +26,13 @@
     "plugins": [
       "expo-font",
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d0bd8ed2-fb8f-4bb8-84dc-78e12a642703"
+      }
+    },
+    "owner": "bigstar99"
   },
   "resolve": {
     "alias": {

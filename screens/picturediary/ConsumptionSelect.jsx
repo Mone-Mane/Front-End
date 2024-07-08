@@ -26,19 +26,20 @@ const ConsumptionSelect = ({ navigation }) => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedItems, setSelectedItmes] = useState([]);
   const [idsCategory, setIdsCategory] = useState([]);
 
   const { data: myAccountHistory, error,isLoading  } = useQuery({
     queryKey: ["getUsersAccountsLogsPeriod"],
     queryFn: () => getUsersAccountsLogsPeriod(3),
   });
-  console.log(selectedIds)
+  console.log(selectedItems)
 
   const[selectRequest, setSelectRequest] = useRecoilState(diaryRequest)
 
   useEffect(() => {
     if (myAccountHistory) {
+      console.log(myAccountHistory.data);
       setFilteredData(myAccountHistory.data)
     }
   }, [myAccountHistory]);
@@ -51,24 +52,23 @@ const ConsumptionSelect = ({ navigation }) => {
     setSearchQuery(text);
     filterData(text);
   };
-  const handleSelectItem = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((item) => item !== id));
+  const handleSelectItem = (item) => {
+    if (selectedItems.includes(item)) {
+      setSelectedItmes(selectedItems.filter((i) => i !== item));
     } else {
-      if (selectedIds.length >= 5) {
+      if (selectedItems.length >= 5) {
         Alert.alert("거래내역은 최대 5개까지 선택가능합니다");
         return;
       }
-      setSelectedIds([...selectedIds, id]);
-      setIdsCategory([...idsCategory, id]);
+      setSelectedItmes([...selectedItems, item]);
     }
   };
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleSelectItem(item.historyCode)}>
+    <TouchableOpacity onPress={() => handleSelectItem(item)}>
       <View
         style={[
           styles.accountItem,
-          selectedIds.includes(item.historyCode) ? styles.selectedItem : null,
+          selectedItems.includes(item) ? styles.selectedItem : null,
         ]}
       >
         <AccountHistory transaction={item} />
@@ -91,9 +91,9 @@ const ConsumptionSelect = ({ navigation }) => {
   };
   const toEditkeyword = () => {
     const copy = {...selectRequest};
-    copy.diaryPayments = selectedIds;
+    copy.diaryPayments = selectedItems.map((item)=>item.historyCode);
     setSelectRequest(copy)
-    navigation.navigate("EditKeyword");
+    navigation.navigate("EditKeyword",{selectedItems: selectedItems});
   }
 
 
@@ -127,7 +127,7 @@ const ConsumptionSelect = ({ navigation }) => {
           />
         </View>
       </View>
-      {selectedIds.length != 0 ? 
+      {selectedItems.length != 0 ? 
       (
         <View style={styles.container2}>
           <TouchableOpacity style={styles.button} onPress={toEditkeyword}>

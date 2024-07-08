@@ -22,13 +22,9 @@ const Keyword = ({ keyword, onDelete }) => (
   </View>
 );
 
-const EditKeyword = ({ navigation }) => {
-  const [keywords, setKeywords] = useState([
-    "삼겹살",
-    "이베리코",
-    "게임",
-    "귀멸의칼날",
-  ]);
+const EditKeyword = ({ navigation,route }) => {
+  const selectedItems = route.params?.selectedItems || [];
+  const [keywords, setKeywords] = useState(selectedItems.filter((item)=>item.historyCategory !== null).map((item)=>item.historyCategory));
   const [newKeyword, setNewKeyword] = useState("");
 
   const toSelectCategoryScreen = () => {
