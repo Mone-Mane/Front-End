@@ -38,7 +38,6 @@ const ConsumptionSelect = ({ navigation }) => {
 
   useEffect(() => {
     if (myAccountHistory) {
-      console.log(myAccountHistory.data);
       setFilteredData(myAccountHistory.data)
     }
   }, [myAccountHistory]);

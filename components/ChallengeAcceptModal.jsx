@@ -16,11 +16,11 @@ const ChallengeAcceptModal = ({
   masterdata,
   acceptChallenge,
   rejectChallenge,
+  isAccepted
 }) => {
   const onPressModalClose = () => {
     setIsOpen();
   };
-  const [isAccepted, setIsAccepted] = useState(false);
   return (
     <Modal animationType="fade" visible={isOpen} transparent={true}>
       <View style={styles.centeredView}>
@@ -51,7 +51,6 @@ const ChallengeAcceptModal = ({
                 <TouchableOpacity
                   onPress={() => {
                     acceptChallenge();
-                    setIsAccepted(true);
                   }}
                   style={styles.confirmButton}
                 >

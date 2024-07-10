@@ -14,7 +14,7 @@ import RestartIcon from "../../assets/icons/restart.svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { diaryRequest } from "../../recoil/atoms/diary";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postDiary, putDiaryRetry } from "../../apis/diary";
 import HomeIcon from "../../assets/icons/home.svg";
 import DownloadIcon from "../../assets/icons/download.svg";
@@ -38,6 +38,7 @@ const DiaryCompleteScreen = ({ navigation }) => {
   const [error, setError] = useState("");
   const resetDiaryRequest = useResetRecoilState(diaryRequest);
 
+  const queryClient = useQueryClient();
   // 이미지 인스타 공유
   const InstagramShare = async () => {
     try {
@@ -107,6 +108,7 @@ const DiaryCompleteScreen = ({ navigation }) => {
   };
   const resetAtom = () => {
     resetDiaryRequest;
+    queryClient.invalidateQueries({ queryKey: ['getDiaryHomeList'] });
     navigation.navigate("DiaryHome");
   };
 
@@ -116,21 +118,18 @@ const DiaryCompleteScreen = ({ navigation }) => {
       console.log("이미지 생성!:", response.data);
       setImageUrl(response.data.diaryImage);
       setImageCode(response.data.diaryCode)
-      setIsLoading(false);
     },
     onError: () => {
       setIsLoading(true);
     },
   });
 
-  useState
 
   const retryDiary = useMutation({
     mutationFn: ({imageCode}) => putDiaryRetry(imageCode),
     onSuccess: (response) => {
       setImageUrl(response.data.diaryImage);
       setImageCode(response.data.diaryCode)
-      setIsLoading(false);
     },
     onError: (error) => {
       console.error("다시그리기 실패:", error);
@@ -138,8 +137,16 @@ const DiaryCompleteScreen = ({ navigation }) => {
     },
   });
 
+  useEffect(()=>{
+    if(imageUrl)
+    {
+      setIsLoading(false)
+    }
+  },[imageUrl])
+
   const retryPictureDiary = (imageCode) => {
     setIsLoading(true);
+    setImageUrl(null)
     retryDiary.mutate(imageCode);
   };
 
@@ -148,6 +155,8 @@ const DiaryCompleteScreen = ({ navigation }) => {
   }, [requestData]);
 
   useEffect(()=>{
+    if(imageCode)
+      setIsLoading(false)
   },[imageCode])
 
   return (
@@ -180,7 +189,9 @@ const DiaryCompleteScreen = ({ navigation }) => {
           <View style={styles.buttonWrapper}>
             {!confirm ? (
               <>
-                <TouchableOpacity style={styles.button} onPress={()=>{retryPictureDiary({imageCode:imageCode})}}>
+                <TouchableOpacity style={styles.button} onPress={()=>{
+                  setImageUrl(null);
+                  retryPictureDiary({imageCode:imageCode})}}>
                   <View style={styles.iconContainer}>
                     <RestartIcon width={15} height={18} style={styles.icon} />
                   </View>

@@ -53,6 +53,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [minimumBalanceUser, setMinimumBalanceUser] = useState(0);
   const [challengeStartData, setChallengeStartData] = useState(null);
   const [challengeCreateStatus, setChallengeCreateStatus] = useState(null);
+  const [isAccepted,setIsAccepted] = useState(false)
   const [categoryPicks, setCategoryPicks] = useState([
     {
       name: "카페 덜 가기",
@@ -333,6 +334,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
   useEffect(() => {
     const newUsers = users.map((user)=>{user.accepted = null; return user;});
+    setIsAccepted(false);
     setUsers(newUsers);
   }, [rejectMessage]);
 
@@ -734,6 +736,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const acceptChallenge = () => {
+    setIsAccepted(true);
     ws.current.send(
       JSON.stringify({
         roomId: roomId,
@@ -999,6 +1002,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
               masterdata={challengeStartData}
               acceptChallenge={acceptChallenge}
               rejectChallenge={rejectChallenge}
+              isAcceptOpen={isAcceptOpen}
             />
           )}
         </View>
