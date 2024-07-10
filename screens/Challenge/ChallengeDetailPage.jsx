@@ -8,7 +8,7 @@ import { useRoute } from "@react-navigation/native";
 import { getChallengesDetail } from "../../apis/challenge.js";
 import { useQuery } from "@tanstack/react-query";
 
-const ChallengeDetailPage = () => {
+const ChallengeDetailPage = ({navigation}) => {
   const route = useRoute();
   const { challengeCode } = route.params;
 
@@ -104,7 +104,7 @@ const ChallengeDetailPage = () => {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <CustomHeader title={"챌린지 상세보기"}></CustomHeader>
+      <CustomHeader title={"챌린지 상세보기"} navigation={navigation}></CustomHeader>
       <View style={styles.container}>
         <View style={styles.detailContainer}>
           <View style={styles.nameContainer}>

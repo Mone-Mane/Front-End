@@ -33,14 +33,16 @@ import UserAcceptModal from "../../components/UserAcceptModal";
 const ChallengeCreatePage = ({ navigation, route }) => {
   const screenWidth = Dimensions.get("window").width;
   const itemSpacing = screenWidth * 0.02; // 화면 너비의 2%를 간격으로 설정`
+  console.log("route.params:", route.params);
   const roomId = route.params?.roomId;
-  const master = route.params?.master;
+  const master = route.params?.master||false;
   const ws = useRef(null);
   const [users, setUsers] = useState([]);
   const [setted, setSetted] = useState(false);
   const [enteredMessage, setEnteredMessage] = useState(null);
   const [changeMessage, setChangeMessage] = useState(null);
   const [acceptMessage, setAcceptMessage] = useState(null);
+  const [rejectMessage, setRejectMessage] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [categoryClickedIndex, setCategoryClickedIndex] = useState(null);
   const [costClickedIndex, setCostClickedIndex] = useState(null);
@@ -53,21 +55,33 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   const [challengeCreateStatus, setChallengeCreateStatus] = useState(null);
   const [categoryPicks, setCategoryPicks] = useState([
     {
-      name: "커피 줄이기",
+      name: "카페 덜 가기",
       users: [],
     },
     {
-      name: "택시 줄이기",
+      name: "택시 덜 타기",
       users: [],
     },
     {
-      name: "술 줄이기",
+      name: "오락 줄이기",
       users: [],
     },
     {
-      name: "야식 줄이기",
+      name: "쇼핑 줄이기",
       users: [],
     },
+    {
+      name: "술 덜 마시기",
+      users: [],
+    },
+    {
+      name: "배달 덜 먹기",
+      users: [],
+    },
+    {
+      name: "구독 좀 끊기",
+      users: [],
+    }
   ]);
 
   const [costPicks, setCostPicks] = useState([
@@ -178,7 +192,9 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
   useEffect(() => {
     if (myUser) {
-      ws.current = new WebSocket("ws://172.30.1.4/channel");
+      // ws.current = new WebSocket("ws://172.30.1.4/channel");
+      ws.current = new WebSocket("ws://172.16.21.86/channel");
+      // ws.current = new WebSocket("ws://54.180.140.196:8080/channel");
       ws.current.onopen = () => {
         ws.current.send(
           JSON.stringify({ roomId: roomId, messageType: "ENTER", user: myUser })
@@ -214,12 +230,15 @@ const ChallengeCreatePage = ({ navigation, route }) => {
           }else if(message.messageType === "ACCEPT"){
             setAcceptMessage(message);
           }else if(message.messageType === "REJECT"){
+            setRejectMessage(message);
             if(message.user.userCode !== myUser.userCode){
               setIsAcceptOpen(false);
               setIsStartOpen(false);
               Alert.alert("알림", `${message.user.userName} 님이 챌린지 참여를 수락하지 않았어요!😥`);
             }
           }else if(message.messageType === "CREATED"){
+             setIsAcceptOpen(false);
+             setIsStartOpen(false);
               ws.current.close();
               navigation.navigate("ChallengeMainPage",{challengeId:message.message});
           }else if (message.messageType === "NOTICE"){
@@ -285,6 +304,11 @@ const ChallengeCreatePage = ({ navigation, route }) => {
       setUsers(newUsers);
     }
   }, [acceptMessage]);
+
+  useEffect(() => {
+    const newUsers = users.map((user)=>{user.accepted = null; return user;});
+    setUsers(newUsers);
+  }, [rejectMessage]);
 
   useEffect(() => {
     if(users.length > 0){
@@ -933,6 +957,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
                 setIsOpen={setIsModalVisible}
                 contacts={challengerList}
                 recentUsers={recentPlayers.data}
+                roomId={roomId}
               ></ChallengeRequestModal>
               <UserAcceptModal
                 isOpen={isStartOpen}

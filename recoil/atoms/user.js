@@ -9,3 +9,8 @@ export const myEasId = atom({
   key: "myEasId",
   default: null,
 });
+
+export const myPrefix = atom({
+  key: "myPrefix",
+  default: null,
+});

@@ -1,10 +1,9 @@
 import {
   Modal,
-  Pressable,
   StyleSheet,
   Text,
-  TouchableWithoutFeedback,
   View,
+  TouchableOpacity,
 } from "react-native";
 import FireIcon from "../assets/icons/fire.svg";
 import BadIcon from "../assets/icons/bad.svg";
@@ -49,7 +48,7 @@ const ChallengeAcceptModal = ({
               </>
             ) : (
               <>
-                <Pressable
+                <TouchableOpacity
                   onPress={() => {
                     acceptChallenge();
                     setIsAccepted(true);
@@ -58,14 +57,14 @@ const ChallengeAcceptModal = ({
                 >
                   <GoodIcon width={34} height={34} style={styles.buttonIcon} />
                   <Text style={styles.buttonText}>수락</Text>
-                </Pressable>
-                <Pressable
+                </TouchableOpacity>
+                <TouchableOpacity
                   onPress={()=>{onPressModalClose(); rejectChallenge();}}
                   style={styles.cancelButton}
                 >
                   <BadIcon width={34} height={34} style={styles.buttonIcon} />
                   <Text style={styles.buttonText}>거절</Text>
-                </Pressable>
+                </TouchableOpacity>
               </>
             )}
           </View>

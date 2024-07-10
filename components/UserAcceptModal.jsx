@@ -35,7 +35,7 @@ const UserAcceptModal = ({ isOpen, setIsOpen, users }) => {
                 </View>
               </View>
               <View style={styles.buttonWrapper}>
-                <FlatList style={styles.usersWrapper} data={users.filter((user) => user.master === false)} renderItem={renderUser} keyExtractor={(item) => item.userName} />
+            <FlatList horizontal={true} style={styles.usersWrapper} data={users.filter((user) => user.master === false)} renderItem={renderUser} keyExtractor={(item) => item.userName} contentContainerStyle={styles.centerContainer} />
               </View>
             </View>
           </View>
@@ -73,8 +73,11 @@ const styles = StyleSheet.create({
     height: 70,
   },
   usersWrapper:{
-    flexDirection: "row",
     alignContent: "center",
+  },
+  centerContainer:{
+    justifyContent: "center",
+    alignItems: "center",
   },
   /**
    * 모달 화면 영역
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
     color: "#17191c",
     fontFamily: "Bold",
     textAlign: "left",
-    fontSize: 14,
+    fontSize: 16,
   },
 
   centeredView: {
@@ -118,11 +121,9 @@ const styles = StyleSheet.create({
 
   buttonWrapper: {
     flexDirection: "row",
-    width: "100%",
-    backgroundColor: "gray",
-    justifyContent: "center",
     backgroundColor: "#ffffff",
-    marginTop: 20,
+    justifyContent: "center",
+    alignContent: "center",
   },
   confirmButton: {
     flexDirection: "row",

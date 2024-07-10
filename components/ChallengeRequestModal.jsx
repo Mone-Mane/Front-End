@@ -12,17 +12,23 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CloseIcon from "../assets/icons/close.svg";
+import { useRecoilValue } from "recoil";
+import { myPrefix } from "../recoil/atoms/user";
+import { postNotificationInvite } from "../apis/challenge";
+
 
 const ChallengeRequestModal = ({
   isOpen,
   setIsOpen,
   contacts,
   recentUsers,
+  roomId
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [addedPlayerList, setAddedPlayerList] = useState([]);
   const [searchedPlayerList, setSearchedPlayerList] = useState([]);
   const [currentPlayerList] = useState(recentUsers);
+  const prefix = useRecoilValue(myPrefix);
 
 
   const onPressModalClose = () => {
@@ -185,14 +191,17 @@ const ChallengeRequestModal = ({
           <View style={styles.buttonWrapper}>
             <Pressable
               disabled={addedPlayerList.length == 0}
-              onPress={onPressModalClose}
+              onPress={()=>{console.log(addedPlayerList);
+                postNotificationInvite(roomId,prefix,addedPlayerList.map((player)=>player.userCode));
+                setIsOpen(false);
+              }}
               style={({ pressed }) => [
                 styles.confirmButton,
                 addedPlayerList.length == 0 && styles.confirmButtonDisabled,
                 pressed && styles.confirmButtonPressed,
               ]}
             >
-              <Text style={styles.buttonText} onPro>추가하기</Text>
+              <Text style={styles.buttonText}>추가하기</Text>
             </Pressable>
           </View>
         </View>

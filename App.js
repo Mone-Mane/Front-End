@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Platform } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { StyleSheet, Text, View, Platform, LogBox, Modal, TouchableOpacity } from "react-native";
+import { Link, NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import Profile from "./screens/Profile";
@@ -33,18 +33,22 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import ExpoTokenSetter from "./utils/expoTokenSetter.js";
+import * as Linking from 'expo-linking';
 
 const Stack = createNativeStackNavigator();
+const prefix = Linking.createURL('/');
 
 Notifications.setNotificationHandler({
   handleNotification: async () => {
     console.log("handleNotification");
-    return({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  })}
+    return ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    })
+  }
 });
+LogBox.ignoreLogs(['*']);
 export default function App() {
   const queryClient = new QueryClient();
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -53,13 +57,14 @@ export default function App() {
   const [notification, setNotification] = useState();
   const notificationListener = useRef();
   const responseListener = useRef();
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
 
-  useEffect(()=>{
-    if(notification){
-      console.log(notification)
+  useEffect(() => {
+    if (notification) {
+      setIsNotificationOpen(true);
     }
-  },[notification])
+  }, [notification])
 
 
   useEffect(() => {
@@ -77,14 +82,14 @@ export default function App() {
 
     registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
     Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
-    
+
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log(response);
-    });  
+    });
 
     return () => {
       notificationListener.current &&
@@ -100,8 +105,68 @@ export default function App() {
 
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
-        <ExpoTokenSetter expoPushToken={expoPushToken}/>
-        <NavigationContainer>
+        <ExpoTokenSetter expoPushToken={expoPushToken} prefix={prefix} />
+        <NavigationContainer linking={{
+          prefixes: [prefix], config: {
+            screens: {
+              ChallengeHome: "ChallengeMainPage",
+              ChallengeCreatePage: "ChallengeCreatePage/:roomId", // Add this line
+            }
+          },
+          async getInitialURL() {
+            const url = await Linking.getInitialURL();
+            if (url != null) {
+              return url;
+            }
+
+            const response = await Notifications.getLastNotificationResponseAsync();
+            return response?.notification.request.content.data.url;
+          },
+          subscribe(listener) {
+            const onReceiveURL = ({ url }) => listener(url);
+
+            // Listen to incoming links from deep linking
+            Linking.addEventListener('url', onReceiveURL);
+
+            // Listen to expo push notifications
+            const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+              const url = response.notification.request.content.data.url;
+              listener(url); // 원하는 화면으로 이동합니다.
+            });
+
+            return () => {
+              // Clean up the event listeners
+              // Linking.removeEventListener('url', onReceiveURL);
+
+              subscription.remove();
+            };
+          },
+        }}>
+          {/* Notification Visualization */}
+        <Modal
+          animationType="fade"
+          visible={isNotificationOpen}
+          transparent={true}
+        >
+          <View style={Platform.OS==="ios"?styles.modalIosContainer: styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.title}>{notification?.request?.content?.title}</Text>
+              <View style={styles.buttonArea}>
+              <TouchableOpacity onPress={()=>{
+                setIsNotificationOpen(false);
+                Linking.openURL(notification?.request?.content?.data?.url);
+              }}>
+                <Text>수락</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>{
+                setIsNotificationOpen(false);
+                }}>
+                <Text>닫기</Text>
+              </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
           <Stack.Navigator
             initialRouteName="Home"
             screenOptions={{ headerShown: false }}
@@ -205,7 +270,7 @@ async function registerForPushNotificationsAsync() {
   } else {
     alert('Must use physical device for Push Notifications');
   }
-  console.log("token"+token);
+  console.log("token" + token);
 
   return token;
 }
@@ -217,5 +282,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 100,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#f1f1f1',
+    alignItems: 'left',
+    padding: 13,
+    borderRadius: 20,
+    marginTop: "10%",
+    marginBottom: "180%",
+    minHeight:"12%",
+    marginHorizontal: "10%",
+  },
+  modalIosContainer: {
+    flex: 1,
+    backgroundColor: '#f1f1f1',
+    alignItems: 'left',
+    padding: 13,
+    borderRadius: 20,
+    marginTop: "15%",
+    marginBottom: "180%",
+    marginHorizontal: "8%",
+  },
+  title: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  buttonArea: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: "20%"
   },
 });

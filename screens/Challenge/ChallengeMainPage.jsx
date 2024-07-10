@@ -111,24 +111,11 @@ const ChallengeMainPage = ({ navigation }) => {
       <CustomHeader title={"챌린지"} navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.container}>
-          <View style={styles.inputSpot}>
-            <Text>챌린지 코드</Text>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={handleChangeText}
-            />
-          </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={onCreateRoom}>
               <View style={styles.button}>
                 <Flame style={styles.buttonLogo}></Flame>
                 <Text style={styles.buttonText}>챌린지 생성하기</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onInviteRoom}>
-              <View style={styles.button}>
-                <Flame style={styles.buttonLogo}></Flame>
-                <Text style={styles.buttonText}>챌린지 참가하기</Text>
               </View>
             </TouchableOpacity>
           </View>

@@ -79,4 +79,16 @@ export const findMinimumBalanceUser = async (ids)=>{
   })
 }
 
+export const postNotificationInvite = async (roomId,prefix,userCodes)=>{
+  return await onRequest({
+    method:"POST",
+    url:`/users/notification/invite`,
+    data:{
+      roomId,
+      prefix,
+      userCodes
+    }
+  })
+}
+
   
