@@ -214,8 +214,8 @@ const ChallengeCreatePage = ({ navigation, route }) => {
 
   useEffect(() => {
     if (myUser) {
-      // ws.current = new WebSocket("ws://172.30.1.4/channel");
-      ws.current = new WebSocket("ws://172.16.21.86/channel");
+      ws.current = new WebSocket("ws://172.30.1.4/channel");
+      // ws.current = new WebSocket("ws://172.16.21.86/channel");
       // ws.current = new WebSocket("ws://54.180.140.196:8080/channel");
       ws.current.onopen = () => {
         ws.current.send(
@@ -1002,7 +1002,7 @@ const ChallengeCreatePage = ({ navigation, route }) => {
               masterdata={challengeStartData}
               acceptChallenge={acceptChallenge}
               rejectChallenge={rejectChallenge}
-              isAcceptOpen={isAcceptOpen}
+              isAccepted={isAccepted}
             />
           )}
         </View>

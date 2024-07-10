@@ -5,7 +5,7 @@ import { View, Text, StyleSheet } from "react-native";
 
 const ProgressBar = ({ progress, sizeFont }) => {
   const displayProgress = Math.min(progress, 100); // 진행률은 최대 100으로 제한
-  const barColor = progress > 85 ? "#FF4935" : "#5A73F5"; // 85% 초과 시 빨간색
+  const barColor = progress > 80 ? "#FF4935" : "#5A73F5"; // 80% 초과 시 빨간색
   const iconPosition = Math.max(displayProgress - 100, 0); // 아이콘 위치 조정
   const number = sizeFont;
 

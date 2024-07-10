@@ -60,7 +60,8 @@
     "recoil": "^0.7.7",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.7.5",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "expo-local-authentication": "~14.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

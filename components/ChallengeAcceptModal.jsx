@@ -8,7 +8,8 @@ import {
 import FireIcon from "../assets/icons/fire.svg";
 import BadIcon from "../assets/icons/bad.svg";
 import GoodIcon from "../assets/icons/good.svg";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import * as LocalAuthentication from 'expo-local-authentication';
 
 const ChallengeAcceptModal = ({
   isOpen,
@@ -21,6 +22,9 @@ const ChallengeAcceptModal = ({
   const onPressModalClose = () => {
     setIsOpen();
   };
+  useEffect(() => {
+    console.log("isAccepted", isAccepted);
+  }, [isAccepted]);
   return (
     <Modal animationType="fade" visible={isOpen} transparent={true}>
       <View style={styles.centeredView}>
@@ -50,7 +54,19 @@ const ChallengeAcceptModal = ({
               <>
                 <TouchableOpacity
                   onPress={() => {
-                    acceptChallenge();
+                    LocalAuthentication.hasHardwareAsync().then((result) => {
+                      if(result){
+                        LocalAuthentication.supportedAuthenticationTypesAsync().then((result) => {
+                          if(result.includes(1)){
+                            LocalAuthentication.authenticateAsync().then((result) => {
+                              if(result.success){
+                                acceptChallenge();
+                              }
+                            });
+                          }
+                        });
+                      }
+                    });
                   }}
                   style={styles.confirmButton}
                 >

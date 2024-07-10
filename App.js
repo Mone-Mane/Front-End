@@ -62,7 +62,8 @@ export default function App() {
 
 
   useEffect(() => {
-    if (notification) {
+    console.log(notification?.request.content.data.url);
+    if (notification && notification.request.content.data.type==="invitation") {
       setIsNotificationOpen(true);
     }
   }, [notification])
@@ -112,6 +113,7 @@ export default function App() {
             screens: {
               ChallengeHome: "ChallengeMainPage",
               ChallengeCreatePage: "ChallengeCreatePage/:roomId", // Add this line
+              ChallengeDetailPage: "ChallengeDetailPage/:challengeCode", 
             }
           },
           async getInitialURL() {
