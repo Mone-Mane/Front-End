@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 
-const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex,userInfo,minimumBalanceUser }) => {
+const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex,userInfo,minimumBalanceUser, aiPick }) => {
   // const [clicked, setClicked] = useState(false);
   const [isMasterin,setIsMasterIn] = useState(null);
   const [isDisabled,setIsDisabled] = useState(false);
@@ -50,6 +50,9 @@ const ChallengeBtn = ({ Keyword, users, index, clickedIndex, setClickedIndex,use
           {Keyword}
         </Text>
       </TouchableOpacity>
+      {
+        aiPick ? <Text style={styles.aiPick}>💡AI 추천!</Text> : <></>
+      }
       <View style={styles.usersContainer}>
         {users && users.map((user, index) => (
           <Image
@@ -118,4 +121,9 @@ const styles = StyleSheet.create({
     borderColor: "#5A73F5",
     borderWidth: 2,
   },
+  aiPick: {
+    color: "#F5BD02",
+    fontFamily: "Bold",
+    fontSize: 14,
+  }
 });
