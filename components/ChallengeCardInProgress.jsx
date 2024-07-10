@@ -47,7 +47,7 @@ const ChallengeCardInProgress = ({
     switch (title) {
       case "카페 덜 가기":
         return <Coffee width={50} height={50} />;
-      case "유흥 안하기":
+      case "오락 줄이기":
         return <Game width={50} height={50} />;
       case "택시 덜 타기":
         return <Taxi width={50} height={50} />;

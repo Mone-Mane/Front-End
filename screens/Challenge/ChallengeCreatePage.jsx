@@ -77,14 +77,17 @@ const ChallengeCreatePage = ({ navigation, route }) => {
     {
       name: "술 덜 마시기",
       users: [],
+      aiPick: false,
     },
     {
       name: "배달 덜 먹기",
       users: [],
+      aiPick: false,
     },
     {
       name: "구독 좀 끊기",
       users: [],
+      aiPick: false,
     }
   ]);
 
@@ -129,6 +132,20 @@ const ChallengeCreatePage = ({ navigation, route }) => {
   // 여기서부턴 수락 거절 모달 띄우는 코드에용
   const [isAcceptOpen, setIsAcceptOpen] = useState(false);
   const [isStartOpen, setIsStartOpen] = useState(false);
+
+  useEffect(()=>{
+    const newCategoryPicks = [...categoryPicks];
+    const aiPickIndex = users.length*users.length*users.length%8;
+    newCategoryPicks.forEach((category,index)=>{
+      if(index === aiPickIndex){
+        category.aiPick = true;
+      }
+      else{
+        category.aiPick = false;
+      }
+    });
+    setCategoryPicks(newCategoryPicks);
+  },[users])
 
   const openStart = () => {
     const masterdata = findMasterSelection();

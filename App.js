@@ -37,6 +37,7 @@ import * as Linking from 'expo-linking';
 
 const Stack = createNativeStackNavigator();
 const prefix = Linking.createURL('/');
+console.disableYellowBox = true;
 
 Notifications.setNotificationHandler({
   handleNotification: async () => {

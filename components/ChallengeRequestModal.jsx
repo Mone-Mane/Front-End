@@ -193,6 +193,7 @@ const ChallengeRequestModal = ({
               disabled={addedPlayerList.length == 0}
               onPress={()=>{console.log(addedPlayerList);
                 postNotificationInvite(roomId,prefix,addedPlayerList.map((player)=>player.userCode));
+                setAddedPlayerList([]);
                 setIsOpen(false);
               }}
               style={({ pressed }) => [
