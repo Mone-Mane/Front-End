@@ -54,19 +54,7 @@ const ChallengeAcceptModal = ({
               <>
                 <TouchableOpacity
                   onPress={() => {
-                    LocalAuthentication.hasHardwareAsync().then((result) => {
-                      if(result){
-                        LocalAuthentication.supportedAuthenticationTypesAsync().then((result) => {
-                          if(result.includes(1)){
-                            LocalAuthentication.authenticateAsync().then((result) => {
-                              if(result.success){
-                                acceptChallenge();
-                              }
-                            });
-                          }
-                        });
-                      }
-                    });
+                    acceptChallenge();r
                   }}
                   style={styles.confirmButton}
                 >
